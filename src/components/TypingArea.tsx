@@ -99,14 +99,20 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
   }, [countdown]);
 
-  // Scroll active char into view seamlessly
+  // Scroll active char into view seamlessly inside container ONLY (never scrolling the page/keyboard)
   useEffect(() => {
-    if (activeCharRef.current) {
-      activeCharRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'nearest',
-      });
+    const container = textContainerRef.current;
+    const activeChar = activeCharRef.current;
+    if (container && activeChar) {
+      const containerRect = container.getBoundingClientRect();
+      const charRect = activeChar.getBoundingClientRect();
+
+      // Scroll container ONLY when active character is hiding beyond visible container edges
+      if (charRect.bottom > containerRect.bottom - 24) {
+        container.scrollTop += (charRect.bottom - containerRect.bottom + 36);
+      } else if (charRect.top < containerRect.top + 24) {
+        container.scrollTop -= (containerRect.top - charRect.top + 36);
+      }
     }
   }, [typedChars]);
 
@@ -436,7 +442,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       {/* Main Glassy Typing Canvas Box */}
       <div
         ref={textContainerRef}
-        className="w-full max-w-4xl min-h-[160px] sm:min-h-[200px] p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/60 shadow-sm relative overflow-hidden flex flex-wrap items-center content-start gap-y-2 font-mono tracking-wide text-slate-400 transition-all max-h-[360px] overflow-y-auto"
+        className="w-full max-w-4xl h-[200px] sm:h-[240px] p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/60 shadow-sm relative overflow-y-auto flex flex-wrap items-start content-start gap-y-2 font-mono tracking-wide text-slate-400 scroll-smooth"
       >
         {/* Unfocused overlay prompt if input loses focus */}
         {!isFinished && !countdown && (
