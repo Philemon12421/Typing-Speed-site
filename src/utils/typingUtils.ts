@@ -1,0 +1,179 @@
+import { FingerName, WpmPoint } from '../types';
+import { COMMON_WORDS, QUOTES } from '../data/sampleTexts';
+
+export function calculateStats(
+  typedLength: number,
+  correctCount: number,
+  incorrectCount: number,
+  extraCount: number,
+  timeElapsedSeconds: number,
+  wpmHistory: WpmPoint[]
+) {
+  if (timeElapsedSeconds <= 0) {
+    return { wpm: 0, rawWpm: 0, accuracy: 100, cpm: 0, consistency: 100 };
+  }
+
+  const minutes = timeElapsedSeconds / 60;
+  
+  // Standard calculation: 1 word = 5 characters
+  const rawWpm = Math.round((typedLength / 5) / minutes);
+  const wpm = Math.max(0, Math.round((correctCount / 5) / minutes));
+  const cpm = Math.round(correctCount / minutes);
+  
+  const totalAttempts = correctCount + incorrectCount + extraCount;
+  const accuracy = totalAttempts > 0 
+    ? Math.round((correctCount / totalAttempts) * 100) 
+    : 100;
+
+  // Calculate consistency based on WPM variance in history
+  let consistency = 100;
+  if (wpmHistory.length > 2) {
+    const wpms = wpmHistory.map(p => p.wpm);
+    const mean = wpms.reduce((a, b) => a + b, 0) / wpms.length;
+    if (mean > 0) {
+      const variance = wpms.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / wpms.length;
+      const stdDev = Math.sqrt(variance);
+      const cv = (stdDev / mean) * 100; // Coefficient of Variation
+      consistency = Math.max(0, Math.min(100, Math.round(100 - cv)));
+    }
+  }
+
+  return { wpm, rawWpm, accuracy, cpm, consistency };
+}
+
+// QWERTY key to finger mapping
+const FINGER_KEY_MAP: Record<string, { name: FingerName; label: string; color: string }> = {
+  // Left Pinky
+  '`': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  '1': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  'q': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  'a': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  'z': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  '~': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+  '!': { name: 'left_pinky', label: 'Left Pinky', color: 'bg-rose-500' },
+
+  // Left Ring
+  '2': { name: 'left_ring', label: 'Left Ring', color: 'bg-amber-500' },
+  'w': { name: 'left_ring', label: 'Left Ring', color: 'bg-amber-500' },
+  's': { name: 'left_ring', label: 'Left Ring', color: 'bg-amber-500' },
+  'x': { name: 'left_ring', label: 'Left Ring', color: 'bg-amber-500' },
+  '@': { name: 'left_ring', label: 'Left Ring', color: 'bg-amber-500' },
+
+  // Left Middle
+  '3': { name: 'left_middle', label: 'Left Middle', color: 'bg-emerald-500' },
+  'e': { name: 'left_middle', label: 'Left Middle', color: 'bg-emerald-500' },
+  'd': { name: 'left_middle', label: 'Left Middle', color: 'bg-emerald-500' },
+  'c': { name: 'left_middle', label: 'Left Middle', color: 'bg-emerald-500' },
+  '#': { name: 'left_middle', label: 'Left Middle', color: 'bg-emerald-500' },
+
+  // Left Index
+  '4': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  '5': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  'r': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  't': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  'f': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  'g': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  'v': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  'b': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  '$': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+  '%': { name: 'left_index', label: 'Left Index', color: 'bg-sky-500' },
+
+  // Thumbs
+  ' ': { name: 'thumb', label: 'Thumb', color: 'bg-indigo-500' },
+
+  // Right Index
+  '6': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  '7': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'y': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'u': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'h': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'j': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'n': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  'm': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  '^': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+  '&': { name: 'right_index', label: 'Right Index', color: 'bg-blue-500' },
+
+  // Right Middle
+  '8': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+  'i': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+  'k': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+  ',': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+  '*': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+  '<': { name: 'right_middle', label: 'Right Middle', color: 'bg-teal-500' },
+
+  // Right Ring
+  '9': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+  'o': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+  'l': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+  '.': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+  '(': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+  '>': { name: 'right_ring', label: 'Right Ring', color: 'bg-purple-500' },
+
+  // Right Pinky
+  '0': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '-': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '=': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  'p': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '[': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  ']': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '\\': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  ';': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '\'': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '/': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  ')': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '_': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '+': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  ':': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '"': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+  '?': { name: 'right_pinky', label: 'Right Pinky', color: 'bg-fuchsia-500' },
+};
+
+export function getKeyFingerInfo(char: string) {
+  const lower = char.toLowerCase();
+  return FINGER_KEY_MAP[lower] || { name: 'thumb', label: 'Space Thumb', color: 'bg-indigo-500' };
+}
+
+export function generateWordsText(wordCount: number): string {
+  const result: string[] = [];
+  for (let i = 0; i < wordCount; i++) {
+    const randomIndex = Math.floor(Math.random() * COMMON_WORDS.length);
+    result.push(COMMON_WORDS[randomIndex]);
+  }
+  return result.join(" ");
+}
+
+export function getRandomQuote(length: 'short' | 'medium' | 'long'): string {
+  const list = QUOTES[length];
+  const idx = Math.floor(Math.random() * list.length);
+  return list[idx];
+}
+
+export function generateWeakKeyText(weakKeys: string[]): string {
+  if (!weakKeys || weakKeys.length === 0) {
+    return generateWordsText(30);
+  }
+
+  const focusChars = weakKeys.map(k => k.toLowerCase());
+  // Find words containing the focus chars
+  const matchingWords = COMMON_WORDS.filter(word => 
+    focusChars.some(char => word.toLowerCase().includes(char))
+  );
+
+  const wordPool = matchingWords.length >= 10 ? matchingWords : COMMON_WORDS;
+  const result: string[] = [];
+  
+  for (let i = 0; i < 35; i++) {
+    const randomIndex = Math.floor(Math.random() * wordPool.length);
+    result.push(wordPool[randomIndex]);
+  }
+
+  return result.join(" ");
+}
+
+export function getWpmGrade(wpm: number) {
+  if (wpm < 25) return { title: 'Beginner', color: 'text-amber-600', badge: '🌱 Novice' };
+  if (wpm < 45) return { title: 'Intermediate', color: 'text-blue-600', badge: '⚡ Average Typist' };
+  if (wpm < 70) return { title: 'Fast Typist', color: 'text-emerald-600', badge: '🚀 Pro Speeder' };
+  if (wpm < 95) return { title: 'Touch Master', color: 'text-purple-600', badge: '👑 Touch Master' };
+  return { title: 'Grandmaster', color: 'text-rose-600', badge: '🔥 Speed Demon' };
+}
