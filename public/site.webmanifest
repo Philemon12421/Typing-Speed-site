@@ -1,6 +1,6 @@
 {
-  "name": "VelocisType — Precision Touch Typing Test",
-  "short_name": "VelocisType",
+  "name": "Typerca — Precision Touch Typing Test",
+  "short_name": "Typerca",
   "description": "Free touch typing speed benchmark, WPM test, error heatmaps, and practice engine.",
   "start_url": "/",
   "display": "standalone",

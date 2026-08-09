@@ -32,7 +32,7 @@ import { GoalSoundModal } from './components/GoalSoundModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
 import { TYPING_CHALLENGES } from './data/challenges';
-import { Eye, EyeOff, Sparkles, Award, BookOpen } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, Award } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('test');
@@ -357,24 +357,10 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer Hotkey Guide */}
+      {/* Footer */}
       {!isZenModeActive && (
         <footer className="relative z-10 px-8 py-4 bg-white/20 backdrop-blur-md border-t border-white/20 flex flex-wrap justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest max-w-7xl mx-auto w-full mt-auto gap-4">
-          <div>&copy; VelocisType • Precision Touch Typing Engine</div>
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => setActiveTab('guide')}
-              className="flex items-center gap-1 text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer"
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Interactive Guide & Manual</span>
-            </button>
-            <span>•</span>
-            <span className="text-indigo-600">TAB</span>
-            <span className="text-slate-500">Reset</span>
-            <span className="text-indigo-600 ml-2">ESC</span>
-            <span className="text-slate-500">Restart</span>
-          </div>
+          <div>&copy; Typerca • Precision Touch Typing Engine</div>
         </footer>
       )}
 

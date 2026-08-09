@@ -10,5 +10,5 @@ Disallow: /api/
 Disallow: /*?*
 
 # Host & Sitemap specification
-Host: https://velocistype.com
-Sitemap: https://velocistype.com/sitemap.xml
+Host: https://typerca.vercel.app
+Sitemap: https://typerca.vercel.app/sitemap.xml

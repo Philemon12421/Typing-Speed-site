@@ -72,7 +72,7 @@ export const AnimatedGuideView: React.FC = () => {
 
           <h3 className="text-xl font-bold text-slate-900 border-b pb-2 border-slate-200">3. Master Burst Sprints vs. Endurance</h3>
           <p>
-            Alternate between short 15-second high-intensity sprints to push top raw speed, and 2-minute endurance tests to build typing stamina. Use VelocisType’s <strong>Custom Drill Mode</strong> to target your specific weak key pairs identified on your Error Heatmap.
+            Alternate between short 15-second high-intensity sprints to push top raw speed, and 2-minute endurance tests to build typing stamina. Use Typerca’s <strong>Custom Drill Mode</strong> to target your specific weak key pairs identified on your Error Heatmap.
           </p>
 
           <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold my-4">
@@ -206,12 +206,12 @@ export const AnimatedGuideView: React.FC = () => {
   // FAQs
   const faqs = [
     {
-      q: 'How is Net WPM vs Raw WPM calculated on VelocisType?',
+      q: 'How is Net WPM vs Raw WPM calculated on Typerca?',
       a: 'Net WPM is calculated using standard industry formula: ((Total Characters Typed / 5) - Uncorrected Errors) / Time in Minutes. Raw WPM counts all keystrokes regardless of accuracy.'
     },
     {
-      q: 'Is VelocisType completely free to use?',
-      a: 'Yes, VelocisType is 100% free with unlimited practice tests, Pro Analytics, certificates, and customization options.'
+      q: 'Is Typerca completely free to use?',
+      a: 'Yes, Typerca is 100% free with unlimited practice tests, Pro Analytics, certificates, and customization options.'
     },
     {
       q: 'How does Zen Mode improve focus during typing tests?',
@@ -243,24 +243,14 @@ export const AnimatedGuideView: React.FC = () => {
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-slate-800">
         <div className="flex items-center gap-4 relative z-10">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-600/30 border border-indigo-400/30 backdrop-blur-md flex items-center justify-center shrink-0 shadow-xl">
-            <BookOpen className="w-8 h-8 text-indigo-400 animate-pulse" />
+            <BookOpen className="w-8 h-8 text-indigo-400" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-extrabold text-[10px] uppercase tracking-widest">
-                Knowledge Center & SEO Hub
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold mt-1">Touch Typing Mastery & Guide</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold">Touch Typing Mastery & Guide</h1>
             <p className="text-xs sm:text-sm text-slate-300 font-medium mt-1 max-w-xl">
               In-depth articles, ergonomic training guides, WPM benchmark analysis, and interactive user manuals.
             </p>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md text-xs font-bold text-indigo-200 shrink-0">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>SEO & AdSense Verified</span>
         </div>
       </div>
 

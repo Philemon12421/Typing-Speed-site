@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </svg>
             </div>
             <span className="text-base sm:text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-800">
-              VelocisType
+              Typerca
             </span>
           </div>
 

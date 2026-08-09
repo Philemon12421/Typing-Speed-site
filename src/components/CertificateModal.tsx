@@ -61,7 +61,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <div>
               <div className="flex items-center justify-center gap-2 text-amber-700 font-black text-[11px] uppercase tracking-[0.25em]">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>VelocisType Assessment Standard</span>
+                <span>Typerca Assessment Standard</span>
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 font-serif tracking-tight">
