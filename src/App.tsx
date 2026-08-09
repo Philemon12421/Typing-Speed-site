@@ -32,7 +32,7 @@ import { UserRegistrationModal } from './components/UserRegistrationModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
 import { TYPING_CHALLENGES } from './data/challenges';
-import { Eye, EyeOff, Sparkles, Award, User } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, Award, User, Github, Star, GitFork, GitPullRequest } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('test');
@@ -361,48 +361,104 @@ export default function App() {
 
       {/* Footer */}
       {!settings.zenMode && (
-        <footer className="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <div className="flex items-center gap-3">
-            <span className="font-extrabold text-slate-800">Typerca</span>
-            <span>•</span>
-            <span>Powered by <strong className="text-slate-700">Drenchack Tech Company</strong></span>
+        <footer className="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-slate-200/80 flex flex-col gap-6 text-xs text-slate-500 font-medium">
+          
+          {/* GitHub Open Source Banner (Star, Fork, Contribute) */}
+          <div className="w-full py-3.5 px-4 sm:px-6 rounded-2xl bg-slate-900 border border-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
+                <Github className="w-5 h-5" />
+              </div>
+              <div className="text-center sm:text-left">
+                <div className="font-black text-sm text-white flex items-center justify-center sm:justify-start gap-1.5">
+                  <span>Typing-Speed-site</span>
+                  <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-mono">Open Source</span>
+                </div>
+                <div className="text-[11px] text-slate-400 font-medium mt-0.5">
+                  Star, fork or contribute to this project on GitHub
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 flex-wrap justify-center">
+              <a
+                href="https://github.com/Philemon12421/Typing-Speed-site"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-extrabold text-xs flex items-center gap-1.5 transition-all active:scale-95"
+                title="Star this repository on GitHub"
+              >
+                <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                <span>Star Repo</span>
+              </a>
+
+              <a
+                href="https://github.com/Philemon12421/Typing-Speed-site/fork"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-extrabold text-xs flex items-center gap-1.5 transition-all active:scale-95"
+                title="Fork this repository on GitHub"
+              >
+                <GitFork className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Fork</span>
+              </a>
+
+              <a
+                href="https://github.com/Philemon12421/Typing-Speed-site"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                title="Contribute on GitHub"
+              >
+                <GitPullRequest className="w-3.5 h-3.5" />
+                <span>Contribute</span>
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-slate-600 font-semibold">
-            {/* User Profile / Handle Button in Footer */}
-            <button
-              onClick={() => setIsUserRegistrationModalOpen(true)}
-              title={settings.userName ? `Logged in as @${settings.userName}` : 'Register username for Weekly Leaderboard'}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/90 hover:bg-indigo-100 border border-indigo-200 text-indigo-900 text-xs font-bold font-mono shadow-2xs transition-all"
-            >
-              <User className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-              <span>{settings.userName && settings.userName.trim() ? `@${settings.userName}` : 'Register Handle'}</span>
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="font-extrabold text-slate-800">Typerca</span>
+              <span>•</span>
+              <span>Powered by <strong className="text-slate-700">Drenchack Tech Company</strong></span>
+            </div>
 
-            <button
-              onClick={() => setActiveTab('guide')}
-              className="hover:text-indigo-600 transition-colors"
-            >
-              About Us
-            </button>
-            <button
-              onClick={() => setActiveTab('guide')}
-              className="hover:text-indigo-600 transition-colors"
-            >
-              Privacy Policy
-            </button>
-            <button
-              onClick={() => setActiveTab('guide')}
-              className="hover:text-indigo-600 transition-colors"
-            >
-              Terms of Service
-            </button>
-            <button
-              onClick={() => setActiveTab('guide')}
-              className="hover:text-indigo-600 transition-colors"
-            >
-              Speed Manual
-            </button>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-slate-600 font-semibold">
+              {/* User Profile / Handle Button in Footer */}
+              <button
+                onClick={() => setIsUserRegistrationModalOpen(true)}
+                title={settings.userName ? `Logged in as @${settings.userName}` : 'Register username for Weekly Leaderboard'}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/90 hover:bg-indigo-100 border border-indigo-200 text-indigo-900 text-xs font-bold font-mono shadow-2xs transition-all"
+              >
+                <User className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>{settings.userName && settings.userName.trim() ? `@${settings.userName}` : 'Register Handle'}</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('guide')}
+                className="hover:text-indigo-600 transition-colors"
+              >
+                About Us
+              </button>
+              <button
+                onClick={() => setActiveTab('guide')}
+                className="hover:text-indigo-600 transition-colors"
+              >
+                Privacy Policy
+              </button>
+              <button
+                onClick={() => setActiveTab('guide')}
+                className="hover:text-indigo-600 transition-colors"
+              >
+                Terms of Service
+              </button>
+              <button
+                onClick={() => setActiveTab('guide')}
+                className="hover:text-indigo-600 transition-colors"
+              >
+                Speed Manual
+              </button>
+            </div>
           </div>
         </footer>
       )}

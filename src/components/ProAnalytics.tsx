@@ -617,92 +617,142 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                 </button>
               </div>
             ) : (
-              <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
-                      <th className="p-3.5 pl-5">Rank</th>
-                      <th className="p-3.5">Typist</th>
-                      <th className="p-3.5 text-center">Net WPM</th>
-                      <th className="p-3.5 text-center">Accuracy</th>
-                      <th className="p-3.5 text-center">Tests</th>
-                      <th className="p-3.5 text-right pr-5">Member Joined</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
-                    {fullLeaderboardList.map((entry) => {
-                      const isTop1 = entry.rank === 1;
-                      const isTop2 = entry.rank === 2;
-                      const isTop3 = entry.rank === 3;
+              <div className="flex flex-col gap-4">
+                {/* Gold Medal Champion Spotlight Card */}
+                {fullLeaderboardList.length > 0 && (
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-300/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-400 to-yellow-500 text-amber-950 flex items-center justify-center font-black text-2xl shadow-md ring-4 ring-amber-300/40">
+                        👑
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 text-[11px] font-black text-amber-800 uppercase tracking-wider">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Weekly Gold Medal Champion</span>
+                        </div>
+                        <div className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2 mt-0.5">
+                          <span>{fullLeaderboardList[0].username}</span>
+                          <span className="text-xs text-amber-800 font-mono font-bold">{fullLeaderboardList[0].uniqueHandle}</span>
+                        </div>
+                      </div>
+                    </div>
 
-                      return (
-                        <tr
-                          key={entry.id}
-                          className={`transition-colors ${
-                            entry.isCurrentUser
-                              ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
-                              : 'hover:bg-slate-50/80'
-                          }`}
-                        >
-                          {/* Rank */}
-                          <td className="p-3.5 pl-5 font-black text-sm">
-                            {isTop1 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-amber-950 shadow-xs font-black">🥇 1</span>}
-                            {isTop2 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-300 text-slate-900 shadow-xs font-black">🥈 2</span>}
-                            {isTop3 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-700/20 text-amber-900 shadow-xs font-black">🥉 3</span>}
-                            {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
-                          </td>
+                    <div className="flex items-center gap-4 bg-white/90 backdrop-blur-xs px-4 py-2 rounded-xl border border-amber-200/80 shadow-2xs">
+                      <div className="text-center">
+                        <div className="text-[10px] font-bold text-slate-500 uppercase">Top Speed</div>
+                        <div className="text-base font-black text-indigo-950">{fullLeaderboardList[0].wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span></div>
+                      </div>
+                      <div className="h-6 w-px bg-amber-200" />
+                      <div className="text-center">
+                        <div className="text-[10px] font-bold text-slate-500 uppercase">Accuracy</div>
+                        <div className="text-base font-black text-emerald-700">{fullLeaderboardList[0].accuracy}%</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                          {/* Typist Name & Badges cleanly aligned */}
-                          <td className="p-3.5">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs uppercase text-white shrink-0 shadow-xs ${
-                                entry.isCurrentUser ? 'bg-indigo-600 ring-2 ring-indigo-300' : 'bg-slate-800'
-                              }`}>
-                                {entry.username.charAt(0)}
-                              </div>
-                              <div className="flex flex-col">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="font-extrabold text-slate-900 text-sm">
-                                    {entry.username}
-                                  </span>
-                                  {entry.isCurrentUser && (
-                                    <span className="px-1.5 py-0.5 rounded bg-indigo-100 border border-indigo-200 text-indigo-900 text-[9px] font-black uppercase tracking-wider">
-                                      YOU
-                                    </span>
-                                  )}
-                                  <span className="px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200/80 font-extrabold text-amber-900 text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                                    {entry.badge}
-                                  </span>
+                <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
+                        <th className="p-3.5 pl-5">Rank</th>
+                        <th className="p-3.5">Typist</th>
+                        <th className="p-3.5 text-center">Net WPM</th>
+                        <th className="p-3.5 text-center">Accuracy</th>
+                        <th className="p-3.5 text-center">Tests</th>
+                        <th className="p-3.5 text-right pr-5">Member Joined</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
+                      {fullLeaderboardList.map((entry) => {
+                        const isTop1 = entry.rank === 1;
+                        const isTop2 = entry.rank === 2;
+                        const isTop3 = entry.rank === 3;
+
+                        return (
+                          <tr
+                            key={entry.id}
+                            className={`transition-colors ${
+                              entry.isCurrentUser
+                                ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
+                                : 'hover:bg-slate-50/80'
+                            }`}
+                          >
+                            {/* Rank */}
+                            <td className="p-3.5 pl-5 font-black text-sm">
+                              {isTop1 && (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 text-amber-950 font-black text-xs shadow-sm border border-amber-200/80 ring-2 ring-amber-400/30">
+                                  <Crown className="w-3.5 h-3.5 text-amber-950 fill-amber-950 shrink-0" />
+                                  <span>🥇 #1 Gold</span>
                                 </div>
-                                <span className="text-[10px] text-slate-400 font-mono mt-0.5">{entry.uniqueHandle}</span>
+                              )}
+                              {isTop2 && (
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-400 text-slate-900 font-black text-xs shadow-2xs border border-slate-300">
+                                  <Award className="w-3.5 h-3.5 text-slate-800 shrink-0" />
+                                  <span>🥈 #2 Silver</span>
+                                </div>
+                              )}
+                              {isTop3 && (
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-700/20 via-amber-600/30 to-amber-800/20 text-amber-950 font-black text-xs shadow-2xs border border-amber-600/30">
+                                  <Award className="w-3.5 h-3.5 text-amber-800 shrink-0" />
+                                  <span>🥉 #3 Bronze</span>
+                                </div>
+                              )}
+                              {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
+                            </td>
+
+                            {/* Typist Name & Badges cleanly aligned */}
+                            <td className="p-3.5">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs uppercase text-white shrink-0 shadow-xs ${
+                                  entry.isCurrentUser ? 'bg-indigo-600 ring-2 ring-indigo-300' : 'bg-slate-800'
+                                }`}>
+                                  {entry.username.charAt(0)}
+                                </div>
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="font-extrabold text-slate-900 text-sm">
+                                      {entry.username}
+                                    </span>
+                                    {entry.isCurrentUser && (
+                                      <span className="px-1.5 py-0.5 rounded bg-indigo-100 border border-indigo-200 text-indigo-900 text-[9px] font-black uppercase tracking-wider">
+                                        YOU
+                                      </span>
+                                    )}
+                                    <span className="px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200/80 font-extrabold text-amber-900 text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                                      {entry.badge}
+                                    </span>
+                                  </div>
+                                  <span className="text-[10px] text-slate-400 font-mono mt-0.5">{entry.uniqueHandle}</span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
+                            </td>
 
-                          {/* WPM */}
-                          <td className="p-3.5 text-center font-black text-indigo-950 text-base">
-                            {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
-                          </td>
+                            {/* WPM */}
+                            <td className="p-3.5 text-center font-black text-indigo-950 text-base">
+                              {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
+                            </td>
 
-                          {/* Accuracy */}
-                          <td className="p-3.5 text-center font-extrabold text-emerald-700">
-                            {entry.accuracy}%
-                          </td>
+                            {/* Accuracy */}
+                            <td className="p-3.5 text-center font-extrabold text-emerald-700">
+                              {entry.accuracy}%
+                            </td>
 
-                          {/* Tests */}
-                          <td className="p-3.5 text-center font-bold text-slate-600">
-                            {entry.testsCount}
-                          </td>
+                            {/* Tests */}
+                            <td className="p-3.5 text-center font-bold text-slate-600">
+                              {entry.testsCount}
+                            </td>
 
-                          {/* Date */}
-                          <td className="p-3.5 text-right pr-5 font-mono text-[11px] text-slate-500">
-                            {entry.registeredDate}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                            {/* Date */}
+                            <td className="p-3.5 text-right pr-5 font-mono text-[11px] text-slate-500">
+                              {entry.registeredDate}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
