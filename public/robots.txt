@@ -1,0 +1,14 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /sitemap.xml
+Allow: /site.webmanifest
+
+# Disallow private temporary data
+Disallow: /api/
+Disallow: /*?*
+
+# Host & Sitemap specification
+Host: https://velocistype.com
+Sitemap: https://velocistype.com/sitemap.xml

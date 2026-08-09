@@ -193,18 +193,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`relative flex flex-col items-center justify-center py-1.5 px-3 min-h-[48px] rounded-xl text-[11px] font-extrabold transition-all ${
-                isActive ? 'text-indigo-400' : 'text-slate-400 hover:text-slate-200'
+              className={`flex flex-col items-center justify-center py-1.5 px-3 min-h-[48px] rounded-xl text-[11px] font-extrabold transition-all duration-200 ease-in-out border ${
+                isActive
+                  ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400 shadow-xs'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              {isActive && (
-                <motion.div
-                  layoutId="activeTabMobile"
-                  className="absolute inset-0 bg-indigo-500/15 border border-indigo-500/30 rounded-xl"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <div className="relative z-10 flex flex-col items-center gap-1">
+              <div className="flex flex-col items-center gap-1">
                 {item.icon}
                 <span className="text-[10px] tracking-tight">{item.label}</span>
               </div>

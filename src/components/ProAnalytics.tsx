@@ -11,6 +11,7 @@ import {
   CartesianGrid,
   BarChart,
   Bar,
+  Legend,
 } from 'recharts';
 import {
   Trophy,
@@ -61,6 +62,38 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshRe
     { range: '70-89 WPM', count: results.filter((r) => r.wpm >= 70 && r.wpm < 90).length },
     { range: '90+ WPM', count: results.filter((r) => r.wpm >= 90).length },
   ];
+
+  // 30-Day Typing Activity & WPM Trend Bar Chart data
+  const last30DaysData = React.useMemo(() => {
+    const daysMap: { [key: string]: { tests: number; totalWpm: number; maxWpm: number; dateStr: string } } = {};
+    const now = new Date();
+
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().split('T')[0];
+      const dateStr = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      daysMap[key] = { tests: 0, totalWpm: 0, maxWpm: 0, dateStr };
+    }
+
+    results.forEach((r) => {
+      const key = new Date(r.timestamp).toISOString().split('T')[0];
+      if (daysMap[key]) {
+        daysMap[key].tests += 1;
+        daysMap[key].totalWpm += r.wpm;
+        if (r.wpm > daysMap[key].maxWpm) {
+          daysMap[key].maxWpm = r.wpm;
+        }
+      }
+    });
+
+    return Object.values(daysMap).map((item) => ({
+      date: item.dateStr,
+      testsCount: item.tests,
+      avgWpm: item.tests > 0 ? Math.round(item.totalWpm / item.tests) : 0,
+      peakWpm: item.maxWpm,
+    }));
+  }, [results]);
 
   // Filtered history table
   const filteredResults = results.filter(
@@ -279,6 +312,67 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshRe
         </div>
       ) : (
         <>
+          {/* 30-Day Activity & WPM Trend Bar Chart */}
+          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">30-Day Typing Activity & Speed Trends</h3>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Daily test volume and average WPM performance over the last 30 days
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-xs font-bold">
+                <span className="flex items-center gap-1.5 text-indigo-600">
+                  <span className="w-3 h-3 rounded-md bg-indigo-600 inline-block" />
+                  <span>Tests Taken</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-emerald-600">
+                  <span className="w-3 h-3 rounded-md bg-emerald-500 inline-block" />
+                  <span>Avg WPM</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full h-64 sm:h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={last30DaysData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="date" stroke="#64748b" fontSize={10} interval="preserveStartEnd" />
+                  <YAxis
+                    yAxisId="left"
+                    stroke="#4f46e5"
+                    fontSize={11}
+                    allowDecimals={false}
+                    label={{ value: 'Tests', angle: -90, position: 'insideLeft', style: { fill: '#4f46e5', fontSize: 10, fontWeight: 700 } }}
+                  />
+                  <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    stroke="#10b981"
+                    fontSize={11}
+                    domain={[0, 'auto']}
+                    label={{ value: 'WPM', angle: 90, position: 'insideRight', style: { fill: '#10b981', fontSize: 10, fontWeight: 700 } }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      borderColor: '#e2e8f0',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                    }}
+                    formatter={(value: any, name: string) => [
+                      value,
+                      name === 'testsCount' ? 'Tests Taken' : name === 'avgWpm' ? 'Avg Speed (WPM)' : name,
+                    ]}
+                  />
+                  <Bar yAxisId="left" dataKey="testsCount" name="testsCount" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                  <Bar yAxisId="right" dataKey="avgWpm" name="avgWpm" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Speed Progression Line Chart */}
