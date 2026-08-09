@@ -97,6 +97,7 @@ export interface TypingChallenge {
   modeDetail: string;
   timeSeconds?: number;
   wordCount?: number;
+  quoteLength?: QuoteLength;
   customText?: string;
   blindMode?: boolean;
   xpReward: number;
@@ -115,4 +116,4 @@ export interface AiOpponent {
   color: string;
 }
 
-export type TabType = 'test' | 'duel' | 'challenges' | 'analytics' | 'guide';
+export type TabType = 'test' | 'challenges' | 'analytics' | 'guide';
