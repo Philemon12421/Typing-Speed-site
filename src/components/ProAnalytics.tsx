@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TestResult, MilestoneBadge, LeaderboardEntry } from '../types';
-import { getOverallAnalytics, clearTestHistory, deleteTestResult, exportUserDataJSON, importUserDataJSON } from '../utils/storage';
+import { getOverallAnalytics, clearTestHistory, deleteTestResult, exportUserDataJSON, importUserDataJSON, getRegisteredUsers, saveOrUpdateRegisteredUser } from '../utils/storage';
 import {
   ResponsiveContainer,
   LineChart,
@@ -33,6 +33,7 @@ import {
   Lock,
   ChevronRight,
   TrendingUp,
+  UserCheck,
 } from 'lucide-react';
 
 interface ProAnalyticsProps {
@@ -42,17 +43,84 @@ interface ProAnalyticsProps {
   onOpenRegisterModal?: () => void;
 }
 
-const MILESTONE_BADGES_DEF = [
-  { id: 'novice', title: 'Novice Typist', description: 'Reach 30+ WPM peak speed', category: 'wpm', reqValue: 30, iconSymbol: '🌱', badgeLabel: '30 WPM', color: 'from-emerald-500 to-teal-600' },
-  { id: 'speedster', title: 'Speedster', description: 'Reach 50+ WPM peak speed', category: 'wpm', reqValue: 50, iconSymbol: '⚡', badgeLabel: '50 WPM', color: 'from-blue-500 to-cyan-600' },
-  { id: 'pro_typist', title: 'Pro Typist', description: 'Reach 70+ WPM peak speed', category: 'wpm', reqValue: 70, iconSymbol: '🔥', badgeLabel: '70 WPM', color: 'from-indigo-500 to-purple-600' },
-  { id: 'typing_master', title: 'Typing Master', description: 'Reach 90+ WPM peak speed', category: 'wpm', reqValue: 90, iconSymbol: '👑', badgeLabel: '90 WPM', color: 'from-amber-500 to-yellow-600' },
-  { id: 'grandmaster', title: 'Grandmaster', description: 'Reach 110+ WPM peak speed', category: 'wpm', reqValue: 110, iconSymbol: '🏆', badgeLabel: '110 WPM', color: 'from-rose-500 to-pink-600' },
-  { id: 'god_speed', title: 'God Speed', description: 'Reach 130+ WPM peak speed', category: 'wpm', reqValue: 130, iconSymbol: '🚀', badgeLabel: '130 WPM', color: 'from-fuchsia-600 to-violet-700' },
-  { id: 'accuracy_pro', title: 'Laser Precision', description: 'Score 98%+ accuracy in a completed test', category: 'accuracy', reqValue: 98, iconSymbol: '🎯', badgeLabel: '98% Acc', color: 'from-teal-500 to-emerald-600' },
-  { id: 'centurion', title: 'Test Centurion', description: 'Complete 25+ practice tests', category: 'tests', reqValue: 25, iconSymbol: '🛡️', badgeLabel: '25 Tests', color: 'from-sky-500 to-indigo-600' },
-  { id: 'marathoner', title: 'Typing Veteran', description: 'Complete 50+ practice tests', category: 'tests', reqValue: 50, iconSymbol: '🏅', badgeLabel: '50 Tests', color: 'from-purple-500 to-indigo-700' },
-  { id: 'streak_master', title: 'Streak Warrior', description: 'Maintain a 5-day practice streak', category: 'streak', reqValue: 5, iconSymbol: '🔥', badgeLabel: '5d Streak', color: 'from-orange-500 to-amber-600' },
+const MILESTONE_BADGES_DEF: MilestoneBadge[] = [
+  // WPM SPEED MILESTONES (18 badges)
+  { id: 'wpm_15', title: 'First Keystrokes', description: 'Reach 15+ WPM typing speed', category: 'wpm', reqValue: 15, iconSymbol: '🌱', badgeLabel: '15 WPM', color: 'from-emerald-400 to-teal-500' },
+  { id: 'wpm_25', title: 'Steady Pace', description: 'Reach 25+ WPM typing speed', category: 'wpm', reqValue: 25, iconSymbol: '🚶', badgeLabel: '25 WPM', color: 'from-emerald-500 to-teal-600' },
+  { id: 'wpm_35', title: 'Flow State', description: 'Reach 35+ WPM typing speed', category: 'wpm', reqValue: 35, iconSymbol: '🌊', badgeLabel: '35 WPM', color: 'from-cyan-500 to-blue-500' },
+  { id: 'wpm_45', title: 'Rapid Rhythm', description: 'Reach 45+ WPM typing speed', category: 'wpm', reqValue: 45, iconSymbol: '⚡', badgeLabel: '45 WPM', color: 'from-blue-500 to-indigo-500' },
+  { id: 'wpm_55', title: 'Speedster', description: 'Reach 55+ WPM typing speed', category: 'wpm', reqValue: 55, iconSymbol: '🏃', badgeLabel: '55 WPM', color: 'from-indigo-500 to-violet-600' },
+  { id: 'wpm_65', title: 'Keyboard Runner', description: 'Reach 65+ WPM typing speed', category: 'wpm', reqValue: 65, iconSymbol: '🚀', badgeLabel: '65 WPM', color: 'from-violet-500 to-purple-600' },
+  { id: 'wpm_75', title: 'Pro Typist', description: 'Reach 75+ WPM typing speed', category: 'wpm', reqValue: 75, iconSymbol: '🔥', badgeLabel: '75 WPM', color: 'from-purple-500 to-fuchsia-600' },
+  { id: 'wpm_85', title: 'Ninja Fingers', description: 'Reach 85+ WPM typing speed', category: 'wpm', reqValue: 85, iconSymbol: '🥷', badgeLabel: '85 WPM', color: 'from-fuchsia-500 to-pink-600' },
+  { id: 'wpm_95', title: 'Typing Master', description: 'Reach 95+ WPM typing speed', category: 'wpm', reqValue: 95, iconSymbol: '👑', badgeLabel: '95 WPM', color: 'from-pink-500 to-rose-600' },
+  { id: 'wpm_105', title: 'Century Club', description: 'Cross 100 WPM milestone (105+ WPM)', category: 'wpm', reqValue: 105, iconSymbol: '💯', badgeLabel: '105 WPM', color: 'from-rose-500 to-red-600' },
+  { id: 'wpm_115', title: 'Grandmaster', description: 'Reach 115+ WPM typing speed', category: 'wpm', reqValue: 115, iconSymbol: '🏆', badgeLabel: '115 WPM', color: 'from-amber-500 to-yellow-600' },
+  { id: 'wpm_125', title: 'Lightning Fingers', description: 'Reach 125+ WPM typing speed', category: 'wpm', reqValue: 125, iconSymbol: '⚡', badgeLabel: '125 WPM', color: 'from-yellow-400 to-amber-600' },
+  { id: 'wpm_135', title: 'God Speed', description: 'Reach 135+ WPM typing speed', category: 'wpm', reqValue: 135, iconSymbol: '🌠', badgeLabel: '135 WPM', color: 'from-sky-400 to-blue-600' },
+  { id: 'wpm_145', title: 'Sonic Speedster', description: 'Reach 145+ WPM typing speed', category: 'wpm', reqValue: 145, iconSymbol: '🌀', badgeLabel: '145 WPM', color: 'from-cyan-400 to-teal-600' },
+  { id: 'wpm_155', title: 'Titan Velocity', description: 'Reach 155+ WPM typing speed', category: 'wpm', reqValue: 155, iconSymbol: '✨', badgeLabel: '155 WPM', color: 'from-indigo-600 to-purple-800' },
+  { id: 'wpm_165', title: 'Hyper Drive', description: 'Reach 165+ WPM typing speed', category: 'wpm', reqValue: 165, iconSymbol: '💫', badgeLabel: '165 WPM', color: 'from-fuchsia-600 to-pink-800' },
+  { id: 'wpm_175', title: 'Warp Speed', description: 'Reach 175+ WPM typing speed', category: 'wpm', reqValue: 175, iconSymbol: '🌌', badgeLabel: '175 WPM', color: 'from-purple-800 to-slate-900' },
+  { id: 'wpm_200', title: 'Typing Deity 200', description: 'Achieve legendary 200+ WPM peak speed', category: 'wpm', reqValue: 200, iconSymbol: '🔱', badgeLabel: '200 WPM', color: 'from-amber-300 via-yellow-400 to-amber-600' },
+
+  // ACCURACY MILESTONES (9 badges)
+  { id: 'acc_90', title: 'Clean Touch', description: 'Achieve 90%+ accuracy in a completed test', category: 'accuracy', reqValue: 90, iconSymbol: '🎯', badgeLabel: '90% Acc', color: 'from-emerald-400 to-teal-500' },
+  { id: 'acc_92', title: 'Sharpshooter', description: 'Achieve 92%+ accuracy in a completed test', category: 'accuracy', reqValue: 92, iconSymbol: '🏹', badgeLabel: '92% Acc', color: 'from-teal-500 to-emerald-600' },
+  { id: 'acc_94', title: 'Precision Mind', description: 'Achieve 94%+ accuracy in a completed test', category: 'accuracy', reqValue: 94, iconSymbol: '🧠', badgeLabel: '94% Acc', color: 'from-cyan-500 to-blue-600' },
+  { id: 'acc_96', title: 'Laser Focus', description: 'Achieve 96%+ accuracy in a completed test', category: 'accuracy', reqValue: 96, iconSymbol: '🔍', badgeLabel: '96% Acc', color: 'from-blue-500 to-indigo-600' },
+  { id: 'acc_98', title: 'Laser Precision', description: 'Achieve 98%+ accuracy in a completed test', category: 'accuracy', reqValue: 98, iconSymbol: '💎', badgeLabel: '98% Acc', color: 'from-indigo-500 to-violet-600' },
+  { id: 'acc_99', title: 'Surgical Accuracy', description: 'Achieve 99%+ accuracy in a completed test', category: 'accuracy', reqValue: 99, iconSymbol: '⚔️', badgeLabel: '99% Acc', color: 'from-violet-500 to-purple-600' },
+  { id: 'acc_100', title: 'Flawless Perfection', description: 'Score 100% 0-error flawless accuracy in a completed test', category: 'accuracy', reqValue: 100, iconSymbol: '🌟', badgeLabel: '100% Perfect', color: 'from-amber-400 to-yellow-500' },
+  { id: 'acc_98_3tests', title: 'Consistent Sniper', description: 'Maintain 98%+ peak accuracy benchmark', category: 'accuracy', reqValue: 98, iconSymbol: '🎯', badgeLabel: '98%+ Sniper', color: 'from-rose-500 to-pink-600' },
+  { id: 'acc_99_master', title: 'Zero Drift', description: 'Reach 99% accuracy peak excellence', category: 'accuracy', reqValue: 99, iconSymbol: '🛡️', badgeLabel: 'Zero Drift', color: 'from-sky-400 to-indigo-600' },
+
+  // TESTS COMPLETED MILESTONES (12 badges)
+  { id: 'tests_1', title: 'First Flight', description: 'Complete your first practice test', category: 'tests', reqValue: 1, iconSymbol: '🐣', badgeLabel: '1 Test', color: 'from-emerald-400 to-teal-500' },
+  { id: 'tests_5', title: 'Getting Started', description: 'Complete 5 practice tests', category: 'tests', reqValue: 5, iconSymbol: '🌱', badgeLabel: '5 Tests', color: 'from-emerald-500 to-teal-600' },
+  { id: 'tests_10', title: 'Dedicated Typist', description: 'Complete 10 practice tests', category: 'tests', reqValue: 10, iconSymbol: '📚', badgeLabel: '10 Tests', color: 'from-cyan-500 to-blue-600' },
+  { id: 'tests_25', title: 'Test Centurion', description: 'Complete 25 practice tests', category: 'tests', reqValue: 25, iconSymbol: '🛡️', badgeLabel: '25 Tests', color: 'from-blue-500 to-indigo-600' },
+  { id: 'tests_50', title: 'Typing Veteran', description: 'Complete 50 practice tests', category: 'tests', reqValue: 50, iconSymbol: '🏅', badgeLabel: '50 Tests', color: 'from-indigo-500 to-purple-600' },
+  { id: 'tests_75', title: 'Routine Master', description: 'Complete 75 practice tests', category: 'tests', reqValue: 75, iconSymbol: '🎗️', badgeLabel: '75 Tests', color: 'from-violet-500 to-purple-700' },
+  { id: 'tests_100', title: 'Centennial Typist', description: 'Complete 100 practice tests', category: 'tests', reqValue: 100, iconSymbol: '💯', badgeLabel: '100 Tests', color: 'from-purple-600 to-pink-600' },
+  { id: 'tests_150', title: 'Test Machine', description: 'Complete 150 practice tests', category: 'tests', reqValue: 150, iconSymbol: '🤖', badgeLabel: '150 Tests', color: 'from-pink-500 to-rose-600' },
+  { id: 'tests_200', title: 'Endurance Legend', description: 'Complete 200 practice tests', category: 'tests', reqValue: 200, iconSymbol: '🏛️', badgeLabel: '200 Tests', color: 'from-rose-600 to-red-700' },
+  { id: 'tests_300', title: 'Typing Immortal', description: 'Complete 300 practice tests', category: 'tests', reqValue: 300, iconSymbol: '👑', badgeLabel: '300 Tests', color: 'from-amber-500 to-yellow-600' },
+  { id: 'tests_400', title: 'Steel Keyboards', description: 'Complete 400 practice tests', category: 'tests', reqValue: 400, iconSymbol: '⚔️', badgeLabel: '400 Tests', color: 'from-slate-700 to-slate-900' },
+  { id: 'tests_500', title: 'Half Millennium', description: 'Complete 500 practice tests', category: 'tests', reqValue: 500, iconSymbol: '🌟', badgeLabel: '500 Tests', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+
+  // STREAK MILESTONES (11 badges)
+  { id: 'streak_1', title: 'Daily Spark', description: 'Start your practice streak (1 day)', category: 'streak', reqValue: 1, iconSymbol: '🕯️', badgeLabel: '1d Streak', color: 'from-amber-400 to-orange-500' },
+  { id: 'streak_2', title: 'Momentum', description: 'Maintain a 2-day practice streak', category: 'streak', reqValue: 2, iconSymbol: '⚡', badgeLabel: '2d Streak', color: 'from-orange-400 to-amber-600' },
+  { id: 'streak_3', title: 'Habit Formed', description: 'Maintain a 3-day practice streak', category: 'streak', reqValue: 3, iconSymbol: '🔥', badgeLabel: '3d Streak', color: 'from-orange-500 to-rose-500' },
+  { id: 'streak_5', title: 'Streak Warrior', description: 'Maintain a 5-day practice streak', category: 'streak', reqValue: 5, iconSymbol: '⚔️', badgeLabel: '5d Streak', color: 'from-rose-500 to-red-600' },
+  { id: 'streak_7', title: 'Full Week Habit', description: 'Maintain a 7-day practice streak', category: 'streak', reqValue: 7, iconSymbol: '📅', badgeLabel: '7d Streak', color: 'from-purple-500 to-indigo-600' },
+  { id: 'streak_10', title: 'Iron Discipline', description: 'Maintain a 10-day practice streak', category: 'streak', reqValue: 10, iconSymbol: '🛡️', badgeLabel: '10d Streak', color: 'from-indigo-600 to-blue-600' },
+  { id: 'streak_14', title: 'Fortnight Focus', description: 'Maintain a 14-day practice streak', category: 'streak', reqValue: 14, iconSymbol: '🏹', badgeLabel: '14d Streak', color: 'from-blue-600 to-teal-600' },
+  { id: 'streak_21', title: 'Habit Master', description: 'Maintain a 21-day practice streak', category: 'streak', reqValue: 21, iconSymbol: '🏆', badgeLabel: '21d Streak', color: 'from-teal-500 to-emerald-600' },
+  { id: 'streak_30', title: 'Monthly Legend', description: 'Maintain a 30-day practice streak', category: 'streak', reqValue: 30, iconSymbol: '👑', badgeLabel: '30d Streak', color: 'from-amber-500 to-yellow-600' },
+  { id: 'streak_60', title: 'Two Months Unstoppable', description: 'Maintain a 60-day practice streak', category: 'streak', reqValue: 60, iconSymbol: '🌋', badgeLabel: '60d Streak', color: 'from-rose-600 to-pink-700' },
+  { id: 'streak_100', title: '100-Day Streak Titan', description: 'Maintain an incredible 100-day practice streak', category: 'streak', reqValue: 100, iconSymbol: '☀️', badgeLabel: '100d Streak', color: 'from-amber-300 via-yellow-400 to-amber-600' },
+
+  // TOTAL WORDS TYPED MILESTONES (8 badges)
+  { id: 'words_100', title: 'First Paragraph', description: 'Type 100 total correct words', category: 'words', reqValue: 100, iconSymbol: '📝', badgeLabel: '100 Words', color: 'from-emerald-400 to-teal-500' },
+  { id: 'words_500', title: 'Essayist', description: 'Type 500 total correct words', category: 'words', reqValue: 500, iconSymbol: '📑', badgeLabel: '500 Words', color: 'from-teal-500 to-cyan-600' },
+  { id: 'words_1000', title: 'Article Writer', description: 'Type 1,000 total correct words', category: 'words', reqValue: 1000, iconSymbol: '📰', badgeLabel: '1,000 Words', color: 'from-cyan-600 to-blue-600' },
+  { id: 'words_2500', title: 'Short Story Scribe', description: 'Type 2,500 total correct words', category: 'words', reqValue: 2500, iconSymbol: '📖', badgeLabel: '2,500 Words', color: 'from-blue-600 to-indigo-600' },
+  { id: 'words_5000', title: 'Novelist in Training', description: 'Type 5,000 total correct words', category: 'words', reqValue: 5000, iconSymbol: '📕', badgeLabel: '5,000 Words', color: 'from-indigo-600 to-purple-600' },
+  { id: 'words_10000', title: 'Wordsmith Master', description: 'Type 10,000 total correct words', category: 'words', reqValue: 10000, iconSymbol: '🖋️', badgeLabel: '10,000 Words', color: 'from-purple-600 to-fuchsia-600' },
+  { id: 'words_25000', title: 'Literary Titan', description: 'Type 25,000 total correct words', category: 'words', reqValue: 25000, iconSymbol: '📚', badgeLabel: '25,000 Words', color: 'from-fuchsia-600 to-rose-600' },
+  { id: 'words_50000', title: '50,000 Words Author', description: 'Type a full novel volume of 50,000 words!', category: 'words', reqValue: 50000, iconSymbol: '📜', badgeLabel: '50,000 Words', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+
+  // PRACTICE TIME MILESTONES (8 badges)
+  { id: 'time_5', title: '5-Minute Warmup', description: 'Accumulate 5 total minutes of typing practice', category: 'time', reqValue: 5, iconSymbol: '⏱️', badgeLabel: '5 Mins', color: 'from-emerald-400 to-teal-500' },
+  { id: 'time_15', title: '15-Minute Session', description: 'Accumulate 15 total minutes of typing practice', category: 'time', reqValue: 15, iconSymbol: '⏲️', badgeLabel: '15 Mins', color: 'from-teal-500 to-cyan-600' },
+  { id: 'time_30', title: 'Half Hour Focus', description: 'Accumulate 30 total minutes of typing practice', category: 'time', reqValue: 30, iconSymbol: '⏰', badgeLabel: '30 Mins', color: 'from-cyan-600 to-blue-600' },
+  { id: 'time_60', title: '1 Hour Practiced', description: 'Accumulate 60 total minutes (1 Hour) of practice', category: 'time', reqValue: 60, iconSymbol: '⌛', badgeLabel: '1 Hour', color: 'from-blue-600 to-indigo-600' },
+  { id: 'time_120', title: '2 Hours Master', description: 'Accumulate 2 hours of typing practice', category: 'time', reqValue: 120, iconSymbol: '🕰️', badgeLabel: '2 Hours', color: 'from-indigo-600 to-purple-600' },
+  { id: 'time_300', title: '5 Hours Dedicated', description: 'Accumulate 5 hours of focused typing', category: 'time', reqValue: 300, iconSymbol: '🎓', badgeLabel: '5 Hours', color: 'from-purple-600 to-pink-600' },
+  { id: 'time_600', title: '10 Hours Veteran', description: 'Accumulate 10 full hours of touch typing', category: 'time', reqValue: 600, iconSymbol: '🔮', badgeLabel: '10 Hours', color: 'from-pink-600 to-rose-600' },
+  { id: 'time_1440', title: '24 Hours Clock', description: 'Accumulate a full 24 hours (1 Day) of active keystroke practice!', category: 'time', reqValue: 1440, iconSymbol: '👑', badgeLabel: '24 Hours', color: 'from-amber-400 via-yellow-500 to-amber-700' },
 ];
 
 export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
@@ -68,13 +136,15 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
   const analytics = getOverallAnalytics();
   const maxAccuracy = results.length > 0 ? Math.max(...results.map((r) => r.accuracy)) : 0;
 
-  // Compute Unlocked Badges
+  // Compute Unlocked Badges across all 60+ milestone definitions
   const badgesWithStatus = MILESTONE_BADGES_DEF.map((badge) => {
     let currentValue = 0;
     if (badge.category === 'wpm') currentValue = analytics.bestWpm;
     if (badge.category === 'tests') currentValue = analytics.totalTests;
     if (badge.category === 'accuracy') currentValue = maxAccuracy;
     if (badge.category === 'streak') currentValue = analytics.currentStreakDays;
+    if (badge.category === 'words') currentValue = analytics.totalWords || 0;
+    if (badge.category === 'time') currentValue = Math.round((analytics.totalTimeSeconds || 0) / 60);
 
     const isUnlocked = currentValue >= badge.reqValue;
     const progressPercent = Math.min(100, Math.round((currentValue / badge.reqValue) * 100));
@@ -89,44 +159,39 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
   const unlockedCount = badgesWithStatus.filter((b) => b.isUnlocked).length;
 
-  // Global Mock Weekly Leaderboard
-  const mockLeaderboard: LeaderboardEntry[] = [
-    { id: '1', rank: 1, username: 'ApexTypist', uniqueHandle: '@apextypist', wpm: 124, accuracy: 99, testsCount: 142, registeredDate: 'Weekly Champion', badge: '👑 Grandmaster' },
-    { id: '2', rank: 2, username: 'CyberKeys', uniqueHandle: '@cyberkeys', wpm: 112, accuracy: 98, testsCount: 98, registeredDate: 'Top 3', badge: '🏆 Master' },
-    { id: '3', rank: 3, username: 'VelocityPro', uniqueHandle: '@velocitypro', wpm: 104, accuracy: 97, testsCount: 84, registeredDate: 'Top 3', badge: '⚡ Speedster' },
-    { id: '4', rank: 4, username: 'PhantomFingers', uniqueHandle: '@phantomfingers', wpm: 94, accuracy: 99, testsCount: 65, registeredDate: 'Top 10', badge: '🎯 Precision' },
-    { id: '5', rank: 5, username: 'MatrixTyper', uniqueHandle: '@matrixtyper', wpm: 88, accuracy: 96, testsCount: 71, registeredDate: 'Top 10', badge: '🔥 Veteran' },
-    { id: '6', rank: 6, username: 'QuantumKey', uniqueHandle: '@quantumkey', wpm: 81, accuracy: 95, testsCount: 52, registeredDate: 'Top 10', badge: '⚡ Speedster' },
-    { id: '7', rank: 7, username: 'SwiftPaws', uniqueHandle: '@swiftpaws', wpm: 75, accuracy: 96, testsCount: 44, registeredDate: 'Top 10', badge: '🌱 Pro' },
-  ];
+  // Real Registered Users Weekly Leaderboard (ALL MOCK / FAKE USERS REMOVED)
+  const isUserRegistered = Boolean(userName && userName.trim().length >= 3 && userName !== 'Pro Typist');
 
-  // User Row insertion if registered & has test results
-  const isUserRegistered = Boolean(userName && userName.trim().length >= 3);
-  const userHandle = isUserRegistered ? `@${userName.toLowerCase().replace(/[^a-z0-9]/g, '')}` : '@guest';
-
-  let userLeaderboardRank = 8;
-  const userEntry: LeaderboardEntry = {
-    id: 'user_current',
-    rank: userLeaderboardRank,
-    username: userName || 'You',
-    uniqueHandle: userHandle,
-    wpm: analytics.bestWpm,
-    accuracy: analytics.avgAccuracy || 98,
-    testsCount: analytics.totalTests,
-    isCurrentUser: true,
-    registeredDate: 'Active Week',
-    badge: analytics.bestWpm >= 90 ? '👑 Master' : analytics.bestWpm >= 60 ? '⚡ Speedster' : '🌱 Novice',
-  };
-
-  // Combine and sort leaderboard according to WPM
-  const fullLeaderboardList = [...mockLeaderboard];
-  if (isUserRegistered && analytics.bestWpm > 0) {
-    fullLeaderboardList.push(userEntry);
-    fullLeaderboardList.sort((a, b) => b.wpm - a.wpm);
-    fullLeaderboardList.forEach((entry, idx) => {
-      entry.rank = idx + 1;
-    });
+  // Sync active user to registered users database if registered
+  if (isUserRegistered) {
+    saveOrUpdateRegisteredUser(
+      userName,
+      analytics.bestWpm,
+      analytics.avgAccuracy,
+      analytics.totalTests
+    );
   }
+
+  const realRegisteredUsers = getRegisteredUsers();
+
+  const fullLeaderboardList: LeaderboardEntry[] = realRegisteredUsers
+    .map((u) => ({
+      id: u.id,
+      rank: 0,
+      username: u.username,
+      uniqueHandle: u.uniqueHandle,
+      wpm: u.wpm,
+      accuracy: u.accuracy,
+      testsCount: u.testsCount,
+      isCurrentUser: u.username.toLowerCase() === userName.trim().toLowerCase(),
+      registeredDate: u.registeredDate,
+      badge: u.badge,
+    }))
+    .sort((a, b) => b.wpm - a.wpm);
+
+  fullLeaderboardList.forEach((entry, idx) => {
+    entry.rank = idx + 1;
+  });
 
   // Prepare chart data chronologically (oldest to newest)
   const chartData = [...results]
@@ -547,87 +612,115 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
               )}
             </div>
 
-            {/* Leaderboard Table */}
-            <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
-                    <th className="p-3.5 pl-5">Rank</th>
-                    <th className="p-3.5">Typist</th>
-                    <th className="p-3.5 text-center">Net WPM</th>
-                    <th className="p-3.5 text-center">Accuracy</th>
-                    <th className="p-3.5 text-center">Tests</th>
-                    <th className="p-3.5 text-right pr-5">Tier Badge</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
-                  {fullLeaderboardList.map((entry) => {
-                    const isTop1 = entry.rank === 1;
-                    const isTop2 = entry.rank === 2;
-                    const isTop3 = entry.rank === 3;
+            {/* Leaderboard Table / Empty State */}
+            {fullLeaderboardList.length === 0 ? (
+              <div className="p-10 text-center flex flex-col items-center justify-center gap-3 bg-slate-50/80 rounded-2xl border border-dashed border-slate-300/80 my-2">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-200 flex items-center justify-center text-amber-500 shadow-xs">
+                  <Crown className="w-7 h-7" />
+                </div>
+                <div className="max-w-md">
+                  <h3 className="text-base font-extrabold text-slate-900">No Registered Typists On Leaderboard Yet</h3>
+                  <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">
+                    This weekly board displays scores exclusively from real registered typists. Claim your username and complete a test to take Rank #1!
+                  </p>
+                </div>
+                <button
+                  onClick={onOpenRegisterModal}
+                  className="mt-2 px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2"
+                >
+                  <UserCheck className="w-4 h-4" />
+                  <span>Register Username to Claim Rank #1</span>
+                </button>
+              </div>
+            ) : (
+              <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
+                      <th className="p-3.5 pl-5">Rank</th>
+                      <th className="p-3.5">Typist</th>
+                      <th className="p-3.5 text-center">Net WPM</th>
+                      <th className="p-3.5 text-center">Accuracy</th>
+                      <th className="p-3.5 text-center">Tests</th>
+                      <th className="p-3.5 text-right pr-5">Member Joined</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
+                    {fullLeaderboardList.map((entry) => {
+                      const isTop1 = entry.rank === 1;
+                      const isTop2 = entry.rank === 2;
+                      const isTop3 = entry.rank === 3;
 
-                    return (
-                      <tr
-                        key={entry.id}
-                        className={`transition-colors ${
-                          entry.isCurrentUser
-                            ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
-                            : 'hover:bg-slate-50/80'
-                        }`}
-                      >
-                        {/* Rank */}
-                        <td className="p-3.5 pl-5 font-black text-sm">
-                          {isTop1 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-amber-950 shadow-xs">🥇 1</span>}
-                          {isTop2 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-300 text-slate-900 shadow-xs">🥈 2</span>}
-                          {isTop3 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-700/20 text-amber-900 shadow-xs">🥉 3</span>}
-                          {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
-                        </td>
+                      return (
+                        <tr
+                          key={entry.id}
+                          className={`transition-colors ${
+                            entry.isCurrentUser
+                              ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
+                              : 'hover:bg-slate-50/80'
+                          }`}
+                        >
+                          {/* Rank */}
+                          <td className="p-3.5 pl-5 font-black text-sm">
+                            {isTop1 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-amber-950 shadow-xs font-black">🥇 1</span>}
+                            {isTop2 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-300 text-slate-900 shadow-xs font-black">🥈 2</span>}
+                            {isTop3 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-700/20 text-amber-900 shadow-xs font-black">🥉 3</span>}
+                            {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
+                          </td>
 
-                        {/* Typist */}
-                        <td className="p-3.5">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-extrabold text-xs uppercase text-white ${
-                              entry.isCurrentUser ? 'bg-indigo-600' : 'bg-slate-800'
-                            }`}>
-                              {entry.username.charAt(0)}
+                          {/* Typist Name & Badges cleanly aligned */}
+                          <td className="p-3.5">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs uppercase text-white shrink-0 shadow-xs ${
+                                entry.isCurrentUser ? 'bg-indigo-600 ring-2 ring-indigo-300' : 'bg-slate-800'
+                              }`}>
+                                {entry.username.charAt(0)}
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-extrabold text-slate-900 text-sm">
+                                    {entry.username}
+                                  </span>
+                                  {entry.isCurrentUser && (
+                                    <span className="px-1.5 py-0.5 rounded bg-indigo-100 border border-indigo-200 text-indigo-900 text-[9px] font-black uppercase tracking-wider">
+                                      YOU
+                                    </span>
+                                  )}
+                                  <span className="px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200/80 font-extrabold text-amber-900 text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                                    {entry.badge}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] text-slate-400 font-mono mt-0.5">{entry.uniqueHandle}</span>
+                              </div>
                             </div>
-                            <div className="flex flex-col">
-                              <span className="font-extrabold text-slate-900 flex items-center gap-1">
-                                {entry.username}
-                                {entry.isCurrentUser && <span className="px-1.5 py-0.2 rounded bg-indigo-200 text-indigo-900 text-[9px]">YOU</span>}
-                              </span>
-                              <span className="text-[10px] text-slate-400 font-mono">{entry.uniqueHandle}</span>
-                            </div>
-                          </div>
-                        </td>
+                          </td>
 
-                        {/* WPM */}
-                        <td className="p-3.5 text-center font-black text-indigo-950 text-base">
-                          {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
-                        </td>
+                          {/* WPM */}
+                          <td className="p-3.5 text-center font-black text-indigo-950 text-base">
+                            {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
+                          </td>
 
-                        {/* Accuracy */}
-                        <td className="p-3.5 text-center font-extrabold text-emerald-700">
-                          {entry.accuracy}%
-                        </td>
+                          {/* Accuracy */}
+                          <td className="p-3.5 text-center font-extrabold text-emerald-700">
+                            {entry.accuracy}%
+                          </td>
 
-                        {/* Tests */}
-                        <td className="p-3.5 text-center font-bold text-slate-600">
-                          {entry.testsCount}
-                        </td>
+                          {/* Tests */}
+                          <td className="p-3.5 text-center font-bold text-slate-600">
+                            {entry.testsCount}
+                          </td>
 
-                        {/* Tier Badge */}
-                        <td className="p-3.5 text-right pr-5">
-                          <span className="px-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 font-extrabold text-slate-800 text-[11px]">
-                            {entry.badge}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          {/* Date */}
+                          <td className="p-3.5 text-right pr-5 font-mono text-[11px] text-slate-500">
+                            {entry.registeredDate}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       )}

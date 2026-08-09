@@ -3,6 +3,73 @@ import { TestResult, UserSettings } from '../types';
 const STORAGE_KEY_RESULTS = 'keypulse_test_results_v1';
 const STORAGE_KEY_SETTINGS = 'keypulse_user_settings_v1';
 const STORAGE_KEY_CHALLENGES = 'keypulse_completed_challenges_v1';
+const STORAGE_KEY_REGISTERED_USERS = 'typerca_registered_users_v1';
+
+export interface RegisteredUserRecord {
+  id: string;
+  username: string;
+  uniqueHandle: string;
+  wpm: number;
+  accuracy: number;
+  testsCount: number;
+  registeredDate: string;
+  badge: string;
+}
+
+export function getRegisteredUsers(): RegisteredUserRecord[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_REGISTERED_USERS);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveOrUpdateRegisteredUser(
+  username: string,
+  wpm: number,
+  accuracy: number,
+  testsCount: number
+): RegisteredUserRecord[] {
+  if (typeof window === 'undefined') return [];
+  const cleanUsername = username.trim();
+  if (!cleanUsername || cleanUsername === 'Pro Typist' || cleanUsername.length < 3) return getRegisteredUsers();
+
+  const handle = `@${cleanUsername.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+  const users = getRegisteredUsers();
+  
+  const existingIndex = users.findIndex(
+    (u) => u.username.toLowerCase() === cleanUsername.toLowerCase() || u.uniqueHandle.toLowerCase() === handle
+  );
+
+  let badge = '🌱 Novice';
+  if (wpm >= 140) badge = '👑 Apex Titan';
+  else if (wpm >= 110) badge = '🏆 Grandmaster';
+  else if (wpm >= 90) badge = '⚡ Typing Deity';
+  else if (wpm >= 70) badge = '🔥 Pro Typist';
+  else if (wpm >= 50) badge = '⚡ Speedster';
+
+  const userRecord: RegisteredUserRecord = {
+    id: existingIndex >= 0 ? users[existingIndex].id : `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    username: cleanUsername,
+    uniqueHandle: handle,
+    wpm: Math.max(wpm, existingIndex >= 0 ? users[existingIndex].wpm : 0),
+    accuracy: accuracy || (existingIndex >= 0 ? users[existingIndex].accuracy : 98),
+    testsCount: Math.max(testsCount, existingIndex >= 0 ? users[existingIndex].testsCount : 1),
+    registeredDate: existingIndex >= 0 ? users[existingIndex].registeredDate : new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    badge,
+  };
+
+  if (existingIndex >= 0) {
+    users[existingIndex] = userRecord;
+  } else {
+    users.push(userRecord);
+  }
+
+  localStorage.setItem(STORAGE_KEY_REGISTERED_USERS, JSON.stringify(users));
+  return users;
+}
 
 // In-Memory Storage Cache Layer
 let cachedResults: TestResult[] | null = null;
@@ -115,6 +182,14 @@ export function saveTestResult(result: TestResult): TestResult[] {
     localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(updated));
     cachedResults = updated;
     cachedAnalytics = null; // Invalidate analytics cache
+
+    // Sync registered user score to leaderboard if registered
+    const settings = getUserSettings();
+    if (settings.userName && settings.userName.trim().length >= 3 && settings.userName !== 'Pro Typist') {
+      const bestWpm = Math.max(result.wpm, ...updated.map((r) => r.wpm));
+      saveOrUpdateRegisteredUser(settings.userName, bestWpm, result.accuracy, updated.length);
+    }
+
     return updated;
   } catch (e) {
     console.error('Failed to save test result:', e);

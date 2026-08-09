@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Trophy, CheckCircle, Sparkles, X, Shield, AtSign } from 'lucide-react';
+import { saveOrUpdateRegisteredUser, getOverallAnalytics } from '../utils/storage';
 
 interface UserRegistrationModalProps {
   isOpen: boolean;
@@ -44,6 +45,11 @@ export const UserRegistrationModal: React.FC<UserRegistrationModalProps> = ({
 
     setError(null);
     onSaveUsername(trimmed);
+
+    // Save to real registered users storage for Leaderboard
+    const analytics = getOverallAnalytics();
+    saveOrUpdateRegisteredUser(trimmed, Math.max(userBestWpm, analytics.bestWpm), analytics.avgAccuracy, analytics.totalTests);
+
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);

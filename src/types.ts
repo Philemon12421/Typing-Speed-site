@@ -121,9 +121,9 @@ export interface MilestoneBadge {
   id: string;
   title: string;
   description: string;
-  category: 'wpm' | 'tests' | 'accuracy' | 'streak';
+  category: 'wpm' | 'tests' | 'accuracy' | 'streak' | 'words' | 'time';
   reqValue: number;
-  icon: string;
+  iconSymbol: string;
   color: string;
   badgeLabel: string;
 }
