@@ -104,4 +104,15 @@ export interface TypingChallenge {
   badge: string;
 }
 
-export type TabType = 'test' | 'analytics' | 'challenges' | 'guide';
+export interface AiOpponent {
+  id: string;
+  name: string;
+  title: string;
+  avatar: string;
+  targetWpm: number;
+  accuracy: number;
+  description: string;
+  color: string;
+}
+
+export type TabType = 'test' | 'duel' | 'challenges' | 'analytics' | 'guide';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TestResult, AIAnalysis } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
 import confetti from 'canvas-confetti';
@@ -24,11 +24,17 @@ import {
   Clock,
   Activity,
   Cpu,
+  Share2,
+  Download,
+  Copy,
+  X,
+  Check
 } from 'lucide-react';
 
 interface ResultsModalProps {
   result: TestResult;
   personalBestWpm?: number;
+  userName?: string;
   onRestart: () => void;
   onViewAnalytics: () => void;
   onViewCertificate: () => void;
@@ -40,6 +46,7 @@ interface ResultsModalProps {
 export const ResultsModal: React.FC<ResultsModalProps> = ({
   result,
   personalBestWpm = 0,
+  userName = 'Typist',
   onRestart,
   onViewAnalytics,
   onViewCertificate,
@@ -48,6 +55,9 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
   aiAnalysis,
 }) => {
   const grade = getWpmGrade(result.wpm);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // PB Comparison logic
   const isNewPB = personalBestWpm > 0 && result.wpm > personalBestWpm;
@@ -60,8 +70,8 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
   useEffect(() => {
     try {
       confetti({
-        particleCount: isNewPB ? 120 : 80,
-        spread: 70,
+        particleCount: isNewPB ? 140 : 80,
+        spread: 80,
         origin: { y: 0.6 },
         colors: ['#4f46e5', '#6366f1', '#10b981', '#f59e0b', '#8b5cf6'],
       });
@@ -69,6 +79,128 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
       // Ignore confetti errors
     }
   }, [isNewPB]);
+
+  // Render Canvas Card Image
+  useEffect(() => {
+    if (!isShareModalOpen || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = 1200;
+    const height = 630;
+    canvas.width = width;
+    canvas.height = height;
+
+    // Background Gradient
+    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+    bgGradient.addColorStop(0, '#0f172a');
+    bgGradient.addColorStop(0.5, '#1e1b4b');
+    bgGradient.addColorStop(1, '#020617');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Decorative Ambient Light Orbs
+    ctx.fillStyle = 'rgba(99, 102, 241, 0.15)';
+    ctx.beginPath();
+    ctx.arc(1000, 150, 300, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+    ctx.beginPath();
+    ctx.arc(200, 500, 250, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Glass Container Box
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(60, 60, width - 120, height - 120, 32);
+    ctx.fill();
+    ctx.stroke();
+
+    // Header Brand Tag
+    ctx.fillStyle = '#818cf8';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.fillText('VELOCISTYPE • TOUCH TYPING BENCHMARK', 100, 125);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 16px sans-serif';
+    ctx.fillText(new Date(result.timestamp).toLocaleDateString(undefined, { dateStyle: 'medium' }), width - 320, 125);
+
+    // User Name Banner
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 32px sans-serif';
+    ctx.fillText(userName, 100, 180);
+
+    // WPM Main Stat
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = '900 130px sans-serif';
+    ctx.fillText(`${result.wpm}`, 100, 330);
+
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('WPM', 100 + ctx.measureText(`${result.wpm}`).width + 20, 280);
+
+    // Divider Line
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.beginPath();
+    ctx.moveTo(100, 370);
+    ctx.lineTo(width - 100, 370);
+    ctx.stroke();
+
+    // Sub Stats Grid
+    const stats = [
+      { label: 'ACCURACY', val: `${result.accuracy}%`, color: '#34d399' },
+      { label: 'CONSISTENCY', val: `${result.consistency}%`, color: '#a78bfa' },
+      { label: 'RAW SPEED', val: `${result.rawWpm} WPM`, color: '#38bdf8' },
+      { label: 'MODE', val: `${result.mode} (${result.timeSeconds}s)`, color: '#f472b6' },
+    ];
+
+    stats.forEach((st, idx) => {
+      const x = 100 + idx * 260;
+      const y = 430;
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(st.label, x, y);
+
+      ctx.fillStyle = st.color;
+      ctx.font = '800 32px sans-serif';
+      ctx.fillText(st.val, x, y + 40);
+    });
+
+    // Footer Verification Seal
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText('Official Performance Card • Verified by VelocisType Engine', 100, 535);
+  }, [isShareModalOpen, result, userName]);
+
+  // Download Card Image Handler
+  const handleDownloadImage = () => {
+    if (!canvasRef.current) return;
+    const link = document.createElement('a');
+    link.download = `velocistype-${result.wpm}wpm.png`;
+    link.href = canvasRef.current.toDataURL('image/png');
+    link.click();
+  };
+
+  // Copy Image Handler
+  const handleCopyImage = async () => {
+    if (!canvasRef.current) return;
+    try {
+      canvasRef.current.toBlob(async (blob) => {
+        if (blob && navigator.clipboard && window.ClipboardItem) {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }
+      });
+    } catch (e) {
+      // Fallback
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm animate-in fade-in zoom-in-95 duration-300">
@@ -93,13 +225,20 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
         </div>
 
         {/* Primary Action Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <button
             onClick={onRestart}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-200 transition-all hover:scale-[1.02]"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Next Test (Tab)</span>
+          </button>
+          <button
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold text-sm shadow-sm transition-all"
+          >
+            <Share2 className="w-4 h-4 text-indigo-600" />
+            <span>Share Results</span>
           </button>
           <button
             onClick={onViewCertificate}
@@ -369,6 +508,61 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
           Close & Practice Again
         </button>
       </div>
+
+      {/* Share Card Modal */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-white flex flex-col gap-6 shadow-2xl relative">
+            <button
+              onClick={() => setIsShareModalOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <Share2 className="w-6 h-6 text-indigo-400" />
+              <div>
+                <h3 className="text-xl font-extrabold text-white">Share Typing Milestone</h3>
+                <p className="text-xs text-slate-400 font-medium">Generated Canvas card ready for social sharing or downloading.</p>
+              </div>
+            </div>
+
+            <div className="w-full bg-slate-950 rounded-2xl p-2 border border-slate-800 shadow-inner flex justify-center">
+              <canvas ref={canvasRef} className="w-full h-auto rounded-xl shadow-lg border border-slate-800 max-h-[380px] object-contain" />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadImage}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download PNG Image</span>
+                </button>
+
+                <button
+                  onClick={handleCopyImage}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm transition-all active:scale-95"
+                >
+                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
+                  <span>{copied ? 'Copied to Clipboard!' : 'Copy Image'}</span>
+                </button>
+              </div>
+
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just scored ${result.wpm} WPM with ${result.accuracy}% accuracy on VelocisType! 🚀 #typing #velocistype`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+              >
+                <span>Share to X / Twitter</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

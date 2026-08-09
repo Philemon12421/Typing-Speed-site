@@ -31,6 +31,7 @@ import { CertificateModal } from './components/CertificateModal';
 import { GoalSoundModal } from './components/GoalSoundModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
+import { LiveDuelView } from './components/LiveDuelView';
 import { Eye, EyeOff, Sparkles, Award, BookOpen } from 'lucide-react';
 
 export default function App() {
@@ -296,6 +297,7 @@ export default function App() {
               <ResultsModal
                 result={latestResult}
                 personalBestWpm={overallAnalytics.bestWpm}
+                userName={settings.userName}
                 onRestart={generateNewPassage}
                 onViewAnalytics={() => setActiveTab('analytics')}
                 onViewCertificate={() => setIsCertificateOpen(true)}
@@ -329,7 +331,16 @@ export default function App() {
           </div>
         )}
 
-        {/* VIEW 2: CHALLENGES */}
+        {/* VIEW 2: LIVE AI DUEL */}
+        {activeTab === 'duel' && (
+          <LiveDuelView
+            settings={settings}
+            personalBestWpm={overallAnalytics.bestWpm}
+            onSaveResult={() => setResults(getTestResults())}
+          />
+        )}
+
+        {/* VIEW 3: CHALLENGES */}
         {activeTab === 'challenges' && (
           <ChallengesView
             completedIds={completedChallengeIds}

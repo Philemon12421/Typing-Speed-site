@@ -42,6 +42,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
+  const [countdown, setCountdown] = useState<number | null>(null);
   
   // Real-time error tracking maps
   const [keyErrors, setKeyErrors] = useState<Record<string, number>>({});
@@ -65,10 +66,38 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     setIsStarted(false);
     setIsFinished(false);
     setTimeElapsed(0);
+    setCountdown(null);
     setKeyErrors({});
     setFingerStats({});
     setWpmHistory([]);
   }, [targetText]);
+
+  // Handle Start Test with Countdown
+  const handleStartWithCountdown = () => {
+    if (isStarted || countdown !== null) return;
+    setCountdown(3);
+  };
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (countdown === null) return;
+
+    soundSynth.playKeyPress(settings.soundProfile, settings.soundVolume, false, false);
+
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown((prev) => (prev !== null ? prev - 1 : 0));
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      const timer = setTimeout(() => {
+        setCountdown(null);
+        setIsStarted(true);
+        setTimeout(() => inputRef.current?.focus(), 50);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   // Scroll active char into view seamlessly
   useEffect(() => {
@@ -190,7 +219,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
   // Keyboard Event Handling
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFinished) return;
+    if (isFinished || countdown !== null) return;
 
     const newTyped = e.target.value;
 
@@ -409,7 +438,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
         className="w-full max-w-4xl min-h-[160px] sm:min-h-[200px] p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/60 shadow-sm relative overflow-hidden flex flex-wrap items-center content-start gap-y-2 font-mono tracking-wide text-slate-400 transition-all max-h-[360px] overflow-y-auto"
       >
         {/* Unfocused overlay prompt if input loses focus */}
-        {!isFinished && (
+        {!isFinished && !countdown && (
           <div className="absolute inset-0 z-10 bg-white/40 backdrop-blur-[2px] opacity-0 hover:opacity-100 focus-within:opacity-0 transition-opacity flex flex-col items-center justify-center pointer-events-none p-4 text-center">
             <button
               onClick={() => inputRef.current?.focus()}
@@ -420,11 +449,30 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
           </div>
         )}
 
-        {/* Start typing prompt callout */}
-        {!isStarted && (
-          <div className="absolute top-3 right-4 sm:top-4 sm:right-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium border border-indigo-200 animate-pulse">
-            <Play className="w-3 h-3 fill-indigo-600" />
-            <span>Start typing to begin...</span>
+        {/* Start Test Button Banner (Before starting) */}
+        {!isStarted && countdown === null && (
+          <div className="absolute inset-0 z-20 bg-slate-900/10 backdrop-blur-[3px] flex flex-col items-center justify-center p-4 text-center gap-3 animate-in fade-in duration-200">
+            <button
+              onClick={handleStartWithCountdown}
+              className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-extrabold shadow-xl shadow-indigo-300 flex items-center gap-2.5 active:scale-95 transition-all cursor-pointer"
+            >
+              <Play className="w-5 h-5 fill-white" />
+              <span>Click to Start Test</span>
+            </button>
+            <span className="text-xs font-bold text-slate-700 bg-white/80 px-3 py-1 rounded-full shadow-sm border border-slate-200">
+              Or start typing directly to begin
+            </span>
+          </div>
+        )}
+
+        {/* Clean Countdown Popup Modal (3... 2... 1... GO!) */}
+        {countdown !== null && (
+          <div className="absolute inset-0 z-30 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white text-center animate-in zoom-in-95 duration-200">
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">Get Ready</span>
+            <div className="text-7xl sm:text-8xl font-black text-amber-400 my-2 animate-bounce">
+              {countdown === 0 ? 'GO!' : countdown}
+            </div>
+            <span className="text-xs font-semibold text-slate-300">Hands on home row!</span>
           </div>
         )}
 
