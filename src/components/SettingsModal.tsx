@@ -90,40 +90,101 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
 
-        {/* Sound Profile */}
+        {/* Keyboard Sound Toggle & Profile */}
         <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
-          <label className="text-xs font-bold text-slate-800 flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <Volume2 className="w-4 h-4 text-blue-600" />
-              <span>Keyboard Sound Profile</span>
-            </span>
-            <span className="text-[11px] text-slate-500 font-mono">
-              {Math.round(settings.soundVolume * 100)}%
-            </span>
-          </label>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-slate-800 flex items-center gap-2">
+              {settings.soundEnabled ? (
+                <Volume2 className="w-4 h-4 text-blue-600" />
+              ) : (
+                <VolumeX className="w-4 h-4 text-slate-400" />
+              )}
+              <span>Keyboard Click Sounds</span>
+            </label>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.soundEnabled}
+                onChange={(e) => handleChange('soundEnabled', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
 
-          <select
-            value={settings.soundProfile}
-            onChange={(e) => handleChange('soundProfile', e.target.value as SoundProfile)}
-            className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none"
-          >
-            <option value="cherry_mx">Cherry MX Mechanical Switches</option>
-            <option value="click">Clean Digital UI Click</option>
-            <option value="typewriter">Vintage Typewriter Clack</option>
-            <option value="soft">Soft Bubble Pop</option>
-            <option value="silent">Mute / Silent</option>
-          </select>
+          {settings.soundEnabled && (
+            <>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[11px] font-bold text-slate-700">Audio Profile</span>
+                <div className="grid grid-cols-1 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleChange('soundProfile', 'cherry_mx')}
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl border text-xs font-bold transition-all ${
+                      settings.soundProfile === 'cherry_mx'
+                        ? 'bg-blue-50 border-blue-500 text-blue-900 shadow-2xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>🎹</span>
+                      <span>Cherry MX Blue</span>
+                    </span>
+                    <span className="text-[10px] font-normal text-slate-500">Crisp Tactile Click</span>
+                  </button>
 
-          {/* Volume Slider */}
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={settings.soundVolume}
-            onChange={(e) => handleChange('soundVolume', parseFloat(e.target.value))}
-            className="w-full accent-blue-600 cursor-pointer"
-          />
+                  <button
+                    type="button"
+                    onClick={() => handleChange('soundProfile', 'soft')}
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl border text-xs font-bold transition-all ${
+                      settings.soundProfile === 'soft'
+                        ? 'bg-blue-50 border-blue-500 text-blue-900 shadow-2xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>🫧</span>
+                      <span>Silent Red</span>
+                    </span>
+                    <span className="text-[10px] font-normal text-slate-500">Quiet Dampened Linear</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleChange('soundProfile', 'typewriter')}
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl border text-xs font-bold transition-all ${
+                      settings.soundProfile === 'typewriter'
+                        ? 'bg-blue-50 border-blue-500 text-blue-900 shadow-2xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>⌨️</span>
+                      <span>Retro Typewriter</span>
+                    </span>
+                    <span className="text-[10px] font-normal text-slate-500">Vintage Mechanical Clack</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Volume Slider */}
+              <div className="flex flex-col gap-1 pt-1">
+                <div className="flex justify-between items-center text-[10px] font-bold text-slate-500">
+                  <span>Volume Level</span>
+                  <span>{Math.round(settings.soundVolume * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.05"
+                  max="1"
+                  step="0.05"
+                  value={settings.soundVolume}
+                  onChange={(e) => handleChange('soundVolume', parseFloat(e.target.value))}
+                  className="w-full accent-blue-600 cursor-pointer"
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Toggles Group */}

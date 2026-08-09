@@ -150,24 +150,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            {/* Quick Controls: Username Handle, Sound, Streak & Settings */}
+            {/* Quick Controls: Sound, Streak & Settings */}
             <div className="flex items-center gap-1 sm:gap-1.5">
-              
-              {/* Username Handle Button */}
-              <button
-                onClick={onOpenRegisterModal}
-                title={userName ? `Logged in as @${userName}` : 'Register username for Weekly Leaderboard'}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-900 text-xs font-bold shadow-2xs transition-all"
-              >
-                <User className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                <span className="hidden sm:inline font-mono font-extrabold text-[11px]">
-                  {userName && userName.trim() ? `@${userName}` : 'Register'}
-                </span>
-                <span className="sm:hidden font-mono text-[10px]">
-                  {userName && userName.trim() ? `@${userName.slice(0, 6)}` : 'User'}
-                </span>
-              </button>
-
               <button
                 onClick={onOpenGoalSoundModal}
                 title={`Sound Profile: ${soundProfile}`}

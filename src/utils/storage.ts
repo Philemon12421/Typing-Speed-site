@@ -21,6 +21,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   userName: 'Pro Typist',
   fontSize: 'lg',
   caretStyle: 'line',
+  soundEnabled: true,
   soundProfile: 'cherry_mx',
   soundVolume: 0.4,
   blindMode: false,

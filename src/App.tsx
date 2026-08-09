@@ -32,7 +32,7 @@ import { UserRegistrationModal } from './components/UserRegistrationModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
 import { TYPING_CHALLENGES } from './data/challenges';
-import { Eye, EyeOff, Sparkles, Award } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, Award, User } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('test');
@@ -362,13 +362,23 @@ export default function App() {
       {/* Footer */}
       {!settings.zenMode && (
         <footer className="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span className="font-extrabold text-slate-800">Typerca</span>
             <span>•</span>
             <span>Powered by <strong className="text-slate-700">Drenchack Tech Company</strong></span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-slate-600 font-semibold">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-slate-600 font-semibold">
+            {/* User Profile / Handle Button in Footer */}
+            <button
+              onClick={() => setIsUserRegistrationModalOpen(true)}
+              title={settings.userName ? `Logged in as @${settings.userName}` : 'Register username for Weekly Leaderboard'}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/90 hover:bg-indigo-100 border border-indigo-200 text-indigo-900 text-xs font-bold font-mono shadow-2xs transition-all"
+            >
+              <User className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+              <span>{settings.userName && settings.userName.trim() ? `@${settings.userName}` : 'Register Handle'}</span>
+            </button>
+
             <button
               onClick={() => setActiveTab('guide')}
               className="hover:text-indigo-600 transition-colors"

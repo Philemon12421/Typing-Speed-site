@@ -235,8 +235,9 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     // Sound effect trigger
     if (newTyped.length > typedChars.length) {
       const isError = lastChar !== expectedChar;
+      const activeProfile = settings.soundEnabled === false ? 'silent' : settings.soundProfile;
       soundSynth.playKeyPress(
-        settings.soundProfile,
+        activeProfile,
         settings.soundVolume,
         lastChar === ' ',
         isError

@@ -555,85 +555,56 @@ export const AnimatedGuideView: React.FC = () => {
             </div>
           </section>
 
-          {/* Clean Team Display Grid */}
+          {/* Clean Solo Founder & Creator Display */}
           <section className="space-y-6 border-t border-slate-200 pt-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
                   <Users className="w-6 h-6 text-indigo-600" />
-                  <span>Meet Our Leadership & Engineering Team</span>
+                  <span>Meet the Developer & Founder</span>
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  The passionate minds behind Typerca’s real-time typing engine and design architecture.
+                  Typerca is built, engineered, and maintained independently by a passionate solo creator.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-8 rounded-3xl bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 text-white shadow-xl border border-indigo-700/50 relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-6">
+              <div className="absolute top-0 right-0 p-6 opacity-10 font-mono text-9xl font-black pointer-events-none select-none">
+                SOLO
+              </div>
               
-              {/* Founder Card */}
-              <div className="p-6 rounded-2xl bg-white border-2 border-indigo-500/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 bg-indigo-600 text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-wider">
-                  Founder
-                </div>
-                <div className="w-16 h-16 rounded-2xl bg-indigo-900 text-indigo-100 font-extrabold text-xl flex items-center justify-center shrink-0 border border-indigo-700 shadow-inner">
-                  PO
-                </div>
-                <div className="space-y-1">
-                  <h4 className="text-lg font-extrabold text-slate-900">Philemon Osei Kusi</h4>
-                  <p className="text-xs font-extrabold text-indigo-600">Founder & Chief Executive Officer</p>
-                  <p className="text-[11px] font-semibold text-slate-500">Founder of Drenchack Tech Company</p>
-                  <p className="text-xs text-slate-600 pt-1 leading-normal">
-                    Visionary software engineer and entrepreneur leading product direction, real-time typing metrics, and community velocity programs.
-                  </p>
-                </div>
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-indigo-600 text-white font-black text-3xl sm:text-4xl flex items-center justify-center shrink-0 border-4 border-indigo-400/30 shadow-2xl shadow-indigo-500/20">
+                POK
               </div>
 
-              {/* Team Member 2 */}
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-emerald-200">
-                  MV
+              <div className="space-y-3 text-center md:text-left relative z-10 flex-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-bold uppercase tracking-widest">
+                  <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Solo Founder & Lead Architect</span>
                 </div>
-                <div className="space-y-1">
-                  <h4 className="text-lg font-extrabold text-slate-900">Dr. Marcus Vance</h4>
-                  <p className="text-xs font-extrabold text-emerald-600">Head of Cognitive Ergonomics</p>
-                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Ergonomics Division</p>
-                  <p className="text-xs text-slate-600 pt-1 leading-normal">
-                    Motor learning researcher specializing in finger column mappings, fatigue prevention, and muscle memory drills.
-                  </p>
+                
+                <div>
+                  <h4 className="text-2xl sm:text-3xl font-black tracking-tight text-white">Philemon Osei Kusi</h4>
+                  <p className="text-sm font-semibold text-indigo-300 mt-0.5">Founder & Lead Engineer, Drenchack Tech Company</p>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+                  As the sole developer behind Typerca, Philemon architected every aspect of the platform — from the zero-latency typing event engine and mechanical audio synthesis to the responsive UI, error heatmaps, and local data analytics. His mission is to make touch typing practice fast, accessible, and deeply engaging for everyone worldwide.
+                </p>
+
+                <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <span className="px-3 py-1.5 rounded-xl bg-white/10 text-xs font-mono font-bold text-indigo-200 border border-white/10">
+                    💻 Full-Stack Development
+                  </span>
+                  <span className="px-3 py-1.5 rounded-xl bg-white/10 text-xs font-mono font-bold text-indigo-200 border border-white/10">
+                    🚀 Founder @ Drenchack Tech
+                  </span>
+                  <span className="px-3 py-1.5 rounded-xl bg-white/10 text-xs font-mono font-bold text-indigo-200 border border-white/10">
+                    🎯 100% Solo Project
+                  </span>
                 </div>
               </div>
-
-              {/* Team Member 3 */}
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
-                <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-rose-200">
-                  ER
-                </div>
-                <div className="space-y-1">
-                  <h4 className="text-lg font-extrabold text-slate-900">Elena Rostova</h4>
-                  <p className="text-xs font-extrabold text-rose-600">Lead UI/UX Architect</p>
-                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Design Studio</p>
-                  <p className="text-xs text-slate-600 pt-1 leading-normal">
-                    Creator of Typerca’s responsive interface, error heatmaps, and distraction-free Zen mode controls.
-                  </p>
-                </div>
-              </div>
-
-              {/* Team Member 4 */}
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
-                <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-amber-200">
-                  AR
-                </div>
-                <div className="space-y-1">
-                  <h4 className="text-lg font-extrabold text-slate-900">Alex Rivera</h4>
-                  <p className="text-xs font-extrabold text-amber-600">Systems & Audio Synthesizer Lead</p>
-                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Core Engineering</p>
-                  <p className="text-xs text-slate-600 pt-1 leading-normal">
-                    Pioneered the Web Audio mechanical switch sound synthesis engine and zero-latency input buffer.
-                  </p>
-                </div>
-              </div>
-
             </div>
           </section>
 

@@ -24,6 +24,7 @@ export interface UserSettings {
   userName: string;
   fontSize: FontSize;
   caretStyle: CaretStyle;
+  soundEnabled: boolean;
   soundProfile: SoundProfile;
   soundVolume: number;
   blindMode: boolean;

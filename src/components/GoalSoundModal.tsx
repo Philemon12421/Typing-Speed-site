@@ -37,11 +37,11 @@ export const GoalSoundModal: React.FC<GoalSoundModalProps> = ({
   if (!isOpen) return null;
 
   const soundOptions: { id: SoundProfile; label: string; desc: string; icon: string }[] = [
-    { id: 'typewriter', label: 'Typewriter', desc: 'Classic mechanical snap & spring', icon: '⌨️' },
-    { id: 'cherry_mx', label: 'Cherry MX', desc: 'Crisp tactile switch click', icon: '🎹' },
+    { id: 'cherry_mx', label: 'Cherry MX Blue', desc: 'Crisp tactile switch click', icon: '🎹' },
+    { id: 'soft', label: 'Silent Red', desc: 'Quiet dampened linear sound', icon: '🫧' },
+    { id: 'typewriter', label: 'Retro Typewriter', desc: 'Vintage mechanical snap & clack', icon: '⌨️' },
     { id: 'click', label: 'Digital Click', desc: 'Modern clean UI tick', icon: '🖱️' },
-    { id: 'soft', label: 'Soft Pop', desc: 'Warm gentle bubble sound', icon: '🫧' },
-    { id: 'silent', label: 'Silent', desc: 'Disable audio feedback', icon: '🔇' },
+    { id: 'silent', label: 'Silent / Mute', desc: 'Disable audio feedback', icon: '🔇' },
   ];
 
   const handleTestSound = (profile: SoundProfile) => {
