@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TYPING_CHALLENGES } from '../data/challenges';
 import { TypingChallenge, TestResult } from '../types';
 import { Trophy, Zap, Target, Flame, Code, Activity, EyeOff, Crown, CheckCircle2, Play, Sparkles, Award } from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface ChallengesViewProps {
   completedIds: string[];
@@ -94,9 +95,11 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
 
           {/* XP Progress Bar */}
           <div className="w-full h-2.5 rounded-full bg-black/20 overflow-hidden p-0.5 border border-white/10">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-500"
-              style={{ width: `${levelProgressPercent}%` }}
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 shadow-xs"
+              initial={{ width: 0 }}
+              animate={{ width: `${levelProgressPercent}%` }}
+              transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             />
           </div>
 

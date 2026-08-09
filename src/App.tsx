@@ -31,6 +31,7 @@ import { CertificateModal } from './components/CertificateModal';
 import { GoalSoundModal } from './components/GoalSoundModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
+import { TYPING_CHALLENGES } from './data/challenges';
 import { Eye, EyeOff, Sparkles, Award, BookOpen } from 'lucide-react';
 
 export default function App() {
@@ -219,7 +220,7 @@ export default function App() {
   const isZenModeActive = settings.zenMode && activeTab === 'test' && !latestResult;
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-hidden selection:bg-indigo-600 selection:text-white pb-12">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-hidden selection:bg-indigo-600 selection:text-white pb-20 sm:pb-12">
       {/* Frosted Glass Ambient Soft Blurred Light Orbs */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none" />
       <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none" />
@@ -246,6 +247,8 @@ export default function App() {
           userName={settings.userName}
           soundProfile={settings.soundProfile}
           todayProgress={todayProgress}
+          completedChallengesCount={completedChallengeIds.length}
+          totalChallengesCount={TYPING_CHALLENGES.length}
           onOpenGoalSoundModal={() => setIsGoalSoundModalOpen(true)}
         />
       )}
