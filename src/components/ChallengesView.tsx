@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TYPING_CHALLENGES } from '../data/challenges';
 import { TypingChallenge, TestResult } from '../types';
-import { Trophy, Zap, Target, Flame, Code, Activity, EyeOff, Crown, CheckCircle2, Play, Sparkles, Award } from 'lucide-react';
+import { Trophy, Zap, Target, Flame, Code, Activity, EyeOff, Crown, CheckCircle2, Play, Award, Search, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface ChallengesViewProps {
@@ -10,26 +10,70 @@ interface ChallengesViewProps {
   onStartChallenge: (challenge: TypingChallenge) => void;
 }
 
+const ITEMS_PER_PAGE = 24;
+
 export const ChallengesView: React.FC<ChallengesViewProps> = ({
   completedIds,
-  testResults,
   onStartChallenge,
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'easy' | 'medium' | 'hard' | 'legendary'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'easy' | 'medium' | 'hard' | 'legendary' | 'passed'>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Calculate user XP and Level
-  const totalXp = TYPING_CHALLENGES.reduce((sum, ch) => {
-    return completedIds.includes(ch.id) ? sum + ch.xpReward : sum;
-  }, 0);
+  // Calculate user XP and Level across 1050+ challenges
+  const totalXp = useMemo(() => {
+    return TYPING_CHALLENGES.reduce((sum, ch) => {
+      return completedIds.includes(ch.id) ? sum + ch.xpReward : sum;
+    }, 0);
+  }, [completedIds]);
 
   const level = Math.floor(totalXp / 250) + 1;
   const xpInCurrentLevel = totalXp % 250;
   const levelProgressPercent = Math.min(100, Math.round((xpInCurrentLevel / 250) * 100));
 
-  const filteredChallenges = TYPING_CHALLENGES.filter((ch) => {
-    if (selectedFilter === 'all') return true;
-    return ch.difficulty === selectedFilter;
-  });
+  // Filter & Search Logic
+  const filteredChallenges = useMemo(() => {
+    return TYPING_CHALLENGES.filter((ch) => {
+      // Difficulty / Passed filter
+      if (selectedFilter === 'passed') {
+        if (!completedIds.includes(ch.id)) return false;
+      } else if (selectedFilter !== 'all') {
+        if (ch.difficulty !== selectedFilter) return false;
+      }
+
+      // Search query filter
+      if (searchQuery.trim() !== '') {
+        const q = searchQuery.toLowerCase().trim();
+        const matchTitle = ch.title.toLowerCase().includes(q);
+        const matchDesc = ch.description.toLowerCase().includes(q);
+        const matchBadge = ch.badge.toLowerCase().includes(q);
+        const matchMode = ch.modeDetail.toLowerCase().includes(q);
+        const matchId = ch.id.toLowerCase().includes(q);
+        return matchTitle || matchDesc || matchBadge || matchMode || matchId;
+      }
+
+      return true;
+    });
+  }, [selectedFilter, searchQuery, completedIds]);
+
+  // Pagination calculation
+  const totalPages = Math.max(1, Math.ceil(filteredChallenges.length / ITEMS_PER_PAGE));
+  const pageIndex = Math.min(currentPage, totalPages);
+  
+  const paginatedChallenges = useMemo(() => {
+    const start = (pageIndex - 1) * ITEMS_PER_PAGE;
+    return filteredChallenges.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredChallenges, pageIndex]);
+
+  const handleFilterChange = (filter: 'all' | 'easy' | 'medium' | 'hard' | 'legendary' | 'passed') => {
+    setSelectedFilter(filter);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (q: string) => {
+    setSearchQuery(q);
+    setCurrentPage(1);
+  };
 
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
@@ -74,14 +118,14 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-200">Typing Mastery Quests</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 font-black text-[10px]">
-                {completedIds.length}/{TYPING_CHALLENGES.length} Unlocked
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-200">1,050+ Challenge Library</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-black text-[10px]">
+                {completedIds.length} / {TYPING_CHALLENGES.length} Unlocked
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold mt-0.5">Typing Skill Challenges</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold mt-0.5">Typing Quests & Skill Challenges</h1>
             <p className="text-xs sm:text-sm text-indigo-100 font-medium mt-1 max-w-lg">
-              Test your speed, accuracy, endurance, and precision under special constraints to earn XP and level up your typing rank!
+              Explore over 1,000 progressive challenges ranging from home-row warmups and code snippets to 150 WPM Sonic Apex bursts!
             </p>
           </div>
         </div>
@@ -110,109 +154,198 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
         </div>
       </div>
 
-      {/* Filter Tabs Bar */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/70 border border-white/60 backdrop-blur-md shadow-sm">
-          {(['all', 'easy', 'medium', 'hard', 'legendary'] as const).map((filter) => (
+      {/* Filter Tabs Bar + Search Box */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search 1,000+ challenges (e.g. Level 50, Code, 100 WPM)..."
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => handleSearchChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-extrabold text-slate-400 hover:text-slate-600"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Tier Filters */}
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/70 border border-slate-200/80 backdrop-blur-md shadow-xs overflow-x-auto scrollbar-none">
+          {(['all', 'easy', 'medium', 'hard', 'legendary', 'passed'] as const).map((filter) => (
             <button
               key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${
+              onClick={() => handleFilterChange(filter)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize whitespace-nowrap transition-all ${
                 selectedFilter === filter
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              {filter}
+              {filter === 'passed' ? `Passed (${completedIds.length})` : filter}
             </button>
           ))}
         </div>
+      </div>
 
-        <div className="text-xs font-semibold text-slate-500">
-          Showing <strong className="text-slate-800">{filteredChallenges.length}</strong> challenges
+      {/* Counter & Page Info Header */}
+      <div className="flex items-center justify-between text-xs font-semibold text-slate-500 px-1">
+        <div className="flex items-center gap-2">
+          <Layers className="w-4 h-4 text-indigo-600" />
+          <span>Showing <strong className="text-slate-900">{filteredChallenges.length}</strong> matching challenges</span>
         </div>
+        <span>Page {pageIndex} of {totalPages}</span>
       </div>
 
       {/* Challenges Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredChallenges.map((challenge) => {
-          const isCompleted = completedIds.includes(challenge.id);
+      {paginatedChallenges.length === 0 ? (
+        <div className="p-12 text-center rounded-3xl bg-white/60 border border-slate-200 flex flex-col items-center justify-center gap-3">
+          <Search className="w-8 h-8 text-slate-300" />
+          <h3 className="text-lg font-bold text-slate-700">No challenges found</h3>
+          <p className="text-xs text-slate-500 max-w-sm">
+            Try adjusting your search query or selecting a different difficulty filter above.
+          </p>
+          <button
+            onClick={() => { setSelectedFilter('all'); setSearchQuery(''); }}
+            className="mt-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-200"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {paginatedChallenges.map((challenge) => {
+            const isCompleted = completedIds.includes(challenge.id);
 
-          return (
-            <div
-              key={challenge.id}
-              className={`p-6 rounded-3xl border transition-all relative flex flex-col justify-between gap-4 ${
-                isCompleted
-                  ? 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 border-emerald-300 shadow-sm'
-                  : 'bg-white/70 backdrop-blur-xl border-white/60 hover:border-indigo-300 shadow-sm hover:shadow-md'
-              }`}
-            >
-              <div>
-                {/* Top Row: Icon, Badge, XP */}
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className={`p-2.5 rounded-2xl flex items-center justify-center ${
-                      isCompleted ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200' : 'bg-slate-100 text-slate-700'
-                    }`}>
-                      {getIconComponent(challenge.icon)}
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-slate-900 text-base">{challenge.title}</h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        {getDifficultyBadge(challenge.difficulty)}
-                        <span className="text-[11px] font-bold text-indigo-600">+{challenge.xpReward} XP</span>
+            return (
+              <div
+                key={challenge.id}
+                className={`p-5 rounded-3xl border transition-all relative flex flex-col justify-between gap-4 ${
+                  isCompleted
+                    ? 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 border-emerald-300 shadow-xs'
+                    : 'bg-white/80 backdrop-blur-xl border-slate-200/80 hover:border-indigo-300 shadow-xs hover:shadow-md'
+                }`}
+              >
+                <div>
+                  {/* Top Row: Icon, Badge, XP */}
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className={`p-2.5 rounded-2xl flex items-center justify-center ${
+                        isCompleted ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200' : 'bg-slate-100 text-slate-700'
+                      }`}>
+                        {getIconComponent(challenge.icon)}
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">{challenge.title}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          {getDifficultyBadge(challenge.difficulty)}
+                          <span className="text-[11px] font-bold text-indigo-600">+{challenge.xpReward} XP</span>
+                        </div>
                       </div>
                     </div>
+
+                    {isCompleted && (
+                      <div className="flex items-center gap-1 text-emerald-700 bg-emerald-100/90 px-2.5 py-1 rounded-xl font-bold text-[11px] shrink-0">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Passed</span>
+                      </div>
+                    )}
                   </div>
 
-                  {isCompleted && (
-                    <div className="flex items-center gap-1 text-emerald-700 bg-emerald-100/90 px-3 py-1 rounded-xl font-bold text-xs shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>Passed</span>
-                    </div>
-                  )}
+                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                    {challenge.description}
+                  </p>
+
+                  {/* Target Criteria Pill */}
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+                    <span className="flex items-center gap-1 font-bold text-slate-900">
+                      <Zap className="w-3.5 h-3.5 text-indigo-600" /> Target: {challenge.targetWpm} WPM
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1 font-bold text-slate-900">
+                      <Target className="w-3.5 h-3.5 text-emerald-600" /> {challenge.targetAccuracy}% Accuracy
+                    </span>
+                    <span>•</span>
+                    <span className="text-slate-500">{challenge.modeDetail}</span>
+                  </div>
                 </div>
 
-                <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                  {challenge.description}
-                </p>
+                {/* Action Button */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-medium text-slate-400">
+                    {isCompleted ? 'Replay anytime' : 'Ready to start?'}
+                  </span>
 
-                {/* Target Criteria Pill */}
-                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-                  <span className="flex items-center gap-1 font-bold text-slate-900">
-                    <Zap className="w-3.5 h-3.5 text-indigo-600" /> Target: {challenge.targetWpm} WPM
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1 font-bold text-slate-900">
-                    <Target className="w-3.5 h-3.5 text-emerald-600" /> {challenge.targetAccuracy}% Accuracy
-                  </span>
-                  <span>•</span>
-                  <span className="text-slate-500">{challenge.modeDetail}</span>
+                  <button
+                    onClick={() => onStartChallenge(challenge)}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs transition-all active:scale-95 ${
+                      isCompleted
+                        ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200'
+                    }`}
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>{isCompleted ? 'Replay' : 'Start'}</span>
+                  </button>
                 </div>
               </div>
+            );
+          })}
+        </div>
+      )}
 
-              {/* Action Button */}
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span className="text-[11px] font-medium text-slate-400">
-                  {isCompleted ? 'Challenge passed! You can replay anytime.' : 'Ready to test your limits?'}
-                </span>
+      {/* Pagination Bar */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-2 pt-4 border-t border-slate-200/80 flex-wrap">
+          <div className="text-xs font-semibold text-slate-500">
+            Page <strong className="text-slate-800">{pageIndex}</strong> of <strong className="text-slate-800">{totalPages}</strong>
+          </div>
 
-                <button
-                  onClick={() => onStartChallenge(challenge)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs transition-all active:scale-95 ${
-                    isCompleted
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200'
-                  }`}
-                >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>{isCompleted ? 'Replay Challenge' : 'Start Challenge'}</span>
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={pageIndex === 1}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              First
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              disabled={pageIndex === 1}
+              className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <span className="px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-900 font-extrabold text-xs font-mono">
+              {pageIndex} / {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              disabled={pageIndex === totalPages}
+              className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={pageIndex === totalPages}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              Last
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
