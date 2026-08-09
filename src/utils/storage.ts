@@ -4,6 +4,19 @@ const STORAGE_KEY_RESULTS = 'keypulse_test_results_v1';
 const STORAGE_KEY_SETTINGS = 'keypulse_user_settings_v1';
 const STORAGE_KEY_CHALLENGES = 'keypulse_completed_challenges_v1';
 
+// In-Memory Storage Cache Layer
+let cachedResults: TestResult[] | null = null;
+let cachedSettings: UserSettings | null = null;
+let cachedAnalytics: any = null;
+let cachedChallenges: string[] | null = null;
+
+export function invalidateStorageCache(): void {
+  cachedResults = null;
+  cachedSettings = null;
+  cachedAnalytics = null;
+  cachedChallenges = null;
+}
+
 export const DEFAULT_SETTINGS: UserSettings = {
   userName: 'Pro Typist',
   fontSize: 'lg',
@@ -23,9 +36,11 @@ export const DEFAULT_SETTINGS: UserSettings = {
 
 export function getCompletedChallengeIds(): string[] {
   if (typeof window === 'undefined') return [];
+  if (cachedChallenges !== null) return cachedChallenges;
   try {
     const raw = localStorage.getItem(STORAGE_KEY_CHALLENGES);
-    return raw ? JSON.parse(raw) : [];
+    cachedChallenges = raw ? JSON.parse(raw) : [];
+    return cachedChallenges!;
   } catch (e) {
     return [];
   }
@@ -38,6 +53,7 @@ export function saveCompletedChallengeId(challengeId: string): string[] {
     if (!existing.includes(challengeId)) {
       const updated = [...existing, challengeId];
       localStorage.setItem(STORAGE_KEY_CHALLENGES, JSON.stringify(updated));
+      cachedChallenges = updated;
       return updated;
     }
     return existing;
@@ -48,10 +64,15 @@ export function saveCompletedChallengeId(challengeId: string): string[] {
 
 export function getUserSettings(): UserSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS;
+  if (cachedSettings !== null) return cachedSettings;
   try {
     const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
-    if (!raw) return DEFAULT_SETTINGS;
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+    if (!raw) {
+      cachedSettings = DEFAULT_SETTINGS;
+      return DEFAULT_SETTINGS;
+    }
+    cachedSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+    return cachedSettings;
   } catch (e) {
     return DEFAULT_SETTINGS;
   }
@@ -61,6 +82,7 @@ export function saveUserSettings(settings: UserSettings): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settings));
+    cachedSettings = settings;
   } catch (e) {
     console.error('Failed to save settings:', e);
   }
@@ -68,11 +90,16 @@ export function saveUserSettings(settings: UserSettings): void {
 
 export function getTestResults(): TestResult[] {
   if (typeof window === 'undefined') return [];
+  if (cachedResults !== null) return cachedResults;
   try {
     const raw = localStorage.getItem(STORAGE_KEY_RESULTS);
-    if (!raw) return [];
+    if (!raw) {
+      cachedResults = [];
+      return [];
+    }
     const results: TestResult[] = JSON.parse(raw);
-    return results.sort((a, b) => b.timestamp - a.timestamp);
+    cachedResults = results.sort((a, b) => b.timestamp - a.timestamp);
+    return cachedResults;
   } catch (e) {
     console.error('Failed to parse test results:', e);
     return [];
@@ -85,6 +112,8 @@ export function saveTestResult(result: TestResult): TestResult[] {
     const existing = getTestResults();
     const updated = [result, ...existing].slice(0, 150); // Store up to 150 past tests
     localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(updated));
+    cachedResults = updated;
+    cachedAnalytics = null; // Invalidate analytics cache
     return updated;
   } catch (e) {
     console.error('Failed to save test result:', e);
@@ -95,6 +124,8 @@ export function saveTestResult(result: TestResult): TestResult[] {
 export function clearTestHistory(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(STORAGE_KEY_RESULTS);
+  cachedResults = [];
+  cachedAnalytics = null;
 }
 
 export function deleteTestResult(id: string): TestResult[] {
@@ -102,13 +133,16 @@ export function deleteTestResult(id: string): TestResult[] {
   const existing = getTestResults();
   const filtered = existing.filter(r => r.id !== id);
   localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(filtered));
+  cachedResults = filtered;
+  cachedAnalytics = null;
   return filtered;
 }
 
 export function getOverallAnalytics() {
+  if (cachedAnalytics !== null) return cachedAnalytics;
   const results = getTestResults();
   if (results.length === 0) {
-    return {
+    cachedAnalytics = {
       totalTests: 0,
       bestWpm: 0,
       avgWpm: 0,
@@ -118,6 +152,7 @@ export function getOverallAnalytics() {
       currentStreakDays: 0,
       topWeakKeys: [] as { key: string; errors: number }[],
     };
+    return cachedAnalytics;
   }
 
   const totalTests = results.length;
@@ -173,7 +208,7 @@ export function getOverallAnalytics() {
     .sort((a, b) => b.errors - a.errors)
     .slice(0, 6);
 
-  return {
+  cachedAnalytics = {
     totalTests,
     bestWpm,
     avgWpm,
@@ -184,6 +219,7 @@ export function getOverallAnalytics() {
     topWeakKeys,
     keyErrors: keyErrorMap,
   };
+  return cachedAnalytics;
 }
 
 export function exportUserDataJSON(): string {
@@ -199,6 +235,7 @@ export function importUserDataJSON(jsonString: string): boolean {
     if (Array.isArray(parsed.results)) {
       localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(parsed.results));
     }
+    invalidateStorageCache();
     return true;
   } catch (e) {
     console.error('Failed to import user data:', e);

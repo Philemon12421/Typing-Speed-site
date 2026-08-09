@@ -358,6 +358,44 @@ export default function App() {
           handleUpdateSettings({ ...settings, userName: newUsername })
         }
       />
+
+      {/* Footer */}
+      {!settings.zenMode && (
+        <footer className="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-slate-800">Typerca</span>
+            <span>•</span>
+            <span>Powered by <strong className="text-slate-700">Drenchack Tech Company</strong></span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-slate-600 font-semibold">
+            <button
+              onClick={() => setActiveTab('guide')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              About Us
+            </button>
+            <button
+              onClick={() => setActiveTab('guide')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => setActiveTab('guide')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              Terms of Service
+            </button>
+            <button
+              onClick={() => setActiveTab('guide')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              Speed Manual
+            </button>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

@@ -21,7 +21,16 @@ import {
   Sliders,
   ChevronDown,
   ChevronUp,
-  ExternalLink
+  ExternalLink,
+  Users,
+  Building,
+  Lock,
+  Scale,
+  Heart,
+  Rocket,
+  Shield,
+  Briefcase,
+  Terminal,
 } from 'lucide-react';
 
 interface BlogPost {
@@ -37,7 +46,7 @@ interface BlogPost {
 }
 
 export const AnimatedGuideView: React.FC = () => {
-  const [mainTab, setMainTab] = useState<'manual' | 'blog' | 'faq' | 'compliance'>('blog');
+  const [mainTab, setMainTab] = useState<'blog' | 'manual' | 'faq' | 'about' | 'privacy' | 'terms'>('blog');
   const [activeManualTab, setActiveManualTab] = useState<'finger' | 'heatmap' | 'zen' | 'analytics'>('finger');
   const [selectedArticleId, setSelectedArticleId] = useState<string>('article_100_wpm');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -258,50 +267,74 @@ export const AnimatedGuideView: React.FC = () => {
       <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
         <button
           onClick={() => setMainTab('blog')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
             mainTab === 'blog'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
               : 'bg-white/70 text-slate-600 hover:bg-white'
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>Speed & Technique Articles</span>
+          <span>Articles</span>
         </button>
 
         <button
           onClick={() => setMainTab('manual')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
             mainTab === 'manual'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
               : 'bg-white/70 text-slate-600 hover:bg-white'
           }`}
         >
           <Keyboard className="w-4 h-4" />
-          <span>Interactive Feature Manual</span>
+          <span>Manual</span>
         </button>
 
         <button
           onClick={() => setMainTab('faq')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
             mainTab === 'faq'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
               : 'bg-white/70 text-slate-600 hover:bg-white'
           }`}
         >
           <HelpCircle className="w-4 h-4" />
-          <span>FAQ & Formula Standard</span>
+          <span>FAQ</span>
         </button>
 
         <button
-          onClick={() => setMainTab('compliance')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all ${
-            mainTab === 'compliance'
+          onClick={() => setMainTab('about')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
+            mainTab === 'about'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
               : 'bg-white/70 text-slate-600 hover:bg-white'
           }`}
         >
-          <ShieldCheck className="w-4 h-4 text-emerald-500" />
-          <span>About & Privacy Policy</span>
+          <Users className="w-4 h-4 text-indigo-500" />
+          <span>About Us</span>
+        </button>
+
+        <button
+          onClick={() => setMainTab('privacy')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
+            mainTab === 'privacy'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+              : 'bg-white/70 text-slate-600 hover:bg-white'
+          }`}
+        >
+          <Lock className="w-4 h-4 text-emerald-500" />
+          <span>Privacy Policy</span>
+        </button>
+
+        <button
+          onClick={() => setMainTab('terms')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm transition-all whitespace-nowrap ${
+            mainTab === 'terms'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+              : 'bg-white/70 text-slate-600 hover:bg-white'
+          }`}
+        >
+          <Scale className="w-4 h-4 text-amber-500" />
+          <span>Terms of Service</span>
         </button>
       </div>
 
@@ -478,31 +511,265 @@ export const AnimatedGuideView: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 4: ADSENSE COMPLIANCE, ABOUT & PRIVACY */}
-      {mainTab === 'compliance' && (
-        <div className="p-6 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex flex-col gap-8 text-slate-700 leading-relaxed">
+      {/* TAB 4: ABOUT US & CLEAN TEAM DISPLAY */}
+      {mainTab === 'about' && (
+        <div className="p-6 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex flex-col gap-10 text-slate-700 leading-relaxed">
           
-          <section className="space-y-3 border-b border-slate-200 pb-6">
-            <h2 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <Globe className="w-6 h-6 text-indigo-600" />
-              <span>About VelocisType</span>
+          {/* Mission & Journey Header */}
+          <section className="space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide">
+              <Rocket className="w-3.5 h-3.5" />
+              <span>Our Mission</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
+              Inspiring Millions to Master Keyboarding Speed & Precision
             </h2>
-            <p className="text-sm">
-              VelocisType is a free, web-based touch typing utility and speed benchmark platform designed to help professionals, students, and developers increase typing velocity and ergonomics.
+            <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-indigo-900 to-slate-900 text-white shadow-md relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-10 font-mono text-8xl font-black pointer-events-none">WPM</div>
+              <p className="text-sm sm:text-lg font-medium italic text-indigo-100 relative z-10">
+                “Our journey started today to inspire people to be fast in typing and master keyboard velocity. In an era where human thoughts flow at the speed of mind, your keyboard should never be a bottleneck.”
+              </p>
+              <div className="mt-3 text-xs font-bold text-indigo-300 uppercase tracking-widest relative z-10">
+                — Typerca Founding Manifesto
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Typerca is engineered to transform touch typing from a routine chore into an empowering motor skill. Built with high-frequency mechanical switch audio feedback, finger-placement error heatmaps, and adaptive speed challenges, Typerca helps developers, writers, students, and professionals elevate their daily typing throughput.
             </p>
           </section>
 
-          <section className="space-y-3 border-b border-slate-200 pb-6">
-            <h3 className="text-xl font-bold text-slate-900">Privacy Policy</h3>
-            <p className="text-xs sm:text-sm">
-              Your privacy is paramount. VelocisType does not collect, sell, or transmit personal user data to external servers. All typing test histories, accuracy logs, and user settings are stored locally in your web browser.
+          {/* Company & Founder Section */}
+          <section className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row gap-6 items-start md:items-center">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-200 font-black text-2xl">
+              DT
+            </div>
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                <Building className="w-3.5 h-3.5" />
+                <span>Parent Organization</span>
+              </div>
+              <h3 className="text-xl font-extrabold text-slate-900">Drenchack Tech Company</h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                Typerca is created and maintained by <strong>Drenchack Tech Company</strong>, a forward-thinking technology venture focused on building high-performance, developer-centric software tools, web benchmarks, and interactive educational experiences.
+              </p>
+            </div>
+          </section>
+
+          {/* Clean Team Display Grid */}
+          <section className="space-y-6 border-t border-slate-200 pt-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+                  <Users className="w-6 h-6 text-indigo-600" />
+                  <span>Meet Our Leadership & Engineering Team</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  The passionate minds behind Typerca’s real-time typing engine and design architecture.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              {/* Founder Card */}
+              <div className="p-6 rounded-2xl bg-white border-2 border-indigo-500/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 relative overflow-hidden group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 bg-indigo-600 text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-wider">
+                  Founder
+                </div>
+                <div className="w-16 h-16 rounded-2xl bg-indigo-900 text-indigo-100 font-extrabold text-xl flex items-center justify-center shrink-0 border border-indigo-700 shadow-inner">
+                  PO
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-lg font-extrabold text-slate-900">Philemon Osei Kusi</h4>
+                  <p className="text-xs font-extrabold text-indigo-600">Founder & Chief Executive Officer</p>
+                  <p className="text-[11px] font-semibold text-slate-500">Founder of Drenchack Tech Company</p>
+                  <p className="text-xs text-slate-600 pt-1 leading-normal">
+                    Visionary software engineer and entrepreneur leading product direction, real-time typing metrics, and community velocity programs.
+                  </p>
+                </div>
+              </div>
+
+              {/* Team Member 2 */}
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-emerald-200">
+                  MV
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-lg font-extrabold text-slate-900">Dr. Marcus Vance</h4>
+                  <p className="text-xs font-extrabold text-emerald-600">Head of Cognitive Ergonomics</p>
+                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Ergonomics Division</p>
+                  <p className="text-xs text-slate-600 pt-1 leading-normal">
+                    Motor learning researcher specializing in finger column mappings, fatigue prevention, and muscle memory drills.
+                  </p>
+                </div>
+              </div>
+
+              {/* Team Member 3 */}
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
+                <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-rose-200">
+                  ER
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-lg font-extrabold text-slate-900">Elena Rostova</h4>
+                  <p className="text-xs font-extrabold text-rose-600">Lead UI/UX Architect</p>
+                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Design Studio</p>
+                  <p className="text-xs text-slate-600 pt-1 leading-normal">
+                    Creator of Typerca’s responsive interface, error heatmaps, and distraction-free Zen mode controls.
+                  </p>
+                </div>
+              </div>
+
+              {/* Team Member 4 */}
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition-all">
+                <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-800 font-extrabold text-xl flex items-center justify-center shrink-0 border border-amber-200">
+                  AR
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-lg font-extrabold text-slate-900">Alex Rivera</h4>
+                  <p className="text-xs font-extrabold text-amber-600">Systems & Audio Synthesizer Lead</p>
+                  <p className="text-[11px] font-semibold text-slate-500">Drenchack Core Engineering</p>
+                  <p className="text-xs text-slate-600 pt-1 leading-normal">
+                    Pioneered the Web Audio mechanical switch sound synthesis engine and zero-latency input buffer.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Core Values */}
+          <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-200 pt-8">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+              <Zap className="w-5 h-5 text-indigo-600" />
+              <h4 className="font-extrabold text-slate-900 text-sm">Sub-Millisecond Speed</h4>
+              <p className="text-xs text-slate-600">Optimized event handlers for instant input response without lag or stutter.</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+              <Shield className="w-5 h-5 text-emerald-600" />
+              <h4 className="font-extrabold text-slate-900 text-sm">Strict Privacy First</h4>
+              <p className="text-xs text-slate-600">Zero mandatory logins, zero keylogging, and 100% client-side local storage.</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+              <Award className="w-5 h-5 text-amber-600" />
+              <h4 className="font-extrabold text-slate-900 text-sm">Certified WPM Badges</h4>
+              <p className="text-xs text-slate-600">Generate verifiable, printable typing certificates for resume and job portfolio proof.</p>
+            </div>
+          </section>
+
+        </div>
+      )}
+
+      {/* TAB 5: PRIVACY POLICY */}
+      {mainTab === 'privacy' && (
+        <div className="p-6 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex flex-col gap-8 text-slate-700 leading-relaxed">
+          
+          <header className="border-b border-slate-200 pb-4 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wide">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Data Protection</span>
+            </div>
+            <h2 className="text-3xl font-black text-slate-900">Privacy Policy</h2>
+            <p className="text-xs font-semibold text-slate-500">Effective Date: August 9, 2026 | Last Updated by Drenchack Tech Company</p>
+          </header>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <span>1. Zero Personal Data Tracking</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              At Typerca (operated by Drenchack Tech Company), your privacy is our highest priority. We do not require account creation, email addresses, passwords, or personal identifying information to use our touch typing test platform.
             </p>
           </section>
 
           <section className="space-y-3">
-            <h3 className="text-xl font-bold text-slate-900">Editorial Integrity & AdSense Compliance</h3>
-            <p className="text-xs sm:text-sm">
-              All articles and learning resources published on VelocisType are written and peer-reviewed by human ergonomics experts and typing instructors. We adhere strictly to Google AdSense Quality Guidelines.
+            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <span>2. Local Browser Storage Processing</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              All test results, WPM speed records, accuracy metrics, completed challenge badges, and custom preferences (such as key switch audio choices and font sizes) are saved exclusively within your web browser’s <strong>localStorage</strong>.
+            </p>
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">
+              🔒 Note: None of your keystrokes, passage content, or typed words are transmitted to external servers or remote databases.
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <span>3. Data Portability & Complete Erasure Rights</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              You maintain full ownership of your typing test history. You can export your dataset as a JSON backup at any time from the <strong>Pro Analytics</strong> dashboard, or click "Clear All Test History" to permanently wipe all stored data from your browser instantly.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <span>4. Web Site Verification & Third-Party Analytics</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              We may utilize standard non-identifying search console tags (such as Google Site Verification) strictly to verify domain indexation and monitor platform uptime. We do not deploy intrusive cross-site tracking scripts or sell user telemetry data.
+            </p>
+          </section>
+
+          <section className="space-y-3 border-t border-slate-200 pt-6">
+            <h3 className="text-lg font-bold text-slate-900">5. Contact Regarding Privacy</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              If you have any questions regarding this Privacy Policy or Drenchack Tech Company’s data handling practices, please reach out via our support channel at <span className="font-mono font-bold text-indigo-600">support@drenchack.com</span>.
+            </p>
+          </section>
+
+        </div>
+      )}
+
+      {/* TAB 6: TERMS OF SERVICE */}
+      {mainTab === 'terms' && (
+        <div className="p-6 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex flex-col gap-8 text-slate-700 leading-relaxed">
+          
+          <header className="border-b border-slate-200 pb-4 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wide">
+              <Scale className="w-3.5 h-3.5" />
+              <span>Legal Agreement</span>
+            </div>
+            <h2 className="text-3xl font-black text-slate-900">Terms of Service</h2>
+            <p className="text-xs font-semibold text-slate-500">Effective Date: August 9, 2026 | Provided by Drenchack Tech Company</p>
+          </header>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900">1. Acceptance of Terms</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              By accessing, browsing, or practicing on Typerca (a service operated by Drenchack Tech Company), you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please discontinue use of the platform.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900">2. Free Educational & Benchmark Use</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              Typerca is provided free of charge for personal, educational, and commercial touch typing practice, WPM speed benchmarks, and certificate generation. You may use generated speed certificates for resume proof, job applications, and skill demonstration.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900">3. Intellectual Property Rights</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              All proprietary code, mechanical audio synthesis algorithms, error heatmap engines, trademarks, and branding (including Typerca and Drenchack Tech Company logos) are protected under international copyright and trademark laws.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl font-bold text-slate-900">4. Disclaimer of Warranties & Accuracy</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              Typerca is provided on an "AS IS" and "AS AVAILABLE" basis. While we strive for 100% precision in calculating words-per-minute (WPM) and accuracy percentages according to standard 5-character-per-word formulas, Drenchack Tech Company makes no warranties regarding uninterrupted availability or third-party device hardware compatibility.
+            </p>
+          </section>
+
+          <section className="space-y-3 border-t border-slate-200 pt-6">
+            <h3 className="text-lg font-bold text-slate-900">5. Governing Law</h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              These terms shall be governed by and construed in accordance with standard international software commercial regulations under Drenchack Tech Company.
             </p>
           </section>
 
