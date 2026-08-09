@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TestResult } from '../types';
+import { TestResult, MilestoneBadge, LeaderboardEntry } from '../types';
 import { getOverallAnalytics, clearTestHistory, deleteTestResult, exportUserDataJSON, importUserDataJSON } from '../utils/storage';
 import {
   ResponsiveContainer,
@@ -11,7 +11,6 @@ import {
   CartesianGrid,
   BarChart,
   Bar,
-  Legend,
 } from 'recharts';
 import {
   Trophy,
@@ -23,22 +22,111 @@ import {
   Trash2,
   Download,
   Upload,
-  AlertCircle,
   CheckCircle2,
   Search,
   FileSpreadsheet,
+  Award,
+  Crown,
+  Medal,
+  User,
+  Sparkles,
+  Lock,
+  ChevronRight,
+  TrendingUp,
 } from 'lucide-react';
 
 interface ProAnalyticsProps {
   results: TestResult[];
   onRefreshResults: () => void;
+  userName?: string;
+  onOpenRegisterModal?: () => void;
 }
 
-export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshResults }) => {
+const MILESTONE_BADGES_DEF = [
+  { id: 'novice', title: 'Novice Typist', description: 'Reach 30+ WPM peak speed', category: 'wpm', reqValue: 30, iconSymbol: '🌱', badgeLabel: '30 WPM', color: 'from-emerald-500 to-teal-600' },
+  { id: 'speedster', title: 'Speedster', description: 'Reach 50+ WPM peak speed', category: 'wpm', reqValue: 50, iconSymbol: '⚡', badgeLabel: '50 WPM', color: 'from-blue-500 to-cyan-600' },
+  { id: 'pro_typist', title: 'Pro Typist', description: 'Reach 70+ WPM peak speed', category: 'wpm', reqValue: 70, iconSymbol: '🔥', badgeLabel: '70 WPM', color: 'from-indigo-500 to-purple-600' },
+  { id: 'typing_master', title: 'Typing Master', description: 'Reach 90+ WPM peak speed', category: 'wpm', reqValue: 90, iconSymbol: '👑', badgeLabel: '90 WPM', color: 'from-amber-500 to-yellow-600' },
+  { id: 'grandmaster', title: 'Grandmaster', description: 'Reach 110+ WPM peak speed', category: 'wpm', reqValue: 110, iconSymbol: '🏆', badgeLabel: '110 WPM', color: 'from-rose-500 to-pink-600' },
+  { id: 'god_speed', title: 'God Speed', description: 'Reach 130+ WPM peak speed', category: 'wpm', reqValue: 130, iconSymbol: '🚀', badgeLabel: '130 WPM', color: 'from-fuchsia-600 to-violet-700' },
+  { id: 'accuracy_pro', title: 'Laser Precision', description: 'Score 98%+ accuracy in a completed test', category: 'accuracy', reqValue: 98, iconSymbol: '🎯', badgeLabel: '98% Acc', color: 'from-teal-500 to-emerald-600' },
+  { id: 'centurion', title: 'Test Centurion', description: 'Complete 25+ practice tests', category: 'tests', reqValue: 25, iconSymbol: '🛡️', badgeLabel: '25 Tests', color: 'from-sky-500 to-indigo-600' },
+  { id: 'marathoner', title: 'Typing Veteran', description: 'Complete 50+ practice tests', category: 'tests', reqValue: 50, iconSymbol: '🏅', badgeLabel: '50 Tests', color: 'from-purple-500 to-indigo-700' },
+  { id: 'streak_master', title: 'Streak Warrior', description: 'Maintain a 5-day practice streak', category: 'streak', reqValue: 5, iconSymbol: '🔥', badgeLabel: '5d Streak', color: 'from-orange-500 to-amber-600' },
+];
+
+export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
+  results,
+  onRefreshResults,
+  userName = '',
+  onOpenRegisterModal,
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'badges' | 'leaderboard' | 'history'>('overview');
 
   const analytics = getOverallAnalytics();
+  const maxAccuracy = results.length > 0 ? Math.max(...results.map((r) => r.accuracy)) : 0;
+
+  // Compute Unlocked Badges
+  const badgesWithStatus = MILESTONE_BADGES_DEF.map((badge) => {
+    let currentValue = 0;
+    if (badge.category === 'wpm') currentValue = analytics.bestWpm;
+    if (badge.category === 'tests') currentValue = analytics.totalTests;
+    if (badge.category === 'accuracy') currentValue = maxAccuracy;
+    if (badge.category === 'streak') currentValue = analytics.currentStreakDays;
+
+    const isUnlocked = currentValue >= badge.reqValue;
+    const progressPercent = Math.min(100, Math.round((currentValue / badge.reqValue) * 100));
+
+    return {
+      ...badge,
+      currentValue,
+      isUnlocked,
+      progressPercent,
+    };
+  });
+
+  const unlockedCount = badgesWithStatus.filter((b) => b.isUnlocked).length;
+
+  // Global Mock Weekly Leaderboard
+  const mockLeaderboard: LeaderboardEntry[] = [
+    { id: '1', rank: 1, username: 'ApexTypist', uniqueHandle: '@apextypist', wpm: 124, accuracy: 99, testsCount: 142, registeredDate: 'Weekly Champion', badge: '👑 Grandmaster' },
+    { id: '2', rank: 2, username: 'CyberKeys', uniqueHandle: '@cyberkeys', wpm: 112, accuracy: 98, testsCount: 98, registeredDate: 'Top 3', badge: '🏆 Master' },
+    { id: '3', rank: 3, username: 'VelocityPro', uniqueHandle: '@velocitypro', wpm: 104, accuracy: 97, testsCount: 84, registeredDate: 'Top 3', badge: '⚡ Speedster' },
+    { id: '4', rank: 4, username: 'PhantomFingers', uniqueHandle: '@phantomfingers', wpm: 94, accuracy: 99, testsCount: 65, registeredDate: 'Top 10', badge: '🎯 Precision' },
+    { id: '5', rank: 5, username: 'MatrixTyper', uniqueHandle: '@matrixtyper', wpm: 88, accuracy: 96, testsCount: 71, registeredDate: 'Top 10', badge: '🔥 Veteran' },
+    { id: '6', rank: 6, username: 'QuantumKey', uniqueHandle: '@quantumkey', wpm: 81, accuracy: 95, testsCount: 52, registeredDate: 'Top 10', badge: '⚡ Speedster' },
+    { id: '7', rank: 7, username: 'SwiftPaws', uniqueHandle: '@swiftpaws', wpm: 75, accuracy: 96, testsCount: 44, registeredDate: 'Top 10', badge: '🌱 Pro' },
+  ];
+
+  // User Row insertion if registered & has test results
+  const isUserRegistered = Boolean(userName && userName.trim().length >= 3);
+  const userHandle = isUserRegistered ? `@${userName.toLowerCase().replace(/[^a-z0-9]/g, '')}` : '@guest';
+
+  let userLeaderboardRank = 8;
+  const userEntry: LeaderboardEntry = {
+    id: 'user_current',
+    rank: userLeaderboardRank,
+    username: userName || 'You',
+    uniqueHandle: userHandle,
+    wpm: analytics.bestWpm,
+    accuracy: analytics.avgAccuracy || 98,
+    testsCount: analytics.totalTests,
+    isCurrentUser: true,
+    registeredDate: 'Active Week',
+    badge: analytics.bestWpm >= 90 ? '👑 Master' : analytics.bestWpm >= 60 ? '⚡ Speedster' : '🌱 Novice',
+  };
+
+  // Combine and sort leaderboard according to WPM
+  const fullLeaderboardList = [...mockLeaderboard];
+  if (isUserRegistered && analytics.bestWpm > 0) {
+    fullLeaderboardList.push(userEntry);
+    fullLeaderboardList.sort((a, b) => b.wpm - a.wpm);
+    fullLeaderboardList.forEach((entry, idx) => {
+      entry.rank = idx + 1;
+    });
+  }
 
   // Prepare chart data chronologically (oldest to newest)
   const chartData = [...results]
@@ -121,53 +209,33 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshRe
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `velocistype-analytics-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `typerca_backup_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleExportCSV = () => {
     if (results.length === 0) return;
-    const headers = [
-      'ID',
-      'Date & Time',
-      'Net WPM',
-      'Raw WPM',
-      'Accuracy (%)',
-      'CPM',
-      'Duration (s)',
-      'Total Chars',
-      'Correct Chars',
-      'Incorrect Chars',
-      'Consistency (%)',
-      'Mode',
-      'Mode Detail',
-    ];
-
+    const headers = ['Date', 'WPM', 'Raw WPM', 'Accuracy', 'Consistency', 'Mode', 'Mode Detail', 'Time (s)'];
     const rows = results.map((r) => [
-      r.id,
-      `"${new Date(r.timestamp).toLocaleString().replace(/"/g, '""')}"`,
+      new Date(r.timestamp).toISOString(),
       r.wpm,
       r.rawWpm,
-      r.accuracy,
-      r.cpm,
+      `${r.accuracy}%`,
+      `${r.consistency}%`,
+      r.mode,
+      r.modeDetail,
       r.timeSeconds,
-      r.totalChars,
-      r.correctChars,
-      r.incorrectChars,
-      r.consistency,
-      `"${r.mode}"`,
-      `"${(r.modeDetail || '').replace(/"/g, '""')}"`,
     ]);
 
-    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const csvContent = [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `velocistype-results-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `typerca_test_history_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,338 +246,457 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshRe
       const content = event.target?.result as string;
       const success = importUserDataJSON(content);
       if (success) {
-        setImportStatus('Data imported successfully!');
+        setImportStatus('Successfully restored test records!');
         onRefreshResults();
       } else {
-        setImportStatus('Failed to import data. Invalid JSON format.');
+        setImportStatus('Failed to import file. Please check format.');
       }
-      setTimeout(() => setImportStatus(null), 3000);
     };
     reader.readAsText(file);
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm">
+    <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 animate-in fade-in duration-300">
       
-      {/* Title & Data Export Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/40 pb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <BarChart2 className="w-6 h-6 text-indigo-600" />
-            <h1 className="text-2xl font-black text-slate-900">Performance Analytics</h1>
+      {/* Header Banner */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl relative overflow-hidden border border-slate-800">
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-600/30 border border-indigo-400/30 backdrop-blur-md flex items-center justify-center shrink-0 shadow-xl text-indigo-400">
+            <Trophy className="w-8 h-8 animate-pulse" />
           </div>
-          <p className="text-xs text-slate-500 font-medium">
-            Detailed speed trends, accuracy distribution, and historical logs
-          </p>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Typerca Analytics & Leaderboard</h1>
+            <p className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
+              Track lifetime milestones, claim your weekly rank, and analyze speed metrics.
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Username Registration Button / Badge */}
+        <div className="relative z-10 shrink-0">
           <button
-            onClick={handleExportCSV}
-            title="Export test history as CSV file for Excel/Sheets tracking"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-200/80 shadow-sm transition-all"
+            onClick={onOpenRegisterModal}
+            className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white font-bold text-xs shadow-lg transition-all active:scale-95"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Export CSV</span>
+            <User className="w-4 h-4 text-amber-400" />
+            <div className="flex flex-col items-start text-left">
+              <span className="text-[10px] text-slate-300 uppercase font-semibold">
+                {isUserRegistered ? 'Leaderboard Handle' : 'Join Leaderboard'}
+              </span>
+              <span className="text-xs font-black text-white">
+                {isUserRegistered ? `@${userName}` : 'Claim Unique Username'}
+              </span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-400" />
           </button>
-
-          <button
-            onClick={handleExportJSON}
-            title="Export full backup JSON"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-700 font-bold text-xs border border-white/60 shadow-sm transition-all"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>Export JSON</span>
-          </button>
-
-          <label className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-700 font-bold text-xs border border-white/60 shadow-sm cursor-pointer transition-all">
-            <Upload className="w-3.5 h-3.5" />
-            <span>Import Data</span>
-            <input type="file" accept=".json" onChange={handleImportFile} className="hidden" />
-          </label>
-
-          {results.length > 0 && (
-            <button
-              onClick={handleClearAll}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 shadow-sm transition-all"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear History</span>
-            </button>
-          )}
         </div>
       </div>
 
-      {importStatus && (
-        <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-semibold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-          <span>{importStatus}</span>
-        </div>
-      )}
+      {/* Analytics Sub-Tab Navigation Bar */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 border border-slate-200/80 shadow-xs overflow-x-auto">
+        <button
+          onClick={() => setActiveSubTab('overview')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSubTab === 'overview'
+              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4" />
+          <span>Performance Overview</span>
+        </button>
 
-      {/* Aggregate Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-indigo-700 text-xs font-semibold">
-            <span>Best Speed</span>
-            <Trophy className="w-4 h-4 text-amber-500" />
-          </div>
-          <span className="text-3xl font-black text-indigo-900">{analytics.bestWpm}</span>
-          <span className="text-[10px] text-indigo-600 font-semibold uppercase">WPM</span>
-        </div>
+        <button
+          onClick={() => setActiveSubTab('badges')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSubTab === 'badges'
+              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <Award className="w-4 h-4 text-amber-500" />
+          <span>Milestone Badges ({unlockedCount}/{MILESTONE_BADGES_DEF.length})</span>
+        </button>
 
-        <div className="p-4 rounded-2xl bg-white/70 border border-white/50 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
-            <span>Avg Speed</span>
-            <Zap className="w-4 h-4 text-indigo-600" />
-          </div>
-          <span className="text-3xl font-black text-slate-800">{analytics.avgWpm}</span>
-          <span className="text-[10px] text-slate-500 font-semibold uppercase">WPM</span>
-        </div>
+        <button
+          onClick={() => setActiveSubTab('leaderboard')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSubTab === 'leaderboard'
+              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <Crown className="w-4 h-4 text-amber-500" />
+          <span>Weekly Leaderboard</span>
+        </button>
 
-        <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-emerald-700 text-xs font-semibold">
-            <span>Avg Accuracy</span>
-            <Target className="w-4 h-4 text-emerald-600" />
-          </div>
-          <span className="text-3xl font-black text-emerald-900">{analytics.avgAccuracy}%</span>
-          <span className="text-[10px] text-emerald-600 font-semibold uppercase">Overall</span>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-orange-50/80 border border-orange-200/80 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-orange-700 text-xs font-semibold">
-            <span>Streak</span>
-            <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
-          </div>
-          <span className="text-3xl font-black text-orange-900">{analytics.currentStreakDays}</span>
-          <span className="text-[10px] text-orange-600 font-semibold uppercase">Days</span>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white/70 border border-white/50 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
-            <span>Total Tests</span>
-            <BarChart2 className="w-4 h-4 text-slate-500" />
-          </div>
-          <span className="text-3xl font-black text-slate-800">{analytics.totalTests}</span>
-          <span className="text-[10px] text-slate-500 font-semibold uppercase">Completed</span>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white/70 border border-white/50 flex flex-col gap-1">
-          <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
-            <span>Practice Time</span>
-            <Clock className="w-4 h-4 text-slate-500" />
-          </div>
-          <span className="text-2xl font-black text-slate-800">
-            {Math.round(analytics.totalTimeSeconds / 60)}m
-          </span>
-          <span className="text-[10px] text-slate-500 font-semibold uppercase">Total</span>
-        </div>
+        <button
+          onClick={() => setActiveSubTab('history')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSubTab === 'history'
+              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <BarChart2 className="w-4 h-4" />
+          <span>Full Test History</span>
+        </button>
       </div>
 
-      {results.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 text-sm font-medium">
-          No typing test records found yet. Take your first typing test to start tracking progress!
-        </div>
-      ) : (
-        <>
-          {/* 30-Day Activity & WPM Trend Bar Chart */}
-          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">30-Day Typing Activity & Speed Trends</h3>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Daily test volume and average WPM performance over the last 30 days
-                </p>
+      {/* SUB-VIEW 1: OVERVIEW & CHARTS */}
+      {activeSubTab === 'overview' && (
+        <div className="flex flex-col gap-6">
+          {/* Aggregate Stats Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-indigo-700 text-xs font-semibold">
+                <span>Best Speed</span>
+                <Trophy className="w-4 h-4 text-amber-500" />
               </div>
-              <div className="flex items-center gap-4 text-xs font-bold">
-                <span className="flex items-center gap-1.5 text-indigo-600">
-                  <span className="w-3 h-3 rounded-md bg-indigo-600 inline-block" />
-                  <span>Tests Taken</span>
-                </span>
-                <span className="flex items-center gap-1.5 text-emerald-600">
-                  <span className="w-3 h-3 rounded-md bg-emerald-500 inline-block" />
-                  <span>Avg WPM</span>
-                </span>
-              </div>
+              <span className="text-3xl font-black text-indigo-900">{analytics.bestWpm}</span>
+              <span className="text-[10px] text-indigo-600 font-semibold uppercase">WPM</span>
             </div>
 
-            <div className="w-full h-64 sm:h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={last30DaysData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="date" stroke="#64748b" fontSize={10} interval="preserveStartEnd" />
-                  <YAxis
-                    yAxisId="left"
-                    stroke="#4f46e5"
-                    fontSize={11}
-                    allowDecimals={false}
-                    label={{ value: 'Tests', angle: -90, position: 'insideLeft', style: { fill: '#4f46e5', fontSize: 10, fontWeight: 700 } }}
-                  />
-                  <YAxis
-                    yAxisId="right"
-                    orientation="right"
-                    stroke="#10b981"
-                    fontSize={11}
-                    domain={[0, 'auto']}
-                    label={{ value: 'WPM', angle: 90, position: 'insideRight', style: { fill: '#10b981', fontSize: 10, fontWeight: 700 } }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                      borderRadius: '12px',
-                      fontSize: '12px',
-                      borderColor: '#e2e8f0',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                    }}
-                    formatter={(value: any, name: string) => [
-                      value,
-                      name === 'testsCount' ? 'Tests Taken' : name === 'avgWpm' ? 'Avg Speed (WPM)' : name,
-                    ]}
-                  />
-                  <Bar yAxisId="left" dataKey="testsCount" name="testsCount" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={28} />
-                  <Bar yAxisId="right" dataKey="avgWpm" name="avgWpm" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={28} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+                <span>Avg Speed</span>
+                <Zap className="w-4 h-4 text-indigo-600" />
+              </div>
+              <span className="text-3xl font-black text-slate-800">{analytics.avgWpm}</span>
+              <span className="text-[10px] text-slate-500 font-semibold uppercase">WPM</span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-emerald-700 text-xs font-semibold">
+                <span>Avg Accuracy</span>
+                <Target className="w-4 h-4 text-emerald-600" />
+              </div>
+              <span className="text-3xl font-black text-emerald-900">{analytics.avgAccuracy}%</span>
+              <span className="text-[10px] text-emerald-600 font-semibold uppercase">Overall</span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-orange-50/80 border border-orange-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-orange-700 text-xs font-semibold">
+                <span>Streak</span>
+                <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
+              </div>
+              <span className="text-3xl font-black text-orange-900">{analytics.currentStreakDays}</span>
+              <span className="text-[10px] text-orange-600 font-semibold uppercase">Days</span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+                <span>Total Tests</span>
+                <BarChart2 className="w-4 h-4 text-slate-500" />
+              </div>
+              <span className="text-3xl font-black text-slate-800">{analytics.totalTests}</span>
+              <span className="text-[10px] text-slate-500 font-semibold uppercase">Completed</span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+                <span>Practice Time</span>
+                <Clock className="w-4 h-4 text-slate-500" />
+              </div>
+              <span className="text-2xl font-black text-slate-800">{Math.round(analytics.totalTimeSeconds / 60)}m</span>
+              <span className="text-[10px] text-slate-500 font-semibold uppercase">Total</span>
             </div>
           </div>
 
-          {/* Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Speed Progression Line Chart */}
-            <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
-              <span className="text-xs font-bold text-slate-800">WPM Progress Over Tests</span>
-              <div className="w-full h-56">
+          {/* Chronological WPM Progression Chart */}
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-4">
+            <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-indigo-600" />
+              <span>WPM Velocity Progression</span>
+            </h3>
+
+            {chartData.length > 0 ? (
+              <div className="w-full h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
+                  <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="index" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} domain={[0, 'auto']} />
+                    <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} />
+                    <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        borderRadius: '12px',
+                        backgroundColor: '#0f172a',
+                        border: 'none',
+                        borderRadius: '16px',
+                        color: '#fff',
                         fontSize: '12px',
+                        fontWeight: 'bold',
                       }}
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="wpm"
-                      name="WPM"
-                      stroke="#4f46e5"
-                      strokeWidth={3}
-                      dot={{ r: 3, fill: '#4f46e5' }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="accuracy"
-                      name="Accuracy %"
-                      stroke="#10b981"
-                      strokeWidth={2}
-                      dot={false}
-                    />
+                    <Line type="monotone" dataKey="wpm" name="Net WPM" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4, fill: '#4f46e5' }} />
+                    <Line type="monotone" dataKey="rawWpm" name="Raw WPM" stroke="#94a3b8" strokeWidth={2} strokeDasharray="4 4" dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
+            ) : (
+              <div className="p-8 text-center text-xs font-semibold text-slate-500">No test data recorded yet. Complete a test to view progression trends!</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* SUB-VIEW 2: MILESTONE BADGES */}
+      {activeSubTab === 'badges' && (
+        <div className="flex flex-col gap-6">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                  <Award className="w-5 h-5 text-amber-500" />
+                  <span>Milestone Badges & Speed Achievements</span>
+                </h2>
+                <p className="text-xs text-slate-500 font-medium">
+                  Unlock permanent badges as you increase your WPM velocity, test counts, and accuracy streak.
+                </p>
+              </div>
+
+              <div className="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-extrabold text-xs">
+                {unlockedCount} / {MILESTONE_BADGES_DEF.length} Unlocked
+              </div>
             </div>
 
-            {/* Speed Distribution Bar Chart */}
-            <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
-              <span className="text-xs font-bold text-slate-800">Speed Distribution</span>
-              <div className="w-full h-56">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={distributionData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="range" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} allowDecimals={false} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        borderRadius: '12px',
-                        fontSize: '12px',
-                      }}
-                    />
-                    <Bar dataKey="count" name="Tests Count" fill="#3b82f6" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+            {/* Badges Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              {badgesWithStatus.map((badge) => (
+                <div
+                  key={badge.id}
+                  className={`p-5 rounded-3xl border transition-all relative overflow-hidden flex flex-col justify-between gap-4 ${
+                    badge.isUnlocked
+                      ? 'bg-gradient-to-br from-white via-indigo-50/30 to-amber-50/20 border-indigo-200 shadow-md'
+                      : 'bg-slate-50/80 border-slate-200/80 opacity-70'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm ${
+                        badge.isUnlocked ? 'bg-indigo-600/10 border border-indigo-200' : 'bg-slate-200/80 text-slate-400'
+                      }`}>
+                        {badge.iconSymbol}
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-extrabold text-slate-900">{badge.title}</h3>
+                        <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200/60 inline-block mt-0.5">
+                          {badge.badgeLabel}
+                        </span>
+                      </div>
+                    </div>
+
+                    {badge.isUnlocked ? (
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white font-extrabold text-[10px] shadow-xs flex items-center gap-1">
+                        <Sparkles className="w-3 h-3" />
+                        Unlocked
+                      </span>
+                    ) : (
+                      <span className="p-1.5 rounded-full bg-slate-200 text-slate-500 text-[10px]">
+                        <Lock className="w-3.5 h-3.5" />
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-xs font-medium text-slate-600 leading-snug">{badge.description}</p>
+
+                  {/* Progress Bar */}
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                      <span>Progress</span>
+                      <span>{badge.currentValue} / {badge.reqValue}</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full bg-gradient-to-r ${badge.color}`}
+                        style={{ width: `${badge.progressPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Top Error-Prone Keys Matrix */}
-          {analytics.topWeakKeys.length > 0 && (
-            <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 flex flex-col gap-2">
-              <span className="text-xs font-bold text-amber-900">
-                Top Error-Prone Keys (Lifetime Weakness Matrix)
-              </span>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {analytics.topWeakKeys.map((item) => (
-                  <div
-                    key={item.key}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-amber-200/80 text-xs font-bold text-amber-900 shadow-sm"
-                  >
-                    <span className="font-mono text-base text-amber-600 font-extrabold uppercase">
-                      '{item.key === ' ' ? 'Space' : item.key}'
-                    </span>
-                    <span className="text-[11px] text-amber-700">{item.errors} total mistakes</span>
-                  </div>
-                ))}
+      {/* SUB-VIEW 3: WEEKLY LEADERBOARD */}
+      {activeSubTab === 'leaderboard' && (
+        <div className="flex flex-col gap-6">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200/80 shadow-xs flex flex-col gap-6">
+            
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-5">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-extrabold text-amber-600 uppercase tracking-wider">
+                  <Crown className="w-4 h-4 text-amber-500" />
+                  <span>Typerca Weekly Speed Sprint</span>
+                </div>
+                <h2 className="text-2xl font-black text-slate-900 mt-1">Global Weekly Typists Leaderboard</h2>
+                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  Top performing typists this week. Register your handle to automatically claim your ranking.
+                </p>
               </div>
-            </div>
-          )}
 
-          {/* Test History Log Table */}
-          <div className="flex flex-col gap-3 pt-2">
+              {!isUserRegistered && (
+                <button
+                  onClick={onOpenRegisterModal}
+                  className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2 shrink-0"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Register Username to Join</span>
+                </button>
+              )}
+            </div>
+
+            {/* Leaderboard Table */}
+            <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
+                    <th className="p-3.5 pl-5">Rank</th>
+                    <th className="p-3.5">Typist</th>
+                    <th className="p-3.5 text-center">Net WPM</th>
+                    <th className="p-3.5 text-center">Accuracy</th>
+                    <th className="p-3.5 text-center">Tests</th>
+                    <th className="p-3.5 text-right pr-5">Tier Badge</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
+                  {fullLeaderboardList.map((entry) => {
+                    const isTop1 = entry.rank === 1;
+                    const isTop2 = entry.rank === 2;
+                    const isTop3 = entry.rank === 3;
+
+                    return (
+                      <tr
+                        key={entry.id}
+                        className={`transition-colors ${
+                          entry.isCurrentUser
+                            ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
+                            : 'hover:bg-slate-50/80'
+                        }`}
+                      >
+                        {/* Rank */}
+                        <td className="p-3.5 pl-5 font-black text-sm">
+                          {isTop1 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-amber-950 shadow-xs">🥇 1</span>}
+                          {isTop2 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-300 text-slate-900 shadow-xs">🥈 2</span>}
+                          {isTop3 && <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-700/20 text-amber-900 shadow-xs">🥉 3</span>}
+                          {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
+                        </td>
+
+                        {/* Typist */}
+                        <td className="p-3.5">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-extrabold text-xs uppercase text-white ${
+                              entry.isCurrentUser ? 'bg-indigo-600' : 'bg-slate-800'
+                            }`}>
+                              {entry.username.charAt(0)}
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-extrabold text-slate-900 flex items-center gap-1">
+                                {entry.username}
+                                {entry.isCurrentUser && <span className="px-1.5 py-0.2 rounded bg-indigo-200 text-indigo-900 text-[9px]">YOU</span>}
+                              </span>
+                              <span className="text-[10px] text-slate-400 font-mono">{entry.uniqueHandle}</span>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* WPM */}
+                        <td className="p-3.5 text-center font-black text-indigo-950 text-base">
+                          {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
+                        </td>
+
+                        {/* Accuracy */}
+                        <td className="p-3.5 text-center font-extrabold text-emerald-700">
+                          {entry.accuracy}%
+                        </td>
+
+                        {/* Tests */}
+                        <td className="p-3.5 text-center font-bold text-slate-600">
+                          {entry.testsCount}
+                        </td>
+
+                        {/* Tier Badge */}
+                        <td className="p-3.5 text-right pr-5">
+                          <span className="px-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 font-extrabold text-slate-800 text-[11px]">
+                            {entry.badge}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUB-VIEW 4: FULL TEST HISTORY LOGS */}
+      {activeSubTab === 'history' && (
+        <div className="flex flex-col gap-6">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <h3 className="text-sm font-bold text-slate-900">Historical Test Log</h3>
-              
-              {/* Search Filter Input */}
-              <div className="relative w-full sm:w-64">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Filter mode or WPM..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900">Historical Test Log</h3>
+                <p className="text-xs text-slate-500 font-medium">Export, search, or inspect all completed tests.</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleExportCSV}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>CSV</span>
+                </button>
+                <button
+                  onClick={handleExportJSON}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>JSON</span>
+                </button>
               </div>
             </div>
 
-            <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <table className="w-full text-left text-xs text-slate-700">
-                <thead className="bg-slate-50/80 text-slate-600 font-bold border-b border-slate-200 uppercase text-[10px] tracking-wider">
+            {/* Filter Search */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search history by mode, WPM, or text..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold outline-none focus:bg-white focus:border-indigo-500"
+              />
+            </div>
+
+            {/* History Table */}
+            <div className="overflow-x-auto rounded-2xl border border-slate-200/80">
+              <table className="w-full text-left text-xs font-semibold text-slate-700">
+                <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 border-b">
                   <tr>
                     <th className="p-3">Date</th>
-                    <th className="p-3">Mode</th>
                     <th className="p-3">WPM</th>
                     <th className="p-3">Accuracy</th>
-                    <th className="p-3">CPM</th>
-                    <th className="p-3">Duration</th>
-                    <th className="p-3">Errors</th>
+                    <th className="p-3">Mode</th>
                     <th className="p-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-medium">
+                <tbody className="divide-y divide-slate-100">
                   {filteredResults.map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="p-3 text-slate-500">
-                        {new Date(r.timestamp).toLocaleDateString()} {new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </td>
-                      <td className="p-3 font-semibold text-slate-800 capitalize">
-                        {r.mode} ({r.modeDetail})
-                      </td>
-                      <td className="p-3 font-extrabold text-blue-600">{r.wpm}</td>
-                      <td className="p-3 font-bold text-emerald-600">{r.accuracy}%</td>
-                      <td className="p-3 text-slate-600">{r.cpm}</td>
-                      <td className="p-3 text-slate-500">{r.timeSeconds}s</td>
-                      <td className="p-3 text-rose-600 font-bold">{r.incorrectChars}</td>
+                    <tr key={r.id} className="hover:bg-slate-50">
+                      <td className="p-3 text-slate-500">{new Date(r.timestamp).toLocaleDateString()}</td>
+                      <td className="p-3 font-black text-indigo-950">{r.wpm} WPM</td>
+                      <td className="p-3 font-bold text-emerald-700">{r.accuracy}%</td>
+                      <td className="p-3 capitalize">{r.mode} ({r.modeDetail})</td>
                       <td className="p-3 text-right">
                         <button
                           onClick={() => handleDelete(r.id)}
-                          className="p-1 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
-                          title="Delete test record"
+                          className="p-1 rounded-lg text-rose-500 hover:bg-rose-50"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </td>
                     </tr>
@@ -518,7 +705,7 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({ results, onRefreshRe
               </table>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

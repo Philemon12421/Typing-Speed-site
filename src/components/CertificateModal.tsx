@@ -1,7 +1,6 @@
 import React from 'react';
 import { TestResult } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
-import { Award, Printer, ShieldCheck, X, Sparkles, Medal, CheckCircle } from 'lucide-react';
 
 interface CertificateModalProps {
   result: TestResult;
@@ -21,7 +20,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     day: 'numeric',
   });
 
-  const certificateId = `VT-${new Date(result.timestamp).getFullYear()}-${(result.id || '99').slice(0, 8).toUpperCase()}`;
+  const certificateId = `TYP-${new Date(result.timestamp).getFullYear()}-${(result.id || '99').slice(0, 8).toUpperCase()}`;
 
   const handlePrint = () => {
     window.print();
@@ -34,9 +33,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 print:hidden transition-colors z-20"
+          aria-label="Close modal"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 print:hidden transition-colors z-20 flex items-center justify-center font-bold text-sm"
         >
-          <X className="w-5 h-5" />
+          ✕
         </button>
 
         {/* Certificate Outer Gold Frame */}
@@ -44,25 +44,30 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           {/* Inner Double Line Border */}
           <div className="border-2 border-double border-amber-600/60 rounded-xl p-6 sm:p-10 flex flex-col items-center text-center gap-5 relative overflow-hidden bg-white/95">
             
-            {/* Watermark Crest */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
-              <Award className="w-96 h-96 text-amber-900" />
+            {/* Watermark Crest SVG */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none text-amber-900">
+              <svg className="w-80 h-80" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
             </div>
 
             {/* Header Badge / Crest */}
             <div className="flex items-center justify-center gap-2">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 p-0.5 shadow-xl shadow-amber-500/20 flex items-center justify-center">
-                <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center">
-                  <Medal className="w-8 h-8 text-amber-400" />
+                <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-amber-400">
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="8" r="6" />
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                  </svg>
                 </div>
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-center gap-2 text-amber-700 font-black text-[11px] uppercase tracking-[0.25em]">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span className="text-amber-500">◆</span>
                 <span>Typerca Assessment Standard</span>
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span className="text-amber-500">◆</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 font-serif tracking-tight">
                 Certificate of Typing Proficiency
@@ -129,12 +134,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               </div>
 
               <div className="flex items-center gap-2 text-indigo-900 font-bold bg-indigo-50 px-3.5 py-1.5 rounded-xl border border-indigo-200 text-xs shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                <svg className="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
                 <span>Verification ID: <strong className="font-mono text-indigo-700">{certificateId}</strong></span>
               </div>
 
               <div className="flex flex-col items-center sm:items-end gap-0.5">
-                <span className="font-serif italic text-base font-bold text-slate-900">VelocisType Engine</span>
+                <span className="font-serif italic text-base font-bold text-slate-900">Typerca Engine</span>
                 <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Official Certification Board</span>
               </div>
             </div>
@@ -148,7 +156,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             onClick={handlePrint}
             className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-lg shadow-indigo-200 transition-all active:scale-95"
           >
-            <Printer className="w-4 h-4" />
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
             <span>Print or Save PDF Certificate</span>
           </button>
           <button

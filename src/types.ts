@@ -116,4 +116,28 @@ export interface AiOpponent {
   color: string;
 }
 
+export interface MilestoneBadge {
+  id: string;
+  title: string;
+  description: string;
+  category: 'wpm' | 'tests' | 'accuracy' | 'streak';
+  reqValue: number;
+  icon: string;
+  color: string;
+  badgeLabel: string;
+}
+
+export interface LeaderboardEntry {
+  id: string;
+  rank: number;
+  username: string;
+  uniqueHandle: string;
+  wpm: number;
+  accuracy: number;
+  testsCount: number;
+  isCurrentUser?: boolean;
+  registeredDate: string;
+  badge: string;
+}
+
 export type TabType = 'test' | 'challenges' | 'analytics' | 'guide';

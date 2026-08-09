@@ -7,7 +7,6 @@ import {
   QuoteLength,
   TestResult,
   UserSettings,
-  AIAnalysis,
   TypingChallenge,
 } from './types';
 import {
@@ -29,6 +28,7 @@ import { ResultsModal } from './components/ResultsModal';
 import { ProAnalytics } from './components/ProAnalytics';
 import { CertificateModal } from './components/CertificateModal';
 import { GoalSoundModal } from './components/GoalSoundModal';
+import { UserRegistrationModal } from './components/UserRegistrationModal';
 import { ChallengesView } from './components/ChallengesView';
 import { AnimatedGuideView } from './components/AnimatedGuideView';
 import { TYPING_CHALLENGES } from './data/challenges';
@@ -46,6 +46,7 @@ export default function App() {
 
   // Goal & Sound Modal State
   const [isGoalSoundModalOpen, setIsGoalSoundModalOpen] = useState<boolean>(false);
+  const [isUserRegistrationModalOpen, setIsUserRegistrationModalOpen] = useState<boolean>(false);
 
   // Test Mode Configurations
   const [mode, setMode] = useState<TestMode>('time');
@@ -73,8 +74,6 @@ export default function App() {
   // Result & Modal States
   const [latestResult, setLatestResult] = useState<TestResult | null>(null);
   const [isCertificateOpen, setIsCertificateOpen] = useState<boolean>(false);
-  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
-  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | undefined>(undefined);
 
   // Handler for updating user settings & saving to local storage
   const handleUpdateSettings = (newSettings: UserSettings) => {
@@ -90,7 +89,6 @@ export default function App() {
   // Regenerate passage when mode or options change
   const generateNewPassage = useCallback(() => {
     setLatestResult(null);
-    setAiAnalysis(undefined);
 
     if (mode === 'time') {
       // For time mode, generate enough words (150 words) so text doesn't run out
@@ -178,38 +176,6 @@ export default function App() {
     setLatestResult(newResult);
   };
 
-  // Run Gemini AI Analysis for current completed test
-  const handleRunAIAnalysis = async () => {
-    if (!latestResult) return;
-    setIsAiLoading(true);
-
-    try {
-      const res = await fetch('/api/gemini/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wpm: latestResult.wpm,
-          rawWpm: latestResult.rawWpm,
-          accuracy: latestResult.accuracy,
-          timeSeconds: latestResult.timeSeconds,
-          mistakes: latestResult.incorrectChars,
-          keyErrors: latestResult.keyErrors,
-          fingerStats: latestResult.fingerStats,
-          mode: latestResult.mode,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.rating) {
-        setAiAnalysis(data);
-      }
-    } catch (e) {
-      console.error('Failed to run AI analysis:', e);
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
-
   const overallAnalytics = getOverallAnalytics();
   const todayProgress = getTodayGoalProgress(
     results,
@@ -250,6 +216,7 @@ export default function App() {
           completedChallengesCount={completedChallengeIds.length}
           totalChallengesCount={TYPING_CHALLENGES.length}
           onOpenGoalSoundModal={() => setIsGoalSoundModalOpen(true)}
+          onOpenRegisterModal={() => setIsUserRegistrationModalOpen(true)}
         />
       )}
 
@@ -304,9 +271,6 @@ export default function App() {
                 onRestart={generateNewPassage}
                 onViewAnalytics={() => setActiveTab('analytics')}
                 onViewCertificate={() => setIsCertificateOpen(true)}
-                onRunAIAnalysis={handleRunAIAnalysis}
-                isAiLoading={isAiLoading}
-                aiAnalysis={aiAnalysis}
               />
             ) : (
               <>
@@ -348,6 +312,8 @@ export default function App() {
           <ProAnalytics
             results={results}
             onRefreshResults={() => setResults(getTestResults())}
+            userName={settings.userName}
+            onOpenRegisterModal={() => setIsUserRegistrationModalOpen(true)}
           />
         )}
 
@@ -380,6 +346,17 @@ export default function App() {
         settings={settings}
         onUpdateSettings={handleUpdateSettings}
         todayProgress={todayProgress}
+      />
+
+      {/* User Registration Handle Modal */}
+      <UserRegistrationModal
+        isOpen={isUserRegistrationModalOpen}
+        onClose={() => setIsUserRegistrationModalOpen(false)}
+        currentUsername={settings.userName}
+        userBestWpm={overallAnalytics.bestWpm}
+        onSaveUsername={(newUsername) =>
+          handleUpdateSettings({ ...settings, userName: newUsername })
+        }
       />
     </div>
   );

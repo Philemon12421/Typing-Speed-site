@@ -38,9 +38,6 @@ interface ResultsModalProps {
   onRestart: () => void;
   onViewAnalytics: () => void;
   onViewCertificate: () => void;
-  onRunAIAnalysis: () => void;
-  isAiLoading: boolean;
-  aiAnalysis?: AIAnalysis;
 }
 
 export const ResultsModal: React.FC<ResultsModalProps> = ({
@@ -50,9 +47,6 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
   onRestart,
   onViewAnalytics,
   onViewCertificate,
-  onRunAIAnalysis,
-  isAiLoading,
-  aiAnalysis,
 }) => {
   const grade = getWpmGrade(result.wpm);
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
@@ -123,7 +117,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
     // Header Brand Tag
     ctx.fillStyle = '#818cf8';
     ctx.font = 'bold 20px sans-serif';
-    ctx.fillText('VELOCISTYPE • TOUCH TYPING BENCHMARK', 100, 125);
+    ctx.fillText('TYPERCA • TOUCH TYPING BENCHMARK', 100, 125);
 
     ctx.fillStyle = '#94a3b8';
     ctx.font = '500 16px sans-serif';
@@ -428,68 +422,6 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
           </div>
         </div>
       )}
-
-      {/* AI Diagnostic Report Banner / Results */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-50/80 via-indigo-50/60 to-sky-50/80 border border-blue-200/80 shadow-sm flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-blue-600 animate-pulse" />
-            <h3 className="text-sm font-black text-slate-900">AI Diagnostic Coach (Gemini Powered)</h3>
-          </div>
-          {!aiAnalysis && (
-            <button
-              onClick={onRunAIAnalysis}
-              disabled={isAiLoading}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all disabled:opacity-50"
-            >
-              {isAiLoading ? (
-                <span>Analyzing test...</span>
-              ) : (
-                <>
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Generate AI Report</span>
-                </>
-              )}
-            </button>
-          )}
-        </div>
-
-        {aiAnalysis && (
-          <div className="flex flex-col gap-3 pt-2 text-xs text-slate-700">
-            <div className="flex items-center gap-2 font-bold text-blue-900 text-sm">
-              <span>Rating:</span>
-              <span className="px-2.5 py-0.5 rounded-lg bg-blue-100 border border-blue-200 text-blue-800">
-                {aiAnalysis.rating}
-              </span>
-            </div>
-            <p className="font-medium text-slate-800">{aiAnalysis.summary}</p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div className="p-3 rounded-xl bg-white/80 border border-emerald-200/80 flex flex-col gap-1">
-                <span className="font-bold text-emerald-800 text-[11px]">Key Strengths</span>
-                <ul className="list-disc list-inside text-[11px] text-slate-600 space-y-0.5">
-                  {aiAnalysis.strengths.map((s, i) => (
-                    <li key={i}>{s}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-3 rounded-xl bg-white/80 border border-amber-200/80 flex flex-col gap-1">
-                <span className="font-bold text-amber-800 text-[11px]">Improvement Focus</span>
-                <ul className="list-disc list-inside text-[11px] text-slate-600 space-y-0.5">
-                  {aiAnalysis.areasToImprove.map((a, i) => (
-                    <li key={i}>{a}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl bg-white/90 border border-blue-200/80 text-[11px] text-blue-900 font-medium">
-              <span className="font-bold">Coach Advice:</span> {aiAnalysis.coachingAdvice}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Footer Navigation */}
       <div className="flex items-center justify-between border-t border-slate-200/80 pt-4 text-xs font-semibold text-slate-600">
