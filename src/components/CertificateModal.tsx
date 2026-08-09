@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TestResult } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
+import { X } from 'lucide-react';
 
 interface CertificateModalProps {
   result: TestResult;
@@ -26,17 +27,33 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     window.print();
   };
 
+  // Close on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:max-w-none">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer"
+    >
+      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:max-w-none cursor-default">
         
         {/* Close Button */}
         <button
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 print:hidden transition-colors z-20 flex items-center justify-center font-bold text-sm"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 print:hidden transition-all z-20 flex items-center justify-center font-bold text-sm shadow-xs active:scale-95 cursor-pointer"
         >
-          ✕
+          <X className="w-5 h-5" />
         </button>
 
         {/* Certificate Outer Gold Frame */}

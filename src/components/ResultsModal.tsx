@@ -453,11 +453,17 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
 
       {/* Share Card Modal */}
       {isShareModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-white flex flex-col gap-6 shadow-2xl relative">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsShareModalOpen(false);
+          }}
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200 cursor-pointer"
+        >
+          <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-white flex flex-col gap-6 shadow-2xl relative cursor-default">
             <button
               onClick={() => setIsShareModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+              aria-label="Close modal"
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all shadow-xs active:scale-95 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -493,14 +499,23 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
                 </button>
               </div>
 
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just scored ${result.wpm} WPM with ${result.accuracy}% accuracy on Typerca! 🚀 #typing #typerca`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
-              >
-                <span>Share to X / Twitter</span>
-              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just scored ${result.wpm} WPM with ${result.accuracy}% accuracy on Typerca! 🚀 #typing #typerca`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+                >
+                  <span>Share to X / Twitter</span>
+                </a>
+
+                <button
+                  onClick={() => setIsShareModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs sm:text-sm transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
