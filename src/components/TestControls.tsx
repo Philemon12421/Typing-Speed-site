@@ -1,6 +1,6 @@
 import React from 'react';
 import { TestMode, TimeOption, WordsOption, QuoteLength } from '../types';
-import { Clock, Type, Quote, Keyboard, RotateCcw } from 'lucide-react';
+import { Clock, Type, Quote, Keyboard, RotateCcw, Eye, EyeOff } from 'lucide-react';
 
 interface TestControlsProps {
   mode: TestMode;
@@ -13,9 +13,11 @@ interface TestControlsProps {
   setQuoteLength: (length: QuoteLength) => void;
   showKeyboard: boolean;
   setShowKeyboard: (show: boolean) => void;
+  zenMode?: boolean;
+  onToggleZenMode?: () => void;
   onRestart: () => void;
-  onOpenCustomModal: () => void;
-  isCustomActive: boolean;
+  onOpenCustomModal?: () => void;
+  isCustomActive?: boolean;
 }
 
 export const TestControls: React.FC<TestControlsProps> = ({
@@ -29,6 +31,8 @@ export const TestControls: React.FC<TestControlsProps> = ({
   setQuoteLength,
   showKeyboard,
   setShowKeyboard,
+  zenMode = false,
+  onToggleZenMode,
   onRestart,
 }) => {
   const modes: { id: TestMode; label: string; icon: React.ReactNode }[] = [
@@ -115,6 +119,22 @@ export const TestControls: React.FC<TestControlsProps> = ({
               </button>
             ))}
           </div>
+        )}
+
+        {/* Zen Mode Toggle */}
+        {onToggleZenMode && (
+          <button
+            onClick={onToggleZenMode}
+            title={zenMode ? 'Zen Mode ON (Hides Navbar & Footer while typing)' : 'Enable Zen Mode (Distraction-Free)'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+              zenMode
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-200'
+                : 'bg-white/60 text-slate-600 border-white/40 hover:bg-white/80'
+            }`}
+          >
+            {zenMode ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">{zenMode ? 'Zen ON' : 'Zen Mode'}</span>
+          </button>
         )}
 
         {/* Keyboard Toggle */}

@@ -2,6 +2,7 @@ import { TestResult, UserSettings } from '../types';
 
 const STORAGE_KEY_RESULTS = 'keypulse_test_results_v1';
 const STORAGE_KEY_SETTINGS = 'keypulse_user_settings_v1';
+const STORAGE_KEY_CHALLENGES = 'keypulse_completed_challenges_v1';
 
 export const DEFAULT_SETTINGS: UserSettings = {
   userName: 'Pro Typist',
@@ -17,7 +18,33 @@ export const DEFAULT_SETTINGS: UserSettings = {
   highlightFinger: true,
   dailyGoalType: 'words',
   dailyGoalTarget: 500,
+  zenMode: false,
 };
+
+export function getCompletedChallengeIds(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_CHALLENGES);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveCompletedChallengeId(challengeId: string): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const existing = getCompletedChallengeIds();
+    if (!existing.includes(challengeId)) {
+      const updated = [...existing, challengeId];
+      localStorage.setItem(STORAGE_KEY_CHALLENGES, JSON.stringify(updated));
+      return updated;
+    }
+    return existing;
+  } catch (e) {
+    return [];
+  }
+}
 
 export function getUserSettings(): UserSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS;

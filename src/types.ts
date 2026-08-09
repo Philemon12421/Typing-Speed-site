@@ -34,6 +34,7 @@ export interface UserSettings {
   highlightFinger: boolean;
   dailyGoalType: DailyGoalType;
   dailyGoalTarget: number;
+  zenMode: boolean;
 }
 
 export interface WpmPoint {
@@ -85,4 +86,22 @@ export interface DrillPreset {
   iconName: string;
 }
 
-export type TabType = 'test' | 'analytics';
+export interface TypingChallenge {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: 'easy' | 'medium' | 'hard' | 'legendary';
+  targetWpm: number;
+  targetAccuracy: number;
+  mode: TestMode;
+  modeDetail: string;
+  timeSeconds?: number;
+  wordCount?: number;
+  customText?: string;
+  blindMode?: boolean;
+  xpReward: number;
+  icon: string;
+  badge: string;
+}
+
+export type TabType = 'test' | 'analytics' | 'challenges' | 'guide';

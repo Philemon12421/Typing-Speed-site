@@ -1,6 +1,6 @@
 import React from 'react';
 import { TabType, SoundProfile, DailyGoalType } from '../types';
-import { Keyboard, BarChart2, Flame, Trophy, Target, Volume2, VolumeX, Sliders } from 'lucide-react';
+import { Keyboard, BarChart2, Flame, Trophy, Target, Volume2, VolumeX, Sliders, Award, BookOpen } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: TabType;
@@ -31,7 +31,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const navItems: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'test', label: 'Practice', icon: <Keyboard className="w-4 h-4" /> },
+    { id: 'challenges', label: 'Challenges', icon: <Award className="w-4 h-4 text-amber-500" /> },
     { id: 'analytics', label: 'Analytics', icon: <BarChart2 className="w-4 h-4" /> },
+    { id: 'guide', label: 'Guide', icon: <BookOpen className="w-4 h-4" /> },
   ];
 
   return (

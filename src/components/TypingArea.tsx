@@ -81,65 +81,69 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
   }, [typedChars]);
 
+  // Keep a ref to onActiveCharChange to avoid effect re-triggering loops
+  const onActiveCharChangeRef = useRef(onActiveCharChange);
+  useEffect(() => {
+    onActiveCharChangeRef.current = onActiveCharChange;
+  }, [onActiveCharChange]);
+
   // Notify parent component of current active character for Virtual Keyboard guidance
   useEffect(() => {
     if (isFinished) return;
     const currentChar = targetText[typedChars.length] || '';
     const nextChar = targetText[typedChars.length + 1] || '';
-    if (onActiveCharChange) {
-      onActiveCharChange(currentChar, nextChar);
+    if (onActiveCharChangeRef.current) {
+      onActiveCharChangeRef.current(currentChar, nextChar);
     }
-  }, [typedChars, targetText, isFinished, onActiveCharChange]);
+  }, [typedChars, targetText, isFinished]);
 
-  // Main Timer Effect
+  // Main Timer Interval
   useEffect(() => {
     if (!isStarted || isFinished) return;
 
     const interval = setInterval(() => {
-      setTimeElapsed((prevTime) => {
-        const newTime = prevTime + 1;
-
-        // Calculate stats for current second
-        let correct = 0;
-        let incorrect = 0;
-        for (let i = 0; i < typedChars.length; i++) {
-          if (typedChars[i] === targetText[i]) correct++;
-          else incorrect++;
-        }
-
-        const stats = calculateStats(
-          typedChars.length,
-          correct,
-          incorrect,
-          0,
-          newTime,
-          wpmHistory
-        );
-
-        setWpmHistory((prevHistory) => [
-          ...prevHistory,
-          {
-            second: newTime,
-            wpm: stats.wpm,
-            rawWpm: stats.rawWpm,
-            errors: incorrect,
-            accuracy: stats.accuracy,
-          },
-        ]);
-
-        // Check time limit condition
-        if (timeLimit && newTime >= timeLimit) {
-          setIsFinished(true);
-          clearInterval(interval);
-          finishTest(newTime, typedChars);
-        }
-
-        return newTime;
-      });
+      setTimeElapsed((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isStarted, isFinished, timeLimit, typedChars, targetText]);
+  }, [isStarted, isFinished]);
+
+  // Per-second Stats & Time Limit Check
+  useEffect(() => {
+    if (!isStarted || isFinished || timeElapsed === 0) return;
+
+    let correct = 0;
+    let incorrect = 0;
+    for (let i = 0; i < typedChars.length; i++) {
+      if (typedChars[i] === targetText[i]) correct++;
+      else incorrect++;
+    }
+
+    const stats = calculateStats(
+      typedChars.length,
+      correct,
+      incorrect,
+      0,
+      timeElapsed,
+      wpmHistory
+    );
+
+    setWpmHistory((prevHistory) => [
+      ...prevHistory,
+      {
+        second: timeElapsed,
+        wpm: stats.wpm,
+        rawWpm: stats.rawWpm,
+        errors: incorrect,
+        accuracy: stats.accuracy,
+      },
+    ]);
+
+    if (timeLimit && timeElapsed >= timeLimit) {
+      setIsFinished(true);
+      finishTest(timeElapsed, typedChars);
+    }
+  }, [timeElapsed]);
 
   // Finish Test Logic
   const finishTest = (finalTimeSeconds: number, currentTyped: string) => {
