@@ -220,7 +220,7 @@ export default function App() {
   const isZenModeActive = settings.zenMode && activeTab === 'test' && !latestResult;
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-hidden selection:bg-indigo-600 selection:text-white pb-20 sm:pb-12">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-x-hidden selection:bg-indigo-600 selection:text-white pb-24 sm:pb-12 max-w-full">
       {/* Frosted Glass Ambient Soft Blurred Light Orbs */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none" />
       <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none" />
@@ -254,7 +254,7 @@ export default function App() {
       )}
 
       {/* Main Container */}
-      <main className={`relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center ${isZenModeActive ? 'pt-16 sm:pt-24' : 'pt-8'}`}>
+      <main className={`relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 flex flex-col items-center max-w-full overflow-x-hidden ${isZenModeActive ? 'pt-16 sm:pt-24' : 'pt-4 sm:pt-8'}`}>
         
         {/* VIEW 1: PRACTICE / TYPING TEST */}
         {activeTab === 'test' && (
