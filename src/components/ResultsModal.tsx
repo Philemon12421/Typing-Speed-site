@@ -128,14 +128,24 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
     ctx.font = '800 32px sans-serif';
     ctx.fillText(userName, 100, 180);
 
-    // WPM Main Stat
-    ctx.fillStyle = '#fbbf24';
+    // WPM Main Stat & Score Badge
     ctx.font = '900 130px sans-serif';
-    ctx.fillText(`${result.wpm}`, 100, 330);
+    const wpmText = `${result.wpm}`;
+    const wpmWidth = ctx.measureText(wpmText).width;
 
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillText(wpmText, 100, 330);
+
+    // "WPM" Unit Label - clearly spaced out after the WPM digits
     ctx.fillStyle = '#f59e0b';
     ctx.font = 'bold 28px sans-serif';
-    ctx.fillText('WPM', 100 + ctx.measureText(`${result.wpm}`).width + 20, 280);
+    const wpmLabelX = 100 + wpmWidth + 28;
+    ctx.fillText('WPM', wpmLabelX, 275);
+
+    // Score / Grade Rank Tag beside WPM with generous spacing
+    ctx.fillStyle = '#a5b4fc';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText(`Grade: ${grade.title}  ${grade.badge}`, wpmLabelX, 320);
 
     // Divider Line
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
@@ -484,7 +494,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
               </div>
 
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just scored ${result.wpm} WPM with ${result.accuracy}% accuracy on VelocisType! 🚀 #typing #velocistype`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just scored ${result.wpm} WPM with ${result.accuracy}% accuracy on Typerca! 🚀 #typing #typerca`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
