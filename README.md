@@ -1,4 +1,4 @@
-# VelocisType — Precision Touch Typing & Speed Benchmark Engine
+# VelocisType — Precision Touch Typing Speed 
 
 VelocisType is a modern, high-performance web application engineered for touch typing practice, velocity benchmarking, real-time error diagnostics, and skill certification. Built with React 18, TypeScript, and Tailwind CSS, it offers a distraction-free typing environment paired with rich analytics.
 
