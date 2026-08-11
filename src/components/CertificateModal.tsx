@@ -178,7 +178,91 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   }, [result, userName, formattedDate, certificateId, grade]);
 
   const handlePrint = () => {
-    window.print();
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      window.print();
+      return;
+    }
+
+    const dataUrl = canvas.toDataURL('image/png');
+
+    let iframe = document.getElementById('typerca-cert-print-iframe') as HTMLIFrameElement;
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = 'typerca-cert-print-iframe';
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      iframe.style.opacity = '0';
+      iframe.style.pointerEvents = 'none';
+      document.body.appendChild(iframe);
+    }
+
+    const doc = iframe.contentWindow?.document || iframe.contentDocument;
+    if (doc) {
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Typerca Certificate - ${userName || 'Pro Typist'}</title>
+            <style>
+              @page {
+                size: A4 landscape;
+                margin: 0;
+              }
+              html, body {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #ffffff !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              img {
+                width: 100%;
+                height: 100%;
+                max-width: 100vw;
+                max-height: 100vh;
+                object-fit: contain;
+                display: block;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" id="cert-img" alt="Certificate" />
+          </body>
+        </html>
+      `);
+      doc.close();
+
+      const img = doc.getElementById('cert-img') as HTMLImageElement;
+      if (img) {
+        const triggerPrint = () => {
+          try {
+            iframe.contentWindow?.focus();
+            iframe.contentWindow?.print();
+          } catch {
+            window.print();
+          }
+        };
+
+        if (img.complete) {
+          setTimeout(triggerPrint, 150);
+        } else {
+          img.onload = () => setTimeout(triggerPrint, 150);
+        }
+      }
+    } else {
+      window.print();
+    }
   };
 
   const handleDownloadPNG = () => {
@@ -206,9 +290,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer print:bg-white print:backdrop-none print:p-0 print:static print:block"
+      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer certificate-print-overlay"
     >
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:max-w-none cursor-default certificate-print-area">
+      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans cursor-default certificate-print-area">
         
         {/* Close Button */}
         <button
