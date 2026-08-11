@@ -208,7 +208,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       }}
       className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer print:bg-white print:backdrop-none print:p-0 print:static print:block"
     >
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:max-w-none cursor-default print-clean-card">
+      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:max-w-none cursor-default certificate-print-area">
         
         {/* Close Button */}
         <button
