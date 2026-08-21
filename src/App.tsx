@@ -30,12 +30,16 @@ import { CertificateModal } from './components/CertificateModal';
 import { GoalSoundModal } from './components/GoalSoundModal';
 import { UserRegistrationModal } from './components/UserRegistrationModal';
 import { ChallengesView } from './components/ChallengesView';
-import { AnimatedGuideView } from './components/AnimatedGuideView';
+import { AnimatedGuideView, GuideSubTab } from './components/AnimatedGuideView';
+import { getSEOMetadata, updateDOMMetaTags } from './utils/seo';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { ContactModal } from './components/ContactModal';
 import { TYPING_CHALLENGES } from './data/challenges';
-import { Eye, EyeOff, Sparkles, Award, User, Github, Star, GitFork, GitPullRequest } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, Award, User, Github, Star, GitFork, GitPullRequest, Mail, Shield, Scale, AlertTriangle, Cookie, BookOpen, Keyboard } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('test');
+  const [guideSubTab, setGuideSubTab] = useState<GuideSubTab>('blog');
   const [settings, setSettings] = useState<UserSettings>(getUserSettings());
   const [results, setResults] = useState<TestResult[]>(getTestResults());
 
@@ -47,6 +51,43 @@ export default function App() {
   // Goal & Sound Modal State
   const [isGoalSoundModalOpen, setIsGoalSoundModalOpen] = useState<boolean>(false);
   const [isUserRegistrationModalOpen, setIsUserRegistrationModalOpen] = useState<boolean>(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+
+  // Navigation helpers for legal & educational sections
+  const navigateToGuideSubTab = (subTab: GuideSubTab) => {
+    setGuideSubTab(subTab);
+    setActiveTab('guide');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // URL Hash Listener for direct deep-linking & SEO updates
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.toLowerCase().replace('#', '');
+      if (hash === 'privacy' || hash === 'terms' || hash === 'about' || hash === 'faq' || hash === 'disclaimer' || hash === 'cookies' || hash === 'contact' || hash === 'manual' || hash === 'blog' || hash === 'guide') {
+        setActiveTab('guide');
+        if (hash === 'privacy' || hash === 'terms' || hash === 'about' || hash === 'faq' || hash === 'disclaimer' || hash === 'cookies' || hash === 'contact' || hash === 'manual' || hash === 'blog') {
+          setGuideSubTab(hash as GuideSubTab);
+        }
+      } else if (hash === 'challenges') {
+        setActiveTab('challenges');
+      } else if (hash === 'analytics') {
+        setActiveTab('analytics');
+      } else if (hash === 'test' || hash === 'practice') {
+        setActiveTab('test');
+      }
+    };
+
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  // Dynamic Meta Tags & JSON-LD Structured Data Synchronization
+  useEffect(() => {
+    const seoConfig = getSEOMetadata(activeTab, guideSubTab);
+    updateDOMMetaTags(seoConfig);
+  }, [activeTab, guideSubTab]);
 
   // Test Mode Configurations
   const [mode, setMode] = useState<TestMode>('time');
@@ -186,7 +227,7 @@ export default function App() {
   const isZenModeActive = settings.zenMode && activeTab === 'test' && !latestResult;
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-x-hidden selection:bg-indigo-600 selection:text-white pb-24 sm:pb-12 max-w-full">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-x-hidden selection:bg-indigo-600 selection:text-white w-full">
       {/* Frosted Glass Ambient Soft Blurred Light Orbs */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none" />
       <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none" />
@@ -220,12 +261,12 @@ export default function App() {
         />
       )}
 
-      {/* Main Container */}
-      <main className={`relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 flex flex-col items-center max-w-full overflow-x-hidden ${isZenModeActive ? 'pt-16 sm:pt-24' : 'pt-4 sm:pt-8'}`}>
+      {/* Main Content Area (flex-1 ensures footer stays pinned to bottom) */}
+      <main className={`relative z-10 flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col items-center overflow-x-hidden ${isZenModeActive ? 'pt-10 sm:pt-14' : 'pt-1 sm:pt-2'} pb-4 sm:pb-6`}>
         
         {/* VIEW 1: PRACTICE / TYPING TEST */}
         {activeTab === 'test' && (
-          <div className="w-full flex flex-col items-center gap-6">
+          <div className="w-full flex flex-col items-center gap-4 sm:gap-5">
             
             {/* Top Control Toolbar */}
             <TestControls
@@ -317,18 +358,14 @@ export default function App() {
           />
         )}
 
-        {/* VIEW 4: ANIMATED GUIDE & README */}
+        {/* VIEW 4: ANIMATED GUIDE & KNOWLEDGE BASE */}
         {activeTab === 'guide' && (
-          <AnimatedGuideView />
+          <AnimatedGuideView
+            initialSubTab={guideSubTab}
+            onSubTabChange={(sub) => setGuideSubTab(sub)}
+          />
         )}
       </main>
-
-      {/* Footer */}
-      {!isZenModeActive && (
-        <footer className="relative z-10 px-8 py-4 bg-white/20 backdrop-blur-md border-t border-white/20 flex flex-wrap justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest max-w-7xl mx-auto w-full mt-auto gap-4">
-          <div>&copy; Typerca • Precision Touch Typing Engine</div>
-        </footer>
-      )}
 
       {/* Typing Certificate Modal */}
       {isCertificateOpen && latestResult && (
@@ -359,100 +396,227 @@ export default function App() {
         }
       />
 
-      {/* Footer */}
+      {/* Contact Us Interactive Modal */}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
+
+      {/* GDPR & CCPA Cookie Consent Banner */}
+      <CookieConsentBanner
+        onOpenPrivacyPolicy={() => navigateToGuideSubTab('privacy')}
+      />
+
+      {/* Comprehensive AdSense Compliant White Footer */}
       {!settings.zenMode && (
-        <footer className="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-slate-200/80 flex flex-col gap-6 text-xs text-slate-500 font-medium">
-          
-          {/* GitHub Open Source Banner (Small & Clean) */}
-          <div className="w-full py-2 px-3.5 sm:px-4 rounded-xl bg-slate-900 border border-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-xs text-xs">
-            <div className="flex items-center gap-2.5">
-              <Github className="w-4 h-4 text-amber-400 shrink-0" />
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-white text-xs">Typing-Speed-site</span>
-                <span className="px-1.5 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/25 text-[10px] font-mono">Open Source</span>
-                <span className="hidden md:inline text-slate-400 text-[11px]">• Star, fork or contribute to this project on GitHub</span>
+        <footer className="w-full bg-white text-slate-600 border-t border-slate-200 mt-auto text-xs transition-all shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
+            
+            {/* GitHub Open Source Banner */}
+            <div className="w-full py-3 px-4 sm:px-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0">
+                  <Github className="w-4 h-4" />
+                </div>
+                <div className="flex items-center gap-2 flex-wrap text-center sm:text-left">
+                  <span className="font-extrabold text-white text-sm">Typing-Speed-site</span>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-mono font-bold">Open Source</span>
+                  <span className="hidden md:inline text-slate-300 text-xs">• Star, fork or contribute on GitHub</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href="https://github.com/Philemon12421/Typing-Speed-site"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 text-amber-300 font-extrabold text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
+                >
+                  <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                  <span>Star Repo</span>
+                </a>
+
+                <a
+                  href="https://github.com/Philemon12421/Typing-Speed-site/fork"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95"
+                >
+                  <GitFork className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Fork</span>
+                </a>
+
+                <a
+                  href="https://github.com/Philemon12421/Typing-Speed-site"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs flex items-center gap-1.5 shadow-md shadow-indigo-600/30 transition-all active:scale-95"
+                >
+                  <GitPullRequest className="w-3.5 h-3.5" />
+                  <span>Contribute</span>
+                </a>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <a
-                href="https://github.com/Philemon12421/Typing-Speed-site"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 text-amber-300 font-bold text-[11px] flex items-center gap-1 transition-all active:scale-95"
-                title="Star this repository on GitHub"
-              >
-                <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
-                <span>Star Repo</span>
-              </a>
+            {/* 4-Column Semantic Links Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 sm:gap-6">
+              
+              {/* Column 1: Core Tools */}
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                  <Keyboard className="w-4 h-4 text-indigo-600" />
+                  <span>Practice & Tools</span>
+                </h4>
+                <ul className="space-y-2 text-slate-600 font-medium">
+                  <li>
+                    <button onClick={() => { setActiveTab('test'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                      Touch Typing Speed Test
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => { setActiveTab('challenges'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                      Typing Challenges & Quests
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => { setActiveTab('analytics'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                      Pro Analytics & Error Heatmap
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('manual')} className="hover:text-indigo-600 transition-colors">
+                      Interactive Feature Manual
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => setIsUserRegistrationModalOpen(true)} className="hover:text-indigo-600 transition-colors">
+                      {settings.userName ? `Profile: @${settings.userName}` : 'Claim Username'}
+                    </button>
+                  </li>
+                </ul>
+              </div>
 
-              <a
-                href="https://github.com/Philemon12421/Typing-Speed-site/fork"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-[11px] flex items-center gap-1 transition-all active:scale-95"
-                title="Fork this repository on GitHub"
-              >
-                <GitFork className="w-3 h-3 text-indigo-400" />
-                <span>Fork</span>
-              </a>
+              {/* Column 2: Guides & Articles */}
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4 text-emerald-600" />
+                  <span>Guides & Science</span>
+                </h4>
+                <ul className="space-y-2 text-slate-600 font-medium">
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                      Break the 100 WPM Plateau
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                      Neuroscience of Muscle Memory
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                      Ergonomics & RSI Prevention
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                      Mechanical Switches Comparison
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                      Global WPM Benchmarks
+                    </button>
+                  </li>
+                </ul>
+              </div>
 
-              <a
-                href="https://github.com/Philemon12421/Typing-Speed-site"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] flex items-center gap-1 shadow-xs transition-all active:scale-95"
-                title="Contribute on GitHub"
-              >
-                <GitPullRequest className="w-3 h-3" />
-                <span>Contribute</span>
-              </a>
+              {/* Column 3: Legal & Trust (AdSense Essentials) */}
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                  <Shield className="w-4 h-4 text-emerald-600" />
+                  <span>Legal & Compliance</span>
+                </h4>
+                <ul className="space-y-2 text-slate-600 font-medium">
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1">
+                      <span>Privacy Policy (GDPR & CCPA)</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600 transition-colors">
+                      Terms of Service
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600 transition-colors">
+                      Cookie & Storage Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('disclaimer')} className="hover:text-indigo-600 transition-colors">
+                      Website Disclaimer
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600 transition-colors">
+                      Frequently Asked Questions (FAQ)
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Column 4: Company & Support */}
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                  <Mail className="w-4 h-4 text-sky-600" />
+                  <span>Company & Support</span>
+                </h4>
+                <ul className="space-y-2 text-slate-600 font-medium">
+                  <li>
+                    <button onClick={() => navigateToGuideSubTab('about')} className="hover:text-indigo-600 transition-colors">
+                      About Us & Mission
+                    </button>
+                  </li>
+                  <li>
+                    <span className="text-slate-800 font-bold block">Drenchack Tech Company</span>
+                  </li>
+                  <li>
+                    <span className="text-slate-500 block text-[11px]">Developer: Philemon Osei Kusi</span>
+                  </li>
+                  <li>
+                    <button onClick={() => setIsContactModalOpen(true)} className="hover:text-indigo-700 font-bold transition-colors flex items-center gap-1 text-indigo-600">
+                      <span>Contact Us / Feedback</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 hover:text-indigo-800 font-mono text-[11px] font-semibold underline">
+                      philemonkusi292@gmail.com
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
             </div>
-          </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="font-extrabold text-slate-800">Typerca</span>
-              <span>•</span>
-              <span>Powered by <strong className="text-slate-700">Drenchack Tech Company</strong></span>
+            {/* Bottom Bar with Copyright & Entity Notice */}
+            <div className="border-t border-slate-200 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+              <div>
+                &copy; {new Date().getFullYear()} <strong className="text-slate-800">Typerca</strong>. Built & Operated by <strong className="text-slate-800">Drenchack Tech Company</strong>. All rights reserved.
+              </div>
+              <div className="flex items-center gap-4 font-semibold text-slate-600">
+                <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600">Privacy</button>
+                <span>•</span>
+                <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600">Terms</button>
+                <span>•</span>
+                <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600">Cookies</button>
+                <span>•</span>
+                <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600">FAQ</button>
+                <span>•</span>
+                <button onClick={() => setIsContactModalOpen(true)} className="hover:text-indigo-600">Contact</button>
+              </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-slate-600 font-semibold">
-              {/* User Profile / Handle Button in Footer */}
-              <button
-                onClick={() => setIsUserRegistrationModalOpen(true)}
-                title={settings.userName ? `Logged in as @${settings.userName}` : 'Register username for Weekly Leaderboard'}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/90 hover:bg-indigo-100 border border-indigo-200 text-indigo-900 text-xs font-bold font-mono shadow-2xs transition-all"
-              >
-                <User className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                <span>{settings.userName && settings.userName.trim() ? `@${settings.userName}` : 'Register Handle'}</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('guide')}
-                className="hover:text-indigo-600 transition-colors"
-              >
-                About Us
-              </button>
-              <button
-                onClick={() => setActiveTab('guide')}
-                className="hover:text-indigo-600 transition-colors"
-              >
-                Privacy Policy
-              </button>
-              <button
-                onClick={() => setActiveTab('guide')}
-                className="hover:text-indigo-600 transition-colors"
-              >
-                Terms of Service
-              </button>
-              <button
-                onClick={() => setActiveTab('guide')}
-                className="hover:text-indigo-600 transition-colors"
-              >
-                Speed Manual
-              </button>
-            </div>
           </div>
         </footer>
       )}
