@@ -1,78 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Core Application Landing & Practice Tests -->
   <url>
     <loc>https://typerca.vercel.app/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#practice</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
+
+  <!-- Interactive Challenges & Diagnostic Analytics -->
   <url>
     <loc>https://typerca.vercel.app/#challenges</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#analytics</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
+
+  <!-- Educational Guides & Knowledge Hub Hub -->
   <url>
     <loc>https://typerca.vercel.app/#guide</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://typerca.vercel.app/#manual</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Legal, AdSense Compliance & Organizational Pages -->
+  <url>
     <loc>https://typerca.vercel.app/#privacy</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#terms</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#cookies</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#disclaimer</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#about</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#contact</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   <url>
     <loc>https://typerca.vercel.app/#faq</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
+
+  <!-- In-Depth Educational Articles & Touch Typing Research -->
+  <url>
+    <loc>https://typerca.vercel.app/#how-to-break-100-wpm-typing-plateau</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://typerca.vercel.app/#neurological-science-touch-typing-muscle-memory</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://typerca.vercel.app/#typing-ergonomics-posture-guide-rsi-prevention</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://typerca.vercel.app/#mechanical-keyboard-switches-linear-tactile-clicky-speed</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://typerca.vercel.app/#global-wpm-benchmark-standards-typing-speed</loc>
+    <lastmod>2026-08-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>
