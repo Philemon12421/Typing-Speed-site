@@ -91,6 +91,57 @@ export default function App() {
     updateDOMMetaTags(seoConfig);
   }, [activeTab, guideSubTab]);
 
+  // Disable View Source shortcuts and right-click context menu
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+
+      // Disable F12 (DevTools)
+      if (e.key === 'F12') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Disable Ctrl+U or Cmd+Option+U (View Page Source)
+      if ((isCtrlOrMeta && key === 'u') || (e.metaKey && e.altKey && key === 'u')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Disable Ctrl+Shift+I / J / C or Cmd+Option+I / J / C (Inspect / DevTools / Console)
+      if (
+        (isCtrlOrMeta && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) ||
+        (e.metaKey && e.altKey && (key === 'i' || key === 'j' || key === 'c'))
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Disable Ctrl+S / Cmd+S (Save Page)
+      if (isCtrlOrMeta && key === 's') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+    };
+
+    window.addEventListener('contextmenu', handleContextMenu);
+    window.addEventListener('keydown', handleKeyDown, true);
+
+    return () => {
+      window.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, []);
+
   // Test Mode Configurations
   const [mode, setMode] = useState<TestMode>('time');
   const [timeOption, setTimeOption] = useState<TimeOption>(30);
