@@ -1,12 +1,40 @@
 import React, { useEffect, useRef } from 'react';
 import { TestResult } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
-import { X, Download, Printer } from 'lucide-react';
+import { X, Download, Printer, Keyboard } from 'lucide-react';
 
 interface CertificateModalProps {
   result: TestResult;
   userName: string;
   onClose: () => void;
+}
+
+// Draws text along a circular arc on a canvas context — used for the seal ring copy.
+function drawArcText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  centerY: number,
+  radius: number,
+  startAngleDeg: number,
+  stepDeg: number,
+  font: string,
+  color: string
+) {
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate((startAngleDeg * Math.PI) / 180);
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < text.length; i++) {
+    ctx.save();
+    ctx.rotate((i * stepDeg * Math.PI) / 180);
+    ctx.fillText(text[i], 0, -radius);
+    ctx.restore();
+  }
+  ctx.restore();
 }
 
 export const CertificateModal: React.FC<CertificateModalProps> = ({
@@ -24,157 +52,228 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
   const certificateId = `TYP-${new Date(result.timestamp).getFullYear()}-${(result.id || '99').slice(0, 8).toUpperCase()}`;
 
-  // Draw Clean High-Res (1400 x 950) Canvas for Pure PNG Download
+  // Draw a clean, professional (Coursera-style) certificate to canvas for PNG export.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = 1400;
-    canvas.height = 950;
+    const W = 1400;
+    const H = 990;
+    canvas.width = W;
+    canvas.height = H;
 
-    // Pure White Clean Background
+    // Background
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, 1400, 950);
+    ctx.fillRect(0, 0, W, H);
 
-    // Outer Gold Frame
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 12;
-    ctx.strokeRect(40, 40, 1320, 870);
+    // Top accent bar
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillRect(0, 0, W, 10);
 
-    // Inner Double Line Frame
-    ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(60, 60, 1280, 830);
-    ctx.strokeRect(66, 66, 1268, 818);
-
-    // Corner Accent Dots
-    ctx.fillStyle = '#b45309';
-    const drawDot = (x: number, y: number) => {
-      ctx.beginPath();
-      ctx.arc(x, y, 6, 0, Math.PI * 2);
-      ctx.fill();
-    };
-    drawDot(63, 63);
-    drawDot(1337, 63);
-    drawDot(63, 887);
-    drawDot(1337, 887);
-
-    // Header Standard
-    ctx.fillStyle = '#b45309';
-    ctx.font = '800 18px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('◆ TYPERCA ASSESSMENT STANDARD ◆', 700, 130);
-
-    // Title
-    ctx.fillStyle = '#0f172a';
-    ctx.font = '900 46px Georgia, serif';
-    ctx.fillText('Certificate of Typing Proficiency', 700, 190);
-
-    // Subtitle
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText('THIS OFFICIAL CREDENTIAL CERTIFIES THAT', 700, 235);
-
-    // Recipient Name
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold italic 52px Georgia, serif';
-    ctx.fillText(userName || 'Pro Typist', 700, 315);
-
-    // Underline
-    ctx.strokeStyle = '#0f172a';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(420, 335);
-    ctx.lineTo(980, 335);
-    ctx.stroke();
-
-    // Performance statement
-    ctx.fillStyle = '#475569';
-    ctx.font = '500 19px sans-serif';
-    ctx.fillText('has completed a standardized touch-typing velocity and rhythm consistency evaluation', 700, 385);
-    ctx.fillText('with the following certified performance results:', 700, 412);
-
-    // Metric Cards (4 Cards)
-    const drawCard = (x: number, title: string, value: string, sub: string, bg: string, border: string, textCol: string) => {
-      ctx.fillStyle = bg;
-      ctx.beginPath();
-      ctx.roundRect(x, 455, 260, 145, 16);
-      ctx.fill();
-      ctx.strokeStyle = border;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = textCol;
-      ctx.font = '800 15px sans-serif';
-      ctx.fillText(title.toUpperCase(), x + 130, 490);
-
-      ctx.fillStyle = '#0f172a';
-      ctx.font = '900 40px sans-serif';
-      ctx.fillText(value, x + 130, 545);
-
-      ctx.fillStyle = textCol;
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText(sub, x + 130, 580);
-    };
-
-    drawCard(110, 'Net Speed', `${result.wpm}`, 'WPM Velocity', '#f0f3ff', '#c7d2fe', '#4338ca');
-    drawCard(400, 'Accuracy', `${result.accuracy}%`, 'Verified Clean', '#ecfdf5', '#a7f3d0', '#047857');
-    drawCard(690, 'Consistency', `${result.consistency}%`, 'Rhythm Score', '#fffbeb', '#fde68a', '#b45309');
-    drawCard(980, 'Rank Tier', grade.title, grade.badge, '#f8fafc', '#e2e8f0', '#334155');
-
-    // Details Strip
-    ctx.fillStyle = '#f8fafc';
-    ctx.beginPath();
-    ctx.roundRect(250, 635, 900, 48, 12);
-    ctx.fill();
+    // Thin content border
     ctx.strokeStyle = '#e2e8f0';
     ctx.lineWidth = 1.5;
-    ctx.stroke();
+    ctx.strokeRect(48, 48, W - 96, H - 96);
 
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.fillText(`Mode: ${result.mode} (${result.modeDetail})  •  Duration: ${result.timeSeconds}s  •  Raw Speed: ${result.rawWpm} WPM`, 700, 665);
-
-    // Line
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(100, 720);
-    ctx.lineTo(1300, 720);
-    ctx.stroke();
-
-    // Footer Info
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'bold 15px sans-serif';
-    ctx.fillText('Date Issued:', 100, 760);
+    // Logo mark (top-left)
     ctx.fillStyle = '#0f172a';
-    ctx.font = '900 17px sans-serif';
-    ctx.fillText(formattedDate, 100, 788);
-
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#e0e7ff';
     ctx.beginPath();
-    ctx.roundRect(500, 745, 400, 48, 12);
+    ctx.roundRect(90, 88, 44, 44, 12);
     ctx.fill();
-    ctx.strokeStyle = '#c7d2fe';
-    ctx.lineWidth = 2;
+    ctx.fillStyle = '#60a5fa';
+    ctx.font = '700 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('T', 112, 112);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '800 22px sans-serif';
+    ctx.fillText('Typerca', 148, 103);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('TOUCH TYPING ASSESSMENT', 148, 123);
+
+    // Certificate ID (top-right)
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('CERTIFICATE ID', W - 90, 100);
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 14px monospace';
+    ctx.fillText(certificateId, W - 90, 120);
+
+    // Title
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 14px sans-serif';
+    ctx.fillText('CERTIFICATE OF ACHIEVEMENT', W / 2, 195);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '700 44px Georgia, serif';
+    ctx.fillText('Typing Proficiency', W / 2, 245);
+
+    ctx.fillStyle = '#475569';
+    ctx.font = '500 16px sans-serif';
+    ctx.fillText('This certifies that', W / 2, 290);
+
+    // Recipient name
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'italic 700 46px Georgia, serif';
+    ctx.fillText(userName || 'Pro Typist', W / 2, 350);
+
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 220, 368);
+    ctx.lineTo(W / 2 + 220, 368);
     ctx.stroke();
 
-    ctx.fillStyle = '#3730a3';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.fillText(`Verification ID: ${certificateId}`, 700, 775);
+    ctx.fillStyle = '#475569';
+    ctx.font = '500 15px sans-serif';
+    ctx.fillText('has successfully completed a verified touch-typing performance assessment,', W / 2, 405);
+    ctx.fillText('achieving the following results:', W / 2, 427);
 
-    ctx.textAlign = 'right';
+    // Stat row (minimalist, divider style — no boxes)
+    const stats = [
+      { label: 'NET SPEED', value: `${result.wpm}`, sub: 'WPM' },
+      { label: 'ACCURACY', value: `${result.accuracy}%`, sub: 'Verified' },
+      { label: 'CONSISTENCY', value: `${result.consistency}%`, sub: 'Rhythm' },
+      { label: 'RANK TIER', value: grade.title, sub: grade.badge },
+    ];
+    const rowY = 495;
+    const colW = 260;
+    const startX = W / 2 - (colW * stats.length) / 2;
+
+    stats.forEach((s, i) => {
+      const cx = startX + colW * i + colW / 2;
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '700 12px sans-serif';
+      ctx.fillText(s.label, cx, rowY);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '800 34px sans-serif';
+      ctx.fillText(s.value, cx, rowY + 46);
+
+      ctx.fillStyle = '#1d4ed8';
+      ctx.font = '600 13px sans-serif';
+      ctx.fillText(s.sub, cx, rowY + 70);
+
+      if (i < stats.length - 1) {
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(startX + colW * (i + 1), rowY - 24);
+        ctx.lineTo(startX + colW * (i + 1), rowY + 78);
+        ctx.stroke();
+      }
+    });
+
+    // Detail strip
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath();
+    ctx.roundRect(startX, 618, colW * stats.length, 42, 10);
+    ctx.fill();
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      `Mode: ${result.mode} (${result.modeDetail})   •   Duration: ${result.timeSeconds}s   •   Raw Speed: ${result.rawWpm} WPM`,
+      W / 2,
+      644
+    );
+
+    // Divider before footer
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(90, 730);
+    ctx.lineTo(W - 90, 730);
+    ctx.stroke();
+
+    // Footer: Date (left)
+    ctx.textAlign = 'left';
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(90, 830);
+    ctx.lineTo(280, 830);
+    ctx.stroke();
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold italic 22px Georgia, serif';
-    ctx.fillText('Typerca Engine Board', 1300, 765);
+    ctx.font = '700 15px sans-serif';
+    ctx.fillText(formattedDate, 90, 815);
     ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 13px sans-serif';
-    ctx.fillText('OFFICIAL CERTIFICATION BOARD', 1300, 788);
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('DATE ISSUED', 90, 850);
 
+    // Footer: Signature (right)
+    ctx.textAlign = 'right';
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.beginPath();
+    ctx.moveTo(W - 280, 830);
+    ctx.lineTo(W - 90, 830);
+    ctx.stroke();
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'italic 700 20px Georgia, serif';
+    ctx.fillText('Typerca Engine Board', W - 90, 815);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('CERTIFICATION AUTHORITY', W - 90, 850);
+
+    // Seal / stamp (center bottom)
+    const sealX = W / 2;
+    const sealY = 800;
+    const sealR = 62;
+
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 7, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#fffbeb';
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Checkmark
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 4.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(sealX - 16, sealY + 2);
+    ctx.lineTo(sealX - 4, sealY + 14);
+    ctx.lineTo(sealX + 18, sealY - 14);
+    ctx.stroke();
+
+    drawArcText(ctx, '★ VERIFIED  •  OFFICIAL  •', sealX, sealY, sealR - 20, -90, 13.2, '700 10px sans-serif', '#92400e');
+
+    // Ribbon tails
+    ctx.fillStyle = '#b45309';
+    ctx.beginPath();
+    ctx.moveTo(sealX - 22, sealY + sealR - 4);
+    ctx.lineTo(sealX - 32, sealY + sealR + 38);
+    ctx.lineTo(sealX - 10, sealY + sealR + 22);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(sealX + 22, sealY + sealR - 4);
+    ctx.lineTo(sealX + 32, sealY + sealR + 38);
+    ctx.lineTo(sealX + 10, sealY + sealR + 22);
+    ctx.closePath();
+    ctx.fill();
   }, [result, userName, formattedDate, certificateId, grade]);
 
   const handlePrint = () => {
@@ -292,139 +391,129 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       }}
       className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer certificate-print-overlay"
     >
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-2 border-slate-200 font-sans cursor-default certificate-print-area">
-        
+      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl font-sans cursor-default certificate-print-area overflow-hidden">
+
         {/* Close Button */}
         <button
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 print:hidden transition-all z-20 flex items-center justify-center font-bold text-sm shadow-xs active:scale-95 cursor-pointer"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 print:hidden transition-all z-20 flex items-center justify-center shadow-xs active:scale-95 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Certificate Outer Gold Frame */}
-        <div className="relative border-8 border-amber-500/20 rounded-2xl p-2 sm:p-3 bg-gradient-to-b from-amber-50/40 via-white to-indigo-50/20 print:border-amber-500/40">
-          {/* Inner Double Line Border */}
-          <div className="border-2 border-double border-amber-600/60 rounded-xl p-6 sm:p-10 flex flex-col items-center text-center gap-5 relative overflow-hidden bg-white">
-            
-            {/* Watermark Crest SVG */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none text-amber-900">
-              <svg className="w-80 h-80" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
-            </div>
+        {/* Top accent bar */}
+        <div className="h-2 w-full bg-blue-700" />
 
-            {/* Header Badge / Crest */}
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 p-0.5 shadow-xl shadow-amber-500/20 flex items-center justify-center">
-                <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-amber-400">
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="8" r="6" />
-                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                  </svg>
-                </div>
+        <div className="p-6 sm:p-10 border border-slate-100">
+
+          {/* Header: logo + certificate ID */}
+          <div className="flex items-start justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center text-blue-400">
+                <Keyboard className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="font-extrabold text-slate-900 text-lg leading-none">Typerca</div>
+                <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1">Touch Typing Assessment</div>
               </div>
             </div>
-
-            <div>
-              <div className="flex items-center justify-center gap-2 text-amber-700 font-black text-[11px] uppercase tracking-[0.25em]">
-                <span className="text-amber-500">◆</span>
-                <span>Typerca Assessment Standard</span>
-                <span className="text-amber-500">◆</span>
-              </div>
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 font-serif tracking-tight">
-                Certificate of Typing Proficiency
-              </h1>
-              <p className="text-xs text-slate-500 font-semibold tracking-wide uppercase mt-2">
-                This official credential certifies that
-              </p>
+            <div className="text-right">
+              <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Certificate ID</div>
+              <div className="text-sm font-bold text-slate-700 font-mono">{certificateId}</div>
             </div>
+          </div>
 
-            {/* Recipient Name */}
-            <div className="border-b-2 border-slate-900/80 px-10 py-1.5 min-w-[240px] my-1">
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-serif italic tracking-wide">
+          {/* Title block */}
+          <div className="text-center">
+            <p className="text-xs font-semibold text-slate-500 tracking-[0.2em] uppercase">Certificate of Achievement</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 font-serif mt-2">Typing Proficiency</h1>
+            <p className="text-sm text-slate-500 font-medium mt-4">This certifies that</p>
+
+            <div className="inline-block border-b border-slate-300 px-8 pb-2 mt-2 mb-2">
+              <span className="text-3xl sm:text-4xl font-serif italic font-bold text-slate-900">
                 {userName || 'Pro Typist'}
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed font-medium">
-              has completed a standardized, verified touch-typing velocity and rhythm consistency evaluation with the following certified performance results:
+            <p className="text-sm text-slate-600 font-medium max-w-lg mx-auto mt-2 leading-relaxed">
+              has successfully completed a verified touch-typing performance assessment, achieving the following results:
             </p>
-
-            {/* Verified Metrics Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl my-2">
-              <div className="p-3 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 flex flex-col items-center">
-                <span className="text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider">Net Speed</span>
-                <span className="text-2xl sm:text-3xl font-black text-indigo-950 mt-0.5">{result.wpm}</span>
-                <span className="text-[10px] font-bold text-indigo-600">WPM</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex flex-col items-center">
-                <span className="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">Accuracy</span>
-                <span className="text-2xl sm:text-3xl font-black text-emerald-950 mt-0.5">{result.accuracy}%</span>
-                <span className="text-[10px] font-bold text-emerald-600">Verified</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex flex-col items-center">
-                <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider">Consistency</span>
-                <span className="text-2xl sm:text-3xl font-black text-amber-950 mt-0.5">{result.consistency}%</span>
-                <span className="text-[10px] font-bold text-amber-600">Rhythm Score</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
-                <span className="text-[10px] font-extrabold text-slate-600 uppercase tracking-wider">Rank Tier</span>
-                <span className="text-xs font-black text-slate-900 mt-1.5 px-2 py-0.5 rounded-lg bg-white border border-slate-300">
-                  {grade.title}
-                </span>
-                <span className="text-[10px] font-semibold text-slate-500 mt-0.5">{grade.badge}</span>
-              </div>
-            </div>
-
-            {/* Test Details Strip */}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-500 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200/80">
-              <span>Mode: <strong className="text-slate-800 capitalize">{result.mode}</strong> ({result.modeDetail})</span>
-              <span>•</span>
-              <span>Duration: <strong className="text-slate-800">{result.timeSeconds}s</strong></span>
-              <span>•</span>
-              <span>Raw Speed: <strong className="text-slate-800">{result.rawWpm} WPM</strong></span>
-            </div>
-
-            {/* Footer Signature & Serial Seal */}
-            <div className="w-full flex flex-col sm:flex-row items-center justify-between border-t border-slate-200/80 pt-6 gap-4 text-xs text-slate-500 font-medium mt-2">
-              <div className="flex flex-col items-center sm:items-start gap-0.5">
-                <span className="font-bold text-slate-800">Date Issued:</span>
-                <span className="font-semibold text-slate-600">{formattedDate}</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-indigo-900 font-bold bg-indigo-50 px-3.5 py-1.5 rounded-xl border border-indigo-200 text-xs shadow-sm">
-                <svg className="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-                <span>Verification ID: <strong className="font-mono text-indigo-700">{certificateId}</strong></span>
-              </div>
-
-              <div className="flex flex-col items-center sm:items-end gap-0.5">
-                <span className="font-serif italic text-base font-bold text-slate-900">Typerca Engine</span>
-                <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Official Certification Board</span>
-              </div>
-            </div>
-
           </div>
+
+          {/* Stat row — minimalist, divider style */}
+          <div className="flex items-stretch justify-center divide-x divide-slate-200 mt-8 max-w-2xl mx-auto">
+            {[
+              { label: 'Net Speed', value: `${result.wpm}`, sub: 'WPM' },
+              { label: 'Accuracy', value: `${result.accuracy}%`, sub: 'Verified' },
+              { label: 'Consistency', value: `${result.consistency}%`, sub: 'Rhythm' },
+              { label: 'Rank Tier', value: grade.title, sub: grade.badge },
+            ].map((s) => (
+              <div key={s.label} className="flex-1 flex flex-col items-center px-2 sm:px-4">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{s.label}</span>
+                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">{s.value}</span>
+                <span className="text-xs font-semibold text-blue-700 mt-0.5">{s.sub}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Detail strip */}
+          <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-medium text-slate-500 bg-slate-50 px-4 py-2.5 rounded-lg mt-6 max-w-2xl mx-auto text-center">
+            <span>Mode: <strong className="text-slate-700 capitalize">{result.mode}</strong> ({result.modeDetail})</span>
+            <span className="text-slate-300">•</span>
+            <span>Duration: <strong className="text-slate-700">{result.timeSeconds}s</strong></span>
+            <span className="text-slate-300">•</span>
+            <span>Raw Speed: <strong className="text-slate-700">{result.rawWpm} WPM</strong></span>
+          </div>
+
+          {/* Footer: date / seal / signature */}
+          <div className="grid grid-cols-3 items-end mt-10 pt-6 border-t border-slate-200">
+            <div>
+              <div className="border-b border-slate-300 pb-1.5 mb-1.5 w-32">
+                <span className="text-sm font-bold text-slate-800">{formattedDate}</span>
+              </div>
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Date Issued</span>
+            </div>
+
+            {/* Seal */}
+            <div className="flex justify-center">
+              <svg viewBox="0 0 140 160" className="w-20 h-24">
+                <defs>
+                  <path id="sealArc" d="M 20,70 A 50,50 0 1 1 120,70" fill="none" />
+                </defs>
+                <polygon points="55,118 45,155 70,140 95,155 85,118" fill="#b45309" />
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#b45309" strokeWidth="2.5" />
+                <circle cx="70" cy="70" r="44" fill="#fffbeb" stroke="#d97706" strokeWidth="1" />
+                <path d="M 52,72 L 63,84 L 90,54" fill="none" stroke="#b45309" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                <text fontSize="8.2" fontWeight="700" fill="#92400e" letterSpacing="1.5">
+                  <textPath href="#sealArc" startOffset="50%" textAnchor="middle">
+                    ★ VERIFIED • OFFICIAL ★
+                  </textPath>
+                </text>
+              </svg>
+            </div>
+
+            <div className="text-right">
+              <div className="border-b border-slate-300 pb-1.5 mb-1.5">
+                <span className="text-lg font-serif italic font-bold text-slate-900">Typerca Engine Board</span>
+              </div>
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Certification Authority</span>
+            </div>
+          </div>
+
         </div>
 
         {/* Hidden Canvas for Crisp High-Res Image Export */}
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-6 print:hidden">
+        <div className="flex flex-wrap items-center justify-center gap-3 py-6 print:hidden bg-slate-50 border-t border-slate-100">
           <button
             onClick={handleDownloadPNG}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-md shadow-blue-200 transition-all active:scale-95 cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>Download Clean Certificate PNG</span>
+            <span>Download Certificate PNG</span>
           </button>
 
           <button
@@ -446,4 +535,3 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     </div>
   );
 };
-
