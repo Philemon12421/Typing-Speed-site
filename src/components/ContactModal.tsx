@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, User, Building, Clock, X, AlertCircle, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Send, CheckCircle2, User, Building, Clock, X, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -112,13 +112,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
         {isSuccess ? (
           /* Catchy & Professional 24hr Response Pop-up */
           <div className="p-4 sm:p-8 text-center flex flex-col items-center gap-5 animate-in fade-in duration-300">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center shadow-xl shadow-indigo-200">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-              <div className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow">
-                <Sparkles className="w-4 h-4" />
-              </div>
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center shadow-xl shadow-indigo-200">
+              <CheckCircle2 className="w-10 h-10" />
             </div>
 
             <div className="space-y-2 max-w-lg">

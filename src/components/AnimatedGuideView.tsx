@@ -1018,13 +1018,8 @@ export const AnimatedGuideView: React.FC<AnimatedGuideViewProps> = ({
             <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200">
               {contactSent ? (
                 <div className="p-6 text-center flex flex-col items-center gap-4 animate-in fade-in duration-300">
-                  <div className="relative">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200">
-                      <CheckCircle2 className="w-8 h-8" />
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow">
-                      <Sparkles className="w-3.5 h-3.5" />
-                    </div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200">
+                    <CheckCircle2 className="w-8 h-8" />
                   </div>
 
                   <div className="space-y-1.5 max-w-sm">
