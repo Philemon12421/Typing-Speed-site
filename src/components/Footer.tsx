@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({
             href="https://github.com/Philemon12421/Typing-Speed-site"
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/15 text-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-colors"
+            className="shrink-0 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-all hover:-translate-y-0.5"
           >
             <Star className="w-3 h-3" />
             <span>Star on GitHub</span>
@@ -52,7 +52,7 @@ export const Footer: React.FC<FooterProps> = ({
           
           {/* Column 1: Core Tools */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
               <Keyboard className="w-4 h-4 text-indigo-600 shrink-0" />
               <span>Practice & Tools</span>
             </h4>
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 2: Guides & Articles */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
               <BookOpen className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Guides & Science</span>
             </h4>
@@ -122,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 3: Legal & Trust (AdSense Essentials) */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
               <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Legal & Compliance</span>
             </h4>
@@ -157,7 +157,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 4: Company & Support */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
               <Mail className="w-4 h-4 text-sky-600 shrink-0" />
               <span>Company & Support</span>
             </h4>
