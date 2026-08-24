@@ -25,11 +25,11 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenContactModal,
 }) => {
   return (
-    <footer className="w-full bg-white text-slate-600 border-t border-slate-200 mt-auto text-xs transition-all shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+    <footer className="w-full bg-white/60 backdrop-blur-xl text-slate-600 border-t border-white/60 mt-auto text-xs transition-all shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
         
         {/* GitHub Open Source Strip */}
-        <div className="mx-auto w-full sm:w-auto max-w-md sm:max-w-none py-2 px-3.5 rounded-lg bg-slate-900 border border-slate-800 text-white flex items-center justify-center sm:justify-between gap-3">
+        <div className="mx-auto w-full sm:w-auto max-w-md sm:max-w-none py-2 px-3.5 rounded-lg bg-slate-900/70 backdrop-blur-md border border-white/10 text-white flex items-center justify-center sm:justify-between gap-3 shadow-sm">
           <div className="flex items-center gap-2 min-w-0">
             <Github className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="font-semibold text-xs text-slate-200 tracking-tight truncate">Typing-Speed-site</span>
@@ -189,7 +189,7 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Bar with Copyright & Entity Notice */}
-        <div className="border-t border-slate-200 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+        <div className="border-t border-white/60 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
           <div className="text-center sm:text-left font-medium">
             &copy; {new Date().getFullYear()} <strong className="text-slate-800">Typerca</strong>. Built & Operated by <strong className="text-slate-800">Drenchack Tech Company</strong>. All rights reserved.
           </div>
