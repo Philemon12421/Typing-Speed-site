@@ -77,15 +77,15 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* 4-Column Semantic Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6">
           
           {/* Column 1: Core Tools */}
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-              <Keyboard className="w-4 h-4 text-indigo-600" />
+              <Keyboard className="w-4 h-4 text-indigo-600 shrink-0" />
               <span>Practice & Tools</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-medium">
+            <ul className="space-y-2 text-slate-600 font-semibold">
               <li>
                 <button onClick={() => { setActiveTab('test'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
                   Touch Typing Speed Test
@@ -107,7 +107,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
-                <button onClick={onOpenRegisterModal} className="hover:text-indigo-600 transition-colors">
+                <button onClick={onOpenRegisterModal} className="hover:text-indigo-600 transition-colors truncate block max-w-full text-left">
                   {userName ? `Profile: @${userName}` : 'Claim Username'}
                 </button>
               </li>
@@ -115,12 +115,12 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Column 2: Guides & Articles */}
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4 text-emerald-600" />
+              <BookOpen className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Guides & Science</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-medium">
+            <ul className="space-y-2 text-slate-600 font-semibold">
               <li>
                 <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
                   Break the 100 WPM Plateau
@@ -150,14 +150,14 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Column 3: Legal & Trust (AdSense Essentials) */}
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-emerald-600" />
+              <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Legal & Compliance</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-medium">
+            <ul className="space-y-2 text-slate-600 font-semibold">
               <li>
-                <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1">
+                <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 transition-colors flex items-center gap-1">
                   <span>Privacy Policy (GDPR & CCPA)</span>
                 </button>
               </li>
@@ -185,12 +185,12 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Column 4: Company & Support */}
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-sky-600" />
+              <Mail className="w-4 h-4 text-sky-600 shrink-0" />
               <span>Company & Support</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-medium">
+            <ul className="space-y-2 text-slate-600 font-semibold">
               <li>
                 <button onClick={() => navigateToGuideSubTab('about')} className="hover:text-indigo-600 transition-colors">
                   About Us & Mission
@@ -200,7 +200,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="text-slate-800 font-bold block">Drenchack Tech Company</span>
               </li>
               <li>
-                <span className="text-slate-500 block text-[11px]">Developer: Philemon Osei Kusi</span>
+                <span className="text-slate-500 block text-[11px] font-medium">Developer: Philemon Osei Kusi</span>
               </li>
               <li>
                 <button onClick={onOpenContactModal} className="hover:text-indigo-700 font-bold transition-colors flex items-center gap-1 text-indigo-600">
@@ -208,7 +208,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
-                <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 hover:text-indigo-800 font-mono text-[11px] font-semibold underline">
+                <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 hover:text-indigo-800 font-mono text-[11px] font-semibold underline break-all">
                   philemonkusi292@gmail.com
                 </a>
               </li>
@@ -219,10 +219,10 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Bar with Copyright & Entity Notice */}
         <div className="border-t border-slate-200 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
-          <div>
+          <div className="text-center sm:text-left font-medium">
             &copy; {new Date().getFullYear()} <strong className="text-slate-800">Typerca</strong>. Built & Operated by <strong className="text-slate-800">Drenchack Tech Company</strong>. All rights reserved.
           </div>
-          <div className="flex items-center gap-4 font-semibold text-slate-600">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-bold text-slate-600">
             <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600">Privacy</button>
             <span>•</span>
             <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600">Terms</button>
