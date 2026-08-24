@@ -9,6 +9,32 @@ interface VirtualKeyboardProps {
   keyErrors?: Record<string, number>;
 }
 
+const SYMBOL_TO_BASE_KEY: Record<string, string> = {
+  '~': '`',
+  '!': '1',
+  '@': '2',
+  '#': '3',
+  '£': '3',
+  '$': '4',
+  '€': '4',
+  '%': '5',
+  '^': '6',
+  '&': '7',
+  '*': '8',
+  '(': '9',
+  ')': '0',
+  '_': '-',
+  '+': '=',
+  '{': '[',
+  '}': ']',
+  '|': '\\',
+  ':': ';',
+  '"': "'",
+  '<': ',',
+  '>': '.',
+  '?': '/',
+};
+
 const KEYBOARD_ROWS = [
   ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
   ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
@@ -25,8 +51,20 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 }) => {
   const [showHeatmap, setShowHeatmap] = useState<boolean>(false);
 
-  const targetChar = activeChar === ' ' ? 'Space' : activeChar;
   const targetFingerInfo = activeChar ? getKeyFingerInfo(activeChar) : null;
+
+  // Check if character requires Shift
+  const requiresShift = (char: string) => {
+    if (!char) return false;
+    if (char in SYMBOL_TO_BASE_KEY) return true;
+    return char >= 'A' && char <= 'Z';
+  };
+
+  const getBaseKey = (char: string) => {
+    if (!char) return '';
+    if (SYMBOL_TO_BASE_KEY[char]) return SYMBOL_TO_BASE_KEY[char];
+    return char.toLowerCase();
+  };
 
   // Find max errors across all keys for heatmap normalization
   const errorValues: number[] = Object.values(keyErrors);
@@ -58,6 +96,11 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
       };
     }
   };
+
+  const activeBaseKey = getBaseKey(activeChar);
+  const nextBaseKey = getBaseKey(nextChar || '');
+  const activeNeedsShift = requiresShift(activeChar);
+  const nextNeedsShift = requiresShift(nextChar || '');
 
   return (
     <div className="w-full flex flex-col items-center gap-3 p-4 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm my-4 transition-all">
@@ -111,11 +154,18 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
           <div key={rowIndex} className="flex justify-center gap-1.5 w-full min-w-[580px]">
             {row.map((key, keyIndex) => {
               const isSpace = key === 'Space';
+              const isShift = key === 'Shift';
+
               const isTarget =
-                key.toLowerCase() === activeChar.toLowerCase() || (isSpace && activeChar === ' ');
+                (isSpace && activeChar === ' ') ||
+                (isShift && activeNeedsShift) ||
+                (!isSpace && !isShift && key.toLowerCase() === activeBaseKey);
+
               const isNext =
-                nextChar &&
-                (key.toLowerCase() === nextChar.toLowerCase() || (isSpace && nextChar === ' '));
+                !isTarget &&
+                ((isSpace && nextChar === ' ') ||
+                  (isShift && nextNeedsShift) ||
+                  (!isSpace && !isShift && key.toLowerCase() === nextBaseKey));
 
               const fingerInfo = getKeyFingerInfo(key);
               const heatmapStyle = showHeatmap ? getKeyHeatmapStyle(key) : null;

@@ -100,6 +100,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   dailyGoalType: 'words',
   dailyGoalTarget: 500,
   zenMode: false,
+  difficulty: 'moderate',
 };
 
 export function getCompletedChallengeIds(): string[] {

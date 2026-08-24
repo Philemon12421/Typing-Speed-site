@@ -5,6 +5,7 @@ import {
   TimeOption,
   WordsOption,
   QuoteLength,
+  DifficultyLevel,
   TestResult,
   UserSettings,
   TypingChallenge,
@@ -95,6 +96,7 @@ export default function App() {
   const [timeOption, setTimeOption] = useState<TimeOption>(30);
   const [wordsOption, setWordsOption] = useState<WordsOption>(25);
   const [quoteLength, setQuoteLength] = useState<QuoteLength>('medium');
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(settings.difficulty || 'moderate');
   const [customText, setCustomText] = useState<string>('');
   const [customTitle, setCustomTitle] = useState<string>('');
 
@@ -123,30 +125,35 @@ export default function App() {
     saveUserSettings(newSettings);
   };
 
+  const handleDifficultyChange = (newDifficulty: DifficultyLevel) => {
+    setDifficulty(newDifficulty);
+    handleUpdateSettings({ ...settings, difficulty: newDifficulty });
+  };
+
   // Sync keyboard toggle with settings
   useEffect(() => {
     setShowKeyboard(settings.showKeyboard);
   }, [settings.showKeyboard]);
 
-  // Regenerate passage when mode or options change
+  // Regenerate passage when mode, options, or difficulty change
   const generateNewPassage = useCallback(() => {
     setLatestResult(null);
 
     if (mode === 'time') {
       // For time mode, generate enough words (150 words) so text doesn't run out
-      setTargetText(generateWordsText(150));
+      setTargetText(generateWordsText(150, difficulty));
     } else if (mode === 'words') {
-      setTargetText(generateWordsText(wordsOption));
+      setTargetText(generateWordsText(wordsOption, difficulty));
     } else if (mode === 'quote') {
-      setTargetText(getRandomQuote(quoteLength));
+      setTargetText(getRandomQuote(quoteLength, difficulty));
     } else if (mode === 'custom' || mode === 'drill') {
       if (customText) {
         setTargetText(customText);
       } else {
-        setTargetText(generateWordsText(30));
+        setTargetText(generateWordsText(30, difficulty));
       }
     }
-  }, [mode, wordsOption, quoteLength, customText]);
+  }, [mode, wordsOption, quoteLength, difficulty, customText]);
 
   useEffect(() => {
     generateNewPassage();
@@ -188,9 +195,9 @@ export default function App() {
     keyErrors: Record<string, number>;
     fingerStats: Record<string, { hits: number; errors: number }>;
   }) => {
-    let modeDetail = `${timeOption}s`;
-    if (mode === 'words') modeDetail = `${wordsOption} words`;
-    if (mode === 'quote') modeDetail = `Quote (${quoteLength})`;
+    let modeDetail = `${timeOption}s • ${difficulty}`;
+    if (mode === 'words') modeDetail = `${wordsOption} words • ${difficulty}`;
+    if (mode === 'quote') modeDetail = `Quote (${quoteLength}) • ${difficulty}`;
     if (mode === 'custom') modeDetail = customTitle || 'Custom Text';
     if (mode === 'drill') modeDetail = customTitle || 'Drill';
 
@@ -279,6 +286,8 @@ export default function App() {
               setWordsOption={setWordsOption}
               quoteLength={quoteLength}
               setQuoteLength={setQuoteLength}
+              difficulty={difficulty}
+              setDifficulty={handleDifficultyChange}
               showKeyboard={showKeyboard}
               setShowKeyboard={setShowKeyboard}
               zenMode={settings.zenMode}

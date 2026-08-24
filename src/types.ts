@@ -2,6 +2,7 @@ export type TestMode = 'time' | 'words' | 'quote' | 'drill' | 'custom';
 export type TimeOption = 15 | 30 | 60 | 120;
 export type WordsOption = 10 | 25 | 50 | 100;
 export type QuoteLength = 'short' | 'medium' | 'long';
+export type DifficultyLevel = 'simple' | 'moderate' | 'expert';
 export type DrillCategory = 'home_row' | 'top_row' | 'bottom_row' | 'numbers' | 'symbols' | 'weak_keys';
 
 export type CaretStyle = 'line' | 'block' | 'underline' | 'smooth';
@@ -36,6 +37,7 @@ export interface UserSettings {
   dailyGoalType: DailyGoalType;
   dailyGoalTarget: number;
   zenMode: boolean;
+  difficulty?: DifficultyLevel;
 }
 
 export interface WpmPoint {

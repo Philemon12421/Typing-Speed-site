@@ -23,13 +23,13 @@ const QUOTE_SNIPPETS = [
   'Simplicity is prerequisite for reliability. Software engineering is the art of mastering complexity.',
   'Code is like humor. When you have to explain it, it is bad. Strive for clarity above all else.',
   'First, solve the problem. Then, write the code. Premature optimization is the root of all evil.',
-  'The function of good software is to make the complex appear simple and effortless.',
+  'The function of good software is to make the complex appear simple & effortless.',
   'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
   'Talk is cheap. Show me the code. Action speaks louder than words in software craftsmanship.',
   'Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.',
-  'Continuous improvement is better than delayed perfection. Keep typing, keep refining.',
-  'The only way to learn a new programming language or skill is by writing code in it every single day.',
-  'Knowledge is power, but practice is the key that unlocks mastery and lightning speed.',
+  'Continuous improvement is better than delayed perfection. Keep typing, keep refining & stay sharp.',
+  'Work with @team to deliver 100% test coverage & save £500 on infrastructure costs.',
+  'Knowledge is power, but practice is the "key" that unlocks mastery & lightning velocity.'
 ];
 
 const WORD_LISTS = [
@@ -41,6 +41,8 @@ const WORD_LISTS = [
   'champion victory trophy medal dynamic impact energy momentum triumph crest',
   'architecture component framework infrastructure deployment container database reactive',
   'serenity tranquility harmony balance focus clarity instinct flow pulse',
+  '"speed & focus" @team £50 #1 test & "accuracy" £25 @user cats & dogs £100 "flow"',
+  'email@domain.com £75 & 100% "precision" #code @expert £200 trial & error'
 ];
 
 // Base curated iconic challenges

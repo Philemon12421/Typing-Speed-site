@@ -1,6 +1,6 @@
 import React from 'react';
-import { TestMode, TimeOption, WordsOption, QuoteLength } from '../types';
-import { Clock, Type, Quote, Keyboard, RotateCcw, Eye, EyeOff } from 'lucide-react';
+import { TestMode, TimeOption, WordsOption, QuoteLength, DifficultyLevel } from '../types';
+import { Clock, Type, Quote, Keyboard, RotateCcw, Eye, EyeOff, Gauge } from 'lucide-react';
 
 interface TestControlsProps {
   mode: TestMode;
@@ -11,6 +11,8 @@ interface TestControlsProps {
   setWordsOption: (words: WordsOption) => void;
   quoteLength: QuoteLength;
   setQuoteLength: (length: QuoteLength) => void;
+  difficulty: DifficultyLevel;
+  setDifficulty: (difficulty: DifficultyLevel) => void;
   showKeyboard: boolean;
   setShowKeyboard: (show: boolean) => void;
   zenMode?: boolean;
@@ -29,6 +31,8 @@ export const TestControls: React.FC<TestControlsProps> = ({
   setWordsOption,
   quoteLength,
   setQuoteLength,
+  difficulty,
+  setDifficulty,
   showKeyboard,
   setShowKeyboard,
   zenMode = false,
@@ -41,11 +45,32 @@ export const TestControls: React.FC<TestControlsProps> = ({
     { id: 'quote', label: 'Quote', icon: <Quote className="w-3.5 h-3.5" /> },
   ];
 
+  const difficulties: { id: DifficultyLevel; label: string; tooltip: string; badgeColor: string }[] = [
+    {
+      id: 'simple',
+      label: 'Simple',
+      tooltip: 'Smooth, high-frequency words without tricky symbols for pure rhythm',
+      badgeColor: 'text-emerald-600',
+    },
+    {
+      id: 'moderate',
+      label: 'Moderate',
+      tooltip: 'Standard vocabulary with light punctuation and common symbols (@, £, &, ")',
+      badgeColor: 'text-blue-600',
+    },
+    {
+      id: 'expert',
+      label: 'Expert',
+      tooltip: 'Complex irregular words, heavy special symbols (@, £, $, &, {}, []), and code-style syntax',
+      badgeColor: 'text-rose-600',
+    },
+  ];
+
   return (
-    <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-2xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm">
+    <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-3 p-3 rounded-2xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm">
       
-      {/* Mode Selector Group */}
-      <div className="flex flex-wrap items-center gap-1 bg-white/50 p-1 rounded-xl border border-white/40 w-full sm:w-auto justify-center sm:justify-start">
+      {/* Left: Mode Selector Group */}
+      <div className="flex flex-wrap items-center gap-1.5 bg-white/50 p-1 rounded-xl border border-white/40 w-full lg:w-auto justify-center lg:justify-start">
         {modes.map((m) => {
           const isActive = mode === m.id;
           return (
@@ -65,8 +90,33 @@ export const TestControls: React.FC<TestControlsProps> = ({
         })}
       </div>
 
-      {/* Sub-Options Pill Group */}
-      <div className="flex items-center gap-2 overflow-x-auto max-w-full py-0.5">
+      {/* Middle: Difficulty Selector */}
+      <div className="flex items-center gap-1 bg-white/50 p-1 rounded-xl border border-white/40 shadow-xs" title="Adjust complexity of the generated text">
+        <div className="flex items-center gap-1 px-2 text-[11px] font-bold text-slate-500 hidden sm:flex">
+          <Gauge className="w-3.5 h-3.5 text-indigo-500" />
+          <span>Difficulty:</span>
+        </div>
+        {difficulties.map((diff) => {
+          const isActive = difficulty === diff.id;
+          return (
+            <button
+              key={diff.id}
+              onClick={() => setDifficulty(diff.id)}
+              title={diff.tooltip}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 ${
+                isActive
+                  ? 'bg-indigo-600 text-white shadow-sm font-bold scale-[1.02]'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              }`}
+            >
+              <span>{diff.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Right: Sub-Options & Action Pill Group */}
+      <div className="flex items-center gap-2 overflow-x-auto max-w-full py-0.5 justify-center lg:justify-end w-full lg:w-auto">
         {mode === 'time' && (
           <div className="flex items-center gap-1 bg-white/50 p-1 rounded-xl border border-white/40">
             {([15, 30, 60, 120] as TimeOption[]).map((t) => (
