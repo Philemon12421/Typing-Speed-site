@@ -2,8 +2,6 @@ import React from 'react';
 import {
   Github,
   Star,
-  GitFork,
-  GitPullRequest,
   Keyboard,
   BookOpen,
   Shield,
@@ -30,50 +28,23 @@ export const Footer: React.FC<FooterProps> = ({
     <footer className="w-full bg-white text-slate-600 border-t border-slate-200 mt-auto text-xs transition-all shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
         
-        {/* GitHub Open Source Banner */}
-        <div className="w-full py-3 px-4 sm:px-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0">
-              <Github className="w-4 h-4" />
-            </div>
-            <div className="flex items-center gap-2 flex-wrap text-center sm:text-left">
-              <span className="font-extrabold text-white text-sm">Typing-Speed-site</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-mono font-bold">Open Source</span>
-              <span className="hidden md:inline text-slate-300 text-xs">• Star, fork or contribute on GitHub</span>
-            </div>
+        {/* GitHub Open Source Strip */}
+        <div className="mx-auto w-full sm:w-auto max-w-md sm:max-w-none py-2 px-3.5 rounded-lg bg-slate-900 border border-slate-800 text-white flex items-center justify-center sm:justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Github className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="font-semibold text-xs text-slate-200 tracking-tight truncate">Typing-Speed-site</span>
+            <span className="hidden sm:inline text-slate-500 text-xs">is open source</span>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <a
-              href="https://github.com/Philemon12421/Typing-Speed-site"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 text-amber-300 font-extrabold text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
-            >
-              <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
-              <span>Star Repo</span>
-            </a>
-
-            <a
-              href="https://github.com/Philemon12421/Typing-Speed-site/fork"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95"
-            >
-              <GitFork className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Fork</span>
-            </a>
-
-            <a
-              href="https://github.com/Philemon12421/Typing-Speed-site"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs flex items-center gap-1.5 shadow-md shadow-indigo-600/30 transition-all active:scale-95"
-            >
-              <GitPullRequest className="w-3.5 h-3.5" />
-              <span>Contribute</span>
-            </a>
-          </div>
+          <a
+            href="https://github.com/Philemon12421/Typing-Speed-site"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/15 text-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-colors"
+          >
+            <Star className="w-3 h-3" />
+            <span>Star on GitHub</span>
+          </a>
         </div>
 
         {/* 4-Column Semantic Links Grid */}
