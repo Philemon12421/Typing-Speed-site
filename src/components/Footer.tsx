@@ -1,10 +1,9 @@
 import React from 'react';
 import { Github, Keyboard, BookOpen, Shield, Mail } from 'lucide-react';
-import { GuideSubTab } from './AnimatedGuideView';
 
 export interface FooterProps {
   setActiveTab: (tab: 'test' | 'challenges' | 'analytics' | 'guide') => void;
-  navigateToGuideSubTab: (subTab: GuideSubTab) => void;
+  navigateToGuideSubTab: (subTab: string) => void;
   userName?: string;
   onOpenRegisterModal: () => void;
   onOpenContactModal: () => void;
