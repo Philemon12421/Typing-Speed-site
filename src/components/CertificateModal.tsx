@@ -68,6 +68,17 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, W, H);
 
+    // Faded background watermark word
+    ctx.save();
+    ctx.translate(W / 2, H / 2);
+    ctx.rotate((-8 * Math.PI) / 180);
+    ctx.fillStyle = 'rgba(139, 92, 246, 0.03)';
+    ctx.font = '900 220px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('TYPERCA', 0, 0);
+    ctx.restore();
+
     // Top accent bar
     ctx.fillStyle = '#1d4ed8';
     ctx.fillRect(0, 0, W, 10);
@@ -82,7 +93,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.beginPath();
     ctx.roundRect(90, 88, 44, 44, 12);
     ctx.fill();
-    ctx.fillStyle = '#60a5fa';
+    ctx.fillStyle = '#a78bfa';
     ctx.font = '700 20px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -405,12 +416,20 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Top accent bar */}
         <div className="h-2 w-full bg-blue-700" />
 
-        <div className="p-6 sm:p-10 border border-slate-100">
+        <div className="relative p-6 sm:p-10 border border-slate-100 overflow-hidden">
+
+          {/* Faded background watermark */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none select-none absolute inset-0 -z-0 flex items-center justify-center text-[9rem] sm:text-[13rem] font-black font-serif text-violet-500/[0.03] -rotate-6 whitespace-nowrap"
+          >
+            TYPERCA
+          </span>
 
           {/* Header: logo + certificate ID */}
-          <div className="flex items-start justify-between mb-8">
+          <div className="relative z-10 flex items-start justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center text-blue-400">
+              <div className="w-11 h-11 rounded-xl bg-violet-600 flex items-center justify-center text-white shadow-sm shadow-violet-200">
                 <Keyboard className="w-5 h-5" />
               </div>
               <div>
