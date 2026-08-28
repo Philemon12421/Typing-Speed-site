@@ -38,6 +38,9 @@ import {
   Send,
   Loader2,
   ArrowRight,
+  Github,
+  Twitter,
+  Linkedin,
 } from 'lucide-react';
 
 export type GuideSubTab = 'blog' | 'manual' | 'faq' | 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact' | 'cookies';
@@ -693,6 +696,37 @@ export const AnimatedGuideView: React.FC<AnimatedGuideViewProps> = ({
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
                   As the sole developer behind Typerca, Philemon architected every aspect of the platform — from the zero-latency typing event engine and mechanical audio synthesis to the responsive UI, error heatmaps, and local data analytics.
                 </p>
+
+                {/* Social Media & Open Source Links */}
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <a
+                    href="https://github.com/Philemon12421/Typing-Speed-site"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-2 border border-white/20 transition-all"
+                  >
+                    <Github className="w-3.5 h-3.5 text-indigo-300" />
+                    <span>GitHub Repository</span>
+                  </a>
+                  <a
+                    href="https://twitter.com/typerca"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-2 border border-white/20 transition-all"
+                  >
+                    <Twitter className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Twitter / X</span>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/philemon-kusi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-2 border border-white/20 transition-all"
+                  >
+                    <Linkedin className="w-3.5 h-3.5 text-blue-400" />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
               </div>
             </div>
           </section>

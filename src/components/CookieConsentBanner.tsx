@@ -13,23 +13,39 @@ const COOKIE_STORAGE_KEY = 'typerca_cookie_consent_v1';
 export const CookieConsentBanner: React.FC<{
   onOpenPrivacyPolicy: () => void;
 }> = ({ onOpenPrivacyPolicy }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => {
+    try {
+      return !localStorage.getItem(COOKIE_STORAGE_KEY);
+    } catch {
+      return true;
+    }
+  });
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
-  const [preferences, setPreferences] = useState<CookiePreferences>({
-    essential: true,
-    analytics: true,
-    advertising: true,
-    timestamp: new Date().toISOString(),
+  const [preferences, setPreferences] = useState<CookiePreferences>(() => {
+    try {
+      const stored = localStorage.getItem(COOKIE_STORAGE_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch {
+      // ignore
+    }
+    return {
+      essential: true,
+      analytics: true,
+      advertising: true,
+      timestamp: new Date().toISOString(),
+    };
   });
 
   useEffect(() => {
-    // Check if user has already accepted or customized cookies
-    const stored = localStorage.getItem(COOKIE_STORAGE_KEY);
-    if (!stored) {
-      // Delay display slightly for smooth UI entrance
-      const timer = setTimeout(() => setIsVisible(true), 1200);
-      return () => clearTimeout(timer);
-    }
+    const handleOpenBanner = () => {
+      setIsVisible(true);
+      setShowPreferencesModal(true);
+    };
+
+    window.addEventListener('open-cookie-banner', handleOpenBanner);
+    return () => window.removeEventListener('open-cookie-banner', handleOpenBanner);
   }, []);
 
   const handleAcceptAll = () => {

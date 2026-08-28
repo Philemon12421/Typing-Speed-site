@@ -5,7 +5,11 @@ import {
   Keyboard,
   BookOpen,
   Shield,
-  Mail
+  Mail,
+  Sliders,
+  Twitter,
+  Linkedin,
+  Globe
 } from 'lucide-react';
 import { GuideSubTab } from './AnimatedGuideView';
 
@@ -24,27 +28,52 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRegisterModal,
   onOpenContactModal,
 }) => {
+  const handleOpenCookiePreferences = () => {
+    window.dispatchEvent(new CustomEvent('open-cookie-banner'));
+  };
+
   return (
     <footer className="w-full bg-white/60 backdrop-blur-xl text-slate-600 border-t border-white/60 mt-auto text-xs transition-all shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
         
-        {/* GitHub Open Source Strip */}
-        <div className="mx-auto w-full sm:w-auto max-w-md sm:max-w-none py-2 px-3.5 rounded-lg bg-slate-900/70 backdrop-blur-md border border-white/10 text-white flex items-center justify-center sm:justify-between gap-3 shadow-sm">
+        {/* GitHub Open Source Strip & Socials */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-2 px-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-white shadow-sm">
           <div className="flex items-center gap-2 min-w-0">
-            <Github className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-semibold text-xs text-slate-200 tracking-tight truncate">Typing-Speed-site</span>
-            <span className="hidden sm:inline text-slate-500 text-xs">is open source</span>
+            <Github className="w-4 h-4 text-indigo-400 shrink-0" />
+            <span className="font-semibold text-xs text-slate-200 tracking-tight">Typerca Platform</span>
+            <span className="text-slate-400 text-xs">— Open Source Typing Benchmark</span>
           </div>
 
-          <a
-            href="https://github.com/Philemon12421/Typing-Speed-site"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-all hover:-translate-y-0.5"
-          >
-            <Star className="w-3 h-3" />
-            <span>Star on GitHub</span>
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/Philemon12421/Typing-Speed-site"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-all"
+              aria-label="Star Typerca on GitHub"
+            >
+              <Star className="w-3 h-3 text-amber-400" />
+              <span>Star on GitHub</span>
+            </a>
+            <a
+              href="https://twitter.com/typerca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all"
+              aria-label="Follow Typerca on Twitter"
+            >
+              <Twitter className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/philemon-kusi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all"
+              aria-label="Connect with the developer on LinkedIn"
+            >
+              <Linkedin className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
 
         {/* 4-Column Semantic Links Grid */}
@@ -94,7 +123,7 @@ export const Footer: React.FC<FooterProps> = ({
             <ul className="space-y-2 text-slate-600 font-semibold">
               <li>
                 <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
-                  Break the 100 WPM Plateau
+                  Break 100 WPM Plateau
                 </button>
               </li>
               <li>
@@ -109,7 +138,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
-                  Mechanical Switches Comparison
+                  Mechanical Switches Guide
                 </button>
               </li>
               <li>
@@ -143,13 +172,19 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
+                <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 transition-colors flex items-center gap-1 text-slate-700">
+                  <Sliders className="w-3 h-3 text-indigo-500" />
+                  <span>Cookie Preferences</span>
+                </button>
+              </li>
+              <li>
                 <button onClick={() => navigateToGuideSubTab('disclaimer')} className="hover:text-indigo-600 transition-colors">
                   Website Disclaimer
                 </button>
               </li>
               <li>
                 <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600 transition-colors">
-                  Frequently Asked Questions (FAQ)
+                  Frequently Asked Questions
                 </button>
               </li>
             </ul>
@@ -171,11 +206,11 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="text-slate-800 font-bold block">Drenchack Tech Company</span>
               </li>
               <li>
-                <span className="text-slate-500 block text-[11px] font-medium">Developer: Philemon Osei Kusi</span>
+                <span className="text-slate-500 block text-[11px] font-medium">Founder: Philemon Osei Kusi</span>
               </li>
               <li>
                 <button onClick={onOpenContactModal} className="hover:text-indigo-700 font-bold transition-colors flex items-center gap-1 text-indigo-600">
-                  <span>Contact Us / Feedback</span>
+                  <span>Contact Support / Feedback</span>
                 </button>
               </li>
               <li>
@@ -199,6 +234,8 @@ export const Footer: React.FC<FooterProps> = ({
             <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600">Terms</button>
             <span>•</span>
             <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600">Cookies</button>
+            <span>•</span>
+            <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 text-indigo-600">Cookie Settings</button>
             <span>•</span>
             <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600">FAQ</button>
             <span>•</span>

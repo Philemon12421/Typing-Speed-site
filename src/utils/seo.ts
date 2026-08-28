@@ -35,8 +35,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
   if (activeTab === 'test') {
     return {
-      title: 'Typerca — Precision Touch Typing Test, WPM Benchmark & Speed Training',
-      description: 'Free online touch typing speed test & Net WPM benchmark calculator. Features real-time error heatmaps, mechanical switch acoustics, customized passages, and official speed badges.',
+      title: 'Typerca: Speed Typing Test & WPM Benchmark',
+      description: 'Free touch typing test and WPM speed benchmark on Typerca. Track accuracy, analyze error heatmaps, and master 10-finger placement with pro analytics.',
       keywords: 'typerca, typing test, wpm test, touch typing, speed typing test, typing benchmark, keyboard practice, typing speed test online, mechanical keyboard sounds, drenchack tech company',
       canonicalUrl: `${BASE_URL}/#practice`,
       ogType: 'website',
@@ -77,8 +77,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
   if (activeTab === 'challenges') {
     return {
-      title: 'Typing Challenges & Gamified Quests — Boost Speed | Typerca',
-      description: 'Conquer 15+ structured touch typing quests ranging from Home Row Foundations and Programming Syntax to Speed Demon 100+ WPM benchmarks.',
+      title: 'Typing Challenges & Quests — Speed Test | Typerca',
+      description: 'Conquer 15+ structured touch typing quests from Home Row basics to Speed Demon 100+ WPM benchmarks with real-time feedback.',
       keywords: 'typing challenges, touch typing quests, coding typing test, home row drills, typing games, wpm milestone, typerca challenges',
       canonicalUrl: `${BASE_URL}/#challenges`,
       ogType: 'website',
@@ -105,8 +105,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
   if (activeTab === 'analytics') {
     return {
-      title: 'Pro Typing Analytics & Visual Error Heatmap Diagnostic | Typerca',
-      description: 'Deep performance diagnostics for your typing speed. Track Net WPM progress curves, accuracy percentages, keystroke consistency ratings, and weak finger error maps.',
+      title: 'Pro Typing Analytics & Error Heatmap | Typerca',
+      description: 'Deep typing performance diagnostics. Track Net WPM curves, accuracy rates, consistency ratings, and weak finger error maps.',
       keywords: 'typing analytics, error heatmap, typing diagnostics, wpm chart, keystroke tracker, touch typing stats, typerca pro analytics',
       canonicalUrl: `${BASE_URL}/#analytics`,
       ogType: 'website',
@@ -133,8 +133,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
   switch (guideSubTab) {
     case 'privacy':
       return {
-        title: 'Privacy Policy (GDPR, CCPA & AdSense Compliant) — Typerca',
-        description: 'Official privacy policy for Typerca operated by Drenchack Tech Company. Transparent disclosures on zero-knowledge client-side storage, Google AdSense DART cookies, and GDPR/CCPA user rights.',
+        title: 'Privacy Policy (GDPR & CCPA Compliant) — Typerca',
+        description: 'Official privacy policy for Typerca operated by Drenchack Tech Company. Disclosures on local storage, AdSense cookies, and GDPR/CCPA rights.',
         keywords: 'typerca privacy policy, gdpr compliance, ccpa rights, adsense cookies, dart cookie policy, zero keystroke logging, drenchack tech company',
         canonicalUrl: `${BASE_URL}/#privacy`,
         ogType: 'website',
@@ -161,8 +161,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
     case 'terms':
       return {
-        title: 'Terms of Service & Free Educational License Agreement — Typerca',
-        description: 'Terms of Service and conditions for Typerca. Explains the free educational license for individuals, schools, and developers, acceptable usage, and intellectual property terms.',
+        title: 'Terms of Service & License Agreement — Typerca',
+        description: 'Terms of Service and conditions for Typerca. Explains the free educational license, acceptable usage, and intellectual property terms.',
         keywords: 'typerca terms of service, educational license, typing software terms, drenchack tech company legal',
         canonicalUrl: `${BASE_URL}/#terms`,
         ogType: 'website',
@@ -188,8 +188,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
     case 'cookies':
       return {
-        title: 'Cookie & Local Storage Policy — Typerca Transparency Disclosures',
-        description: 'Complete breakdown of cookies, HTML5 web storage, retention durations, and browser cookie control procedures on Typerca.',
+        title: 'Cookie & Local Storage Policy — Typerca',
+        description: 'Complete breakdown of cookies, HTML5 local storage, retention durations, and browser cookie control procedures on Typerca.',
         keywords: 'cookie policy, localstorage disclosures, adsense cookies, typerca cookie banner, browser storage guide',
         canonicalUrl: `${BASE_URL}/#cookies`,
         ogType: 'website',
@@ -215,8 +215,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
     case 'faq':
       return {
-        title: 'Frequently Asked Questions & WPM Calculation Standards — Typerca',
-        description: 'Find answers about standardized Net WPM calculations, zero-keystroke logging architecture, certificate validation, and ergonomic practice tips on Typerca.',
+        title: 'Frequently Asked Questions & WPM Standards | Typerca',
+        description: 'Standardized Net WPM formulas, zero-keystroke logging architecture, certificate validation, and ergonomic practice tips on Typerca.',
         keywords: 'typing faq, net wpm formula, gross wpm vs net wpm, typing certificate validation, typing speed questions, typerca help',
         canonicalUrl: `${BASE_URL}/#faq`,
         ogType: 'website',
@@ -273,8 +273,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
     case 'about':
       return {
-        title: 'About Typerca & Drenchack Tech Company — Mission & Founder',
-        description: 'Discover the story behind Typerca, engineered by Philemon Osei Kusi at Drenchack Tech Company to deliver the world’s most precise, accessible touch typing platform.',
+        title: 'About Typerca & Drenchack Tech Company',
+        description: 'The story and engineering principles behind Typerca, built by Philemon Osei Kusi at Drenchack Tech Company for typists worldwide.',
         keywords: 'about typerca, drenchack tech company, philemon osei kusi, typing software company, touch typing mission',
         canonicalUrl: `${BASE_URL}/#about`,
         ogType: 'website',
@@ -301,7 +301,7 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
     case 'contact':
       return {
         title: 'Contact Us & Developer Support — Typerca',
-        description: 'Get in touch with the Typerca development and support team at Drenchack Tech Company. Submit bug reports, request curriculum features, or give feedback.',
+        description: 'Get in touch with the Typerca team at Drenchack Tech Company. Submit bug reports, request curriculum features, or give feedback.',
         keywords: 'contact typerca, drenchack tech support, philemon osei kusi email, typing test feedback',
         canonicalUrl: `${BASE_URL}/#contact`,
         ogType: 'website',
@@ -332,7 +332,7 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
     case 'disclaimer':
       return {
         title: 'Website & Health Ergonomics Disclaimer — Typerca',
-        description: 'Official legal and health disclaimer for Typerca regarding educational typing scores, repetitive strain injury (RSI) precautions, and third-party links.',
+        description: 'Official legal and health disclaimer for Typerca regarding educational typing scores, repetitive strain injury (RSI) precautions, and links.',
         keywords: 'typerca disclaimer, typing ergonomic health, rsi notice, typing test accuracy disclaimer',
         canonicalUrl: `${BASE_URL}/#disclaimer`,
         ogType: 'website',
@@ -357,8 +357,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
 
     case 'manual':
       return {
-        title: 'Interactive Feature Manual & Touch Typing Guide — Typerca',
-        description: 'Comprehensive manual detailing all Typerca features: custom word sets, quote modes, mechanical switch acoustic synthesizer, and certificate verification.',
+        title: 'Interactive Feature Manual & Guide — Typerca',
+        description: 'Step-by-step user manual exploring mechanical switch audio options, error heatmaps, custom text drills, and certificate generation.',
         keywords: 'typerca manual, typing app instructions, typing sound settings, quote typing mode, touch typing guide',
         canonicalUrl: `${BASE_URL}/#manual`,
         ogType: 'article',
@@ -389,8 +389,8 @@ export function getSEOMetadata(activeTab: TabType, guideSubTab: GuideSubTab = 'b
     case 'blog':
     default:
       return {
-        title: 'Touch Typing Mastery Guides, Science & Hardware — Typerca',
-        description: 'In-depth educational articles on breaking the 100 WPM typing plateau, the neuroscience of motor muscle memory, ergonomic RSI prevention, and mechanical switches.',
+        title: 'Touch Typing Mastery Guides & Science — Typerca',
+        description: 'Educational articles on breaking the 100 WPM typing plateau, neuroscience of motor muscle memory, ergonomic RSI prevention, and switches.',
         keywords: 'typing guide, break 100 wpm, typing speed tips, typing neuroscience, mechanical switches for typing, rsi prevention',
         canonicalUrl: `${BASE_URL}/#guide`,
         ogType: 'article',
