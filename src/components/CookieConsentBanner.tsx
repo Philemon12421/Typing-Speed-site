@@ -87,13 +87,15 @@ export const CookieConsentBanner: React.FC<{
 
   return (
     <>
-      {/* Non-intrusive bottom banner */}
+      {/* Non-intrusive bottom banner (Always detectable by automated AdSense scanners & GDPR bots) */}
       {isVisible && !showPreferencesModal && (
         <div 
-          id="cookie-consent-banner" 
-          role="region" 
-          aria-label="Cookie consent banner"
-          className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-5 rounded-3xl bg-slate-900/95 text-white border border-slate-700/80 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom-5 duration-300"
+          id="cookie-consent"
+          data-testid="cookie-consent"
+          role="dialog" 
+          aria-modal="false"
+          aria-label="Cookie Consent Banner"
+          className="cookie-consent cookie-banner cookie-notice cookieconsent fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-5 rounded-3xl bg-slate-900/95 text-white border border-slate-700/80 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom-5 duration-300"
         >
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-2xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center shrink-0 text-indigo-400">
@@ -101,18 +103,18 @@ export const CookieConsentBanner: React.FC<{
             </div>
             <div className="space-y-1.5 flex-1">
               <h4 className="text-sm font-extrabold text-white flex items-center gap-1.5">
-                <span>Privacy & Cookie Preferences</span>
+                <span>Cookie Consent & Privacy Notice</span>
               </h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                We use cookies and local storage to personalize your typing experience, store WPM benchmarks, and deliver relevant educational content and ads in compliance with GDPR & CCPA regulations.
+                We use cookies and browser local storage to personalize your typing experience, store Net WPM benchmarks, and deliver relevant educational content and ads in compliance with GDPR, ePrivacy Directive, and CCPA regulations.
               </p>
-              <div className="pt-1">
+              <div className="pt-1 flex items-center gap-3">
                 <button
                   type="button"
                   onClick={onOpenPrivacyPolicy}
                   className="text-xs font-bold text-indigo-300 hover:text-indigo-200 underline inline-flex items-center gap-1"
                 >
-                  Read our full Privacy Policy
+                  Privacy Policy
                   <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
@@ -124,26 +126,26 @@ export const CookieConsentBanner: React.FC<{
               type="button"
               id="cookie-customize-btn"
               onClick={() => setShowPreferencesModal(true)}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <Sliders className="w-3.5 h-3.5" />
-              <span>Customize</span>
+              <span>Cookie Settings</span>
             </button>
             <button
               type="button"
               id="cookie-reject-btn"
               onClick={handleRejectNonEssential}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold transition-all"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
             >
-              Essential Only
+              Reject Optional
             </button>
             <button
               type="button"
               id="cookie-accept-all-btn"
               onClick={handleAcceptAll}
-              className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-md shadow-indigo-600/30 transition-all active:scale-95"
+              className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-md shadow-indigo-600/30 transition-all active:scale-95 cursor-pointer"
             >
-              Accept All
+              Accept All Cookies
             </button>
           </div>
         </div>
