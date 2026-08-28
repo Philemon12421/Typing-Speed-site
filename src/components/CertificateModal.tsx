@@ -10,6 +10,7 @@ interface CertificateModalProps {
 }
 
 // Draws text along a circular arc on a canvas context — used for the seal ring copy.
+// Helper to draw circular arc text with clean letter spacing
 function drawArcText(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -35,6 +36,27 @@ function drawArcText(
     ctx.restore();
   }
   ctx.restore();
+}
+
+// Helper to draw a precision scalloped / star rosette
+function drawRosette(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  points: number,
+  outerR: number,
+  innerR: number
+) {
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outerR : innerR;
+    const angle = (i * Math.PI) / points;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
 }
 
 export const CertificateModal: React.FC<CertificateModalProps> = ({
@@ -223,58 +245,147 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.font = '600 12px sans-serif';
     ctx.fillText('CERTIFICATION AUTHORITY', W - 90, 850);
 
-    // Seal / stamp (center bottom)
+    // --- HIGH-END AUTHENTIC VERIFICATION SEAL (Center Bottom) ---
     const sealX = W / 2;
     const sealY = 800;
-    const sealR = 62;
+    const sealR = 64;
 
-    ctx.strokeStyle = '#b45309';
-    ctx.lineWidth = 2.5;
+    // 1. Hanging Ribbon Tails with Gold Stitching & Swallowtail Notches
+    ctx.save();
+    // Left Ribbon Tail
+    const ribbonGradLeft = ctx.createLinearGradient(sealX - 45, sealY + 20, sealX - 10, sealY + 115);
+    ribbonGradLeft.addColorStop(0, '#78350f');
+    ribbonGradLeft.addColorStop(0.4, '#b45309');
+    ribbonGradLeft.addColorStop(1, '#92400e');
+    ctx.fillStyle = ribbonGradLeft;
     ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR - 7, 0, Math.PI * 2);
+    ctx.moveTo(sealX - 16, sealY + 40);
+    ctx.lineTo(sealX - 42, sealY + 114);
+    ctx.lineTo(sealX - 24, sealY + 95);
+    ctx.lineTo(sealX - 6, sealY + 114);
+    ctx.lineTo(sealX - 6, sealY + 40);
+    ctx.closePath();
+    ctx.fill();
+
+    // Left Ribbon Gold Border & Stitching
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    ctx.fillStyle = '#fffbeb';
+    // Right Ribbon Tail
+    const ribbonGradRight = ctx.createLinearGradient(sealX + 10, sealY + 20, sealX + 45, sealY + 115);
+    ribbonGradRight.addColorStop(0, '#78350f');
+    ribbonGradRight.addColorStop(0.4, '#b45309');
+    ribbonGradRight.addColorStop(1, '#92400e');
+    ctx.fillStyle = ribbonGradRight;
     ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR - 8, 0, Math.PI * 2);
+    ctx.moveTo(sealX + 6, sealY + 40);
+    ctx.lineTo(sealX + 6, sealY + 114);
+    ctx.lineTo(sealX + 24, sealY + 95);
+    ctx.lineTo(sealX + 42, sealY + 114);
+    ctx.lineTo(sealX + 16, sealY + 40);
+    ctx.closePath();
+    ctx.fill();
+
+    // Right Ribbon Gold Border
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Precision 32-Point Star Rosette (Metallic Golden Edge)
+    ctx.save();
+    const goldGrad = ctx.createRadialGradient(sealX, sealY, 20, sealX, sealY, sealR + 8);
+    goldGrad.addColorStop(0, '#fbbf24');
+    goldGrad.addColorStop(0.5, '#d97706');
+    goldGrad.addColorStop(0.85, '#b45309');
+    goldGrad.addColorStop(1, '#78350f');
+    ctx.fillStyle = goldGrad;
+    drawRosette(ctx, sealX, sealY, 32, sealR + 6, sealR - 2);
+    ctx.fill();
+    ctx.strokeStyle = '#78350f';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+
+    // 3. Concentric Security Rings & Beaded Border
+    ctx.strokeStyle = '#fef3c7';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 4, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Medallion Base
+    ctx.fillStyle = '#fffdfa';
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 6, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Checkmark
-    ctx.strokeStyle = '#b45309';
-    ctx.lineWidth = 4.5;
+    // Security Micro-Beads (36 beads along outer ring)
+    ctx.fillStyle = '#b45309';
+    const beadCount = 36;
+    const beadRadius = sealR - 10;
+    for (let b = 0; b < beadCount; b++) {
+      const bAngle = (b * Math.PI * 2) / beadCount;
+      const bx = sealX + Math.cos(bAngle) * beadRadius;
+      const by = sealY + Math.sin(bAngle) * beadRadius;
+      ctx.beginPath();
+      ctx.arc(bx, by, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Inner Rule Circle
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 16, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 4. Circular Arc Lettering
+    drawArcText(
+      ctx,
+      '★ TYPERCA VERIFIED ASSESSMENT ★',
+      sealX,
+      sealY,
+      sealR - 20,
+      -94,
+      5.8,
+      '800 8.5px sans-serif',
+      '#78350f'
+    );
+
+    // 5. Center Security Shield / Verification Medallion
+    const innerCenterR = 24;
+    const shieldGrad = ctx.createLinearGradient(sealX - innerCenterR, sealY - innerCenterR, sealX + innerCenterR, sealY + innerCenterR);
+    shieldGrad.addColorStop(0, '#1e293b');
+    shieldGrad.addColorStop(1, '#0f172a');
+    ctx.fillStyle = shieldGrad;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY + 2, innerCenterR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 6. Crisp White Verified Checkmark
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3.8;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
-    ctx.moveTo(sealX - 16, sealY + 2);
-    ctx.lineTo(sealX - 4, sealY + 14);
-    ctx.lineTo(sealX + 18, sealY - 14);
+    ctx.moveTo(sealX - 11, sealY + 1);
+    ctx.lineTo(sealX - 3, sealY + 9);
+    ctx.lineTo(sealX + 12, sealY - 7);
     ctx.stroke();
 
-    drawArcText(ctx, '★ VERIFIED  •  OFFICIAL  •', sealX, sealY, sealR - 20, -90, 13.2, '700 10px sans-serif', '#92400e');
-
-    // Ribbon tails
-    ctx.fillStyle = '#b45309';
-    ctx.beginPath();
-    ctx.moveTo(sealX - 22, sealY + sealR - 4);
-    ctx.lineTo(sealX - 32, sealY + sealR + 38);
-    ctx.lineTo(sealX - 10, sealY + sealR + 22);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(sealX + 22, sealY + sealR - 4);
-    ctx.lineTo(sealX + 32, sealY + sealR + 38);
-    ctx.lineTo(sealX + 10, sealY + sealR + 22);
-    ctx.closePath();
-    ctx.fill();
+    // Tiny 3-star authenticity markers below checkmark
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = '700 7px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('★  ★  ★', sealX, sealY + 18);
   }, [result, userName, formattedDate, certificateId, grade]);
 
   const handlePrint = () => {
@@ -479,20 +590,72 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Date Issued</span>
             </div>
 
-            {/* Seal */}
-            <div className="flex justify-center">
-              <svg viewBox="0 0 140 160" className="w-20 h-24">
+            {/* Authentic High-End Verification Seal */}
+            <div className="flex justify-center -mb-2">
+              <svg viewBox="0 0 160 180" className="w-24 h-28 drop-shadow-md">
                 <defs>
-                  <path id="sealArc" d="M 20,70 A 50,50 0 1 1 120,70" fill="none" />
+                  <radialGradient id="svgSealGold" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fde68a" />
+                    <stop offset="45%" stopColor="#d97706" />
+                    <stop offset="85%" stopColor="#b45309" />
+                    <stop offset="100%" stopColor="#78350f" />
+                  </radialGradient>
+                  <linearGradient id="svgRibbonLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#78350f" />
+                    <stop offset="50%" stopColor="#b45309" />
+                    <stop offset="100%" stopColor="#92400e" />
+                  </linearGradient>
+                  <linearGradient id="svgRibbonRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#78350f" />
+                    <stop offset="50%" stopColor="#b45309" />
+                    <stop offset="100%" stopColor="#92400e" />
+                  </linearGradient>
+                  <linearGradient id="svgShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1e293b" />
+                    <stop offset="100%" stopColor="#0f172a" />
+                  </linearGradient>
+                  <path id="sealArcTop" d="M 28,80 A 52,52 0 1 1 132,80" fill="none" />
+                  <path id="sealArcBottom" d="M 130,82 A 50,50 0 0 1 30,82" fill="none" />
                 </defs>
-                <polygon points="55,118 45,155 70,140 95,155 85,118" fill="#b45309" />
-                <circle cx="70" cy="70" r="52" fill="none" stroke="#b45309" strokeWidth="2.5" />
-                <circle cx="70" cy="70" r="44" fill="#fffbeb" stroke="#d97706" strokeWidth="1" />
-                <path d="M 52,72 L 63,84 L 90,54" fill="none" stroke="#b45309" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-                <text fontSize="8.2" fontWeight="700" fill="#92400e" letterSpacing="1.5">
-                  <textPath href="#sealArc" startOffset="50%" textAnchor="middle">
-                    ★ VERIFIED • OFFICIAL ★
+
+                {/* Left Ribbon Tail */}
+                <polygon points="62,110 32,168 52,150 72,168 72,110" fill="url(#svgRibbonLeft)" stroke="#f59e0b" strokeWidth="1.2" />
+                {/* Right Ribbon Tail */}
+                <polygon points="88,110 88,168 108,150 128,168 98,110" fill="url(#svgRibbonRight)" stroke="#f59e0b" strokeWidth="1.2" />
+
+                {/* 32-Point Scalloped Gold Rosette */}
+                <circle cx="80" cy="80" r="58" fill="url(#svgSealGold)" stroke="#78350f" strokeWidth="1.5" />
+                
+                {/* Outer Relief Ring */}
+                <circle cx="80" cy="80" r="52" fill="none" stroke="#fef3c7" strokeWidth="1.5" strokeDasharray="3,2" />
+                
+                {/* Medallion Base Body */}
+                <circle cx="80" cy="80" r="48" fill="#fffdfa" stroke="#d97706" strokeWidth="1.5" />
+                
+                {/* Inner Rule Ring */}
+                <circle cx="80" cy="80" r="38" fill="none" stroke="#e2e8f0" strokeWidth="1" />
+
+                {/* Circular Security Text */}
+                <text fontSize="7.5" fontWeight="800" fill="#78350f" letterSpacing="1.2">
+                  <textPath href="#sealArcTop" startOffset="50%" textAnchor="middle">
+                    ★ TYPERCA VERIFIED ★
                   </textPath>
+                </text>
+                <text fontSize="6.5" fontWeight="700" fill="#92400e" letterSpacing="1">
+                  <textPath href="#sealArcBottom" startOffset="50%" textAnchor="middle">
+                    • OFFICIAL BENCHMARK •
+                  </textPath>
+                </text>
+
+                {/* Center Navy Medallion */}
+                <circle cx="80" cy="80" r="23" fill="url(#svgShieldGrad)" stroke="#d97706" strokeWidth="1.8" />
+
+                {/* Crisp White Verified Checkmark */}
+                <path d="M 69,79 L 77,87 L 92,72" fill="none" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" />
+
+                {/* Stars below Checkmark */}
+                <text x="80" y="96" fontSize="6.5" fontWeight="700" fill="#fbbf24" textAnchor="middle">
+                  ★★★
                 </text>
               </svg>
             </div>

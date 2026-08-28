@@ -175,17 +175,33 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
       ctx.fillText(st.val, x, y + 40);
     });
 
-    // Footer Verification Seal
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText('Official Performance Card • Verified by VelocisType Engine', 100, 535);
+    // Footer Verification Badge & Seal
+    ctx.fillStyle = '#10b981';
+    ctx.beginPath();
+    ctx.arc(108, 532, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Checkmark inside footer verified badge
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(103, 532);
+    ctx.lineTo(107, 536);
+    ctx.lineTo(113, 528);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.font = '600 15px sans-serif';
+    ctx.fillText('Official Performance Card  •  Verified by Typerca Assessment Engine', 128, 537);
   }, [isShareModalOpen, result, userName]);
 
   // Download Card Image Handler
   const handleDownloadImage = () => {
     if (!canvasRef.current) return;
     const link = document.createElement('a');
-    link.download = `velocistype-${result.wpm}wpm.png`;
+    link.download = `typerca-${result.wpm}wpm.png`;
     link.href = canvasRef.current.toDataURL('image/png');
     link.click();
   };
@@ -216,10 +232,14 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
             <Trophy className="w-7 h-7 text-white" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-2xl font-black text-slate-900">Test Complete!</h2>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 border border-indigo-200 text-indigo-700`}>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 border border-indigo-200 text-indigo-700">
                 {grade.badge}
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Verified</span>
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium">
