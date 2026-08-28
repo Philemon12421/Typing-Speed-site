@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import {
   TabType,
   TestMode,
@@ -26,18 +26,44 @@ import { TestControls } from './components/TestControls';
 import { TypingArea } from './components/TypingArea';
 import { VirtualKeyboard } from './components/VirtualKeyboard';
 import { ResultsModal } from './components/ResultsModal';
-import { ProAnalytics } from './components/ProAnalytics';
-import { CertificateModal } from './components/CertificateModal';
-import { GoalSoundModal } from './components/GoalSoundModal';
-import { UserRegistrationModal } from './components/UserRegistrationModal';
-import { ChallengesView } from './components/ChallengesView';
-import { AnimatedGuideView, GuideSubTab } from './components/AnimatedGuideView';
 import { Footer } from './components/Footer';
 import { getSEOMetadata, updateDOMMetaTags } from './utils/seo';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
-import { ContactModal } from './components/ContactModal';
 import { TYPING_CHALLENGES } from './data/challenges';
-import { Eye, EyeOff, Sparkles, Award, User } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, Award, User, Loader2 } from 'lucide-react';
+import { GuideSubTab } from './components/AnimatedGuideView';
+
+// Lazy-loaded secondary views and modals to optimize initial bundle size & load speed
+const ProAnalytics = lazy(() =>
+  import('./components/ProAnalytics').then((m) => ({ default: m.ProAnalytics }))
+);
+const ChallengesView = lazy(() =>
+  import('./components/ChallengesView').then((m) => ({ default: m.ChallengesView }))
+);
+const AnimatedGuideView = lazy(() =>
+  import('./components/AnimatedGuideView').then((m) => ({ default: m.AnimatedGuideView }))
+);
+const CertificateModal = lazy(() =>
+  import('./components/CertificateModal').then((m) => ({ default: m.CertificateModal }))
+);
+const GoalSoundModal = lazy(() =>
+  import('./components/GoalSoundModal').then((m) => ({ default: m.GoalSoundModal }))
+);
+const UserRegistrationModal = lazy(() =>
+  import('./components/UserRegistrationModal').then((m) => ({ default: m.UserRegistrationModal }))
+);
+const ContactModal = lazy(() =>
+  import('./components/ContactModal').then((m) => ({ default: m.ContactModal }))
+);
+
+const ViewSkeletonLoader = () => (
+  <div className="w-full flex flex-col items-center justify-center py-20 min-h-[400px]">
+    <div className="p-4 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 text-slate-700 font-semibold text-sm animate-pulse">
+      <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+      <span>Loading module...</span>
+    </div>
+  </div>
+);
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('test');
@@ -402,66 +428,86 @@ export default function App() {
 
         {/* VIEW 2: CHALLENGES */}
         {activeTab === 'challenges' && (
-          <ChallengesView
-            completedIds={completedChallengeIds}
-            testResults={results}
-            onStartChallenge={handleStartChallenge}
-          />
+          <Suspense fallback={<ViewSkeletonLoader />}>
+            <ChallengesView
+              completedIds={completedChallengeIds}
+              testResults={results}
+              onStartChallenge={handleStartChallenge}
+            />
+          </Suspense>
         )}
 
         {/* VIEW 3: PRO ANALYTICS */}
         {activeTab === 'analytics' && (
-          <ProAnalytics
-            results={results}
-            onRefreshResults={() => setResults(getTestResults())}
-            userName={settings.userName}
-            onOpenRegisterModal={() => setIsUserRegistrationModalOpen(true)}
-          />
+          <Suspense fallback={<ViewSkeletonLoader />}>
+            <ProAnalytics
+              results={results}
+              onRefreshResults={() => setResults(getTestResults())}
+              userName={settings.userName}
+              onOpenRegisterModal={() => setIsUserRegistrationModalOpen(true)}
+            />
+          </Suspense>
         )}
 
         {/* VIEW 4: ANIMATED GUIDE & KNOWLEDGE BASE */}
         {activeTab === 'guide' && (
-          <AnimatedGuideView
-            initialSubTab={guideSubTab}
-            onSubTabChange={(sub) => setGuideSubTab(sub)}
-          />
+          <Suspense fallback={<ViewSkeletonLoader />}>
+            <AnimatedGuideView
+              initialSubTab={guideSubTab}
+              onSubTabChange={(sub) => setGuideSubTab(sub)}
+            />
+          </Suspense>
         )}
       </main>
 
       {/* Typing Certificate Modal */}
       {isCertificateOpen && latestResult && (
-        <CertificateModal
-          result={latestResult}
-          userName={settings.userName}
-          onClose={() => setIsCertificateOpen(false)}
-        />
+        <Suspense fallback={null}>
+          <CertificateModal
+            result={latestResult}
+            userName={settings.userName}
+            onClose={() => setIsCertificateOpen(false)}
+          />
+        </Suspense>
       )}
 
       {/* Goal & Sound Settings Modal */}
-      <GoalSoundModal
-        isOpen={isGoalSoundModalOpen}
-        onClose={() => setIsGoalSoundModalOpen(false)}
-        settings={settings}
-        onUpdateSettings={handleUpdateSettings}
-        todayProgress={todayProgress}
-      />
+      {isGoalSoundModalOpen && (
+        <Suspense fallback={null}>
+          <GoalSoundModal
+            isOpen={isGoalSoundModalOpen}
+            onClose={() => setIsGoalSoundModalOpen(false)}
+            settings={settings}
+            onUpdateSettings={handleUpdateSettings}
+            todayProgress={todayProgress}
+          />
+        </Suspense>
+      )}
 
       {/* User Registration Handle Modal */}
-      <UserRegistrationModal
-        isOpen={isUserRegistrationModalOpen}
-        onClose={() => setIsUserRegistrationModalOpen(false)}
-        currentUsername={settings.userName}
-        userBestWpm={overallAnalytics.bestWpm}
-        onSaveUsername={(newUsername) =>
-          handleUpdateSettings({ ...settings, userName: newUsername })
-        }
-      />
+      {isUserRegistrationModalOpen && (
+        <Suspense fallback={null}>
+          <UserRegistrationModal
+            isOpen={isUserRegistrationModalOpen}
+            onClose={() => setIsUserRegistrationModalOpen(false)}
+            currentUsername={settings.userName}
+            userBestWpm={overallAnalytics.bestWpm}
+            onSaveUsername={(newUsername) =>
+              handleUpdateSettings({ ...settings, userName: newUsername })
+            }
+          />
+        </Suspense>
+      )}
 
       {/* Contact Us Interactive Modal */}
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
+      {isContactModalOpen && (
+        <Suspense fallback={null}>
+          <ContactModal
+            isOpen={isContactModalOpen}
+            onClose={() => setIsContactModalOpen(false)}
+          />
+        </Suspense>
+      )}
 
       {/* GDPR & CCPA Cookie Consent Banner */}
       <CookieConsentBanner

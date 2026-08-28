@@ -56,20 +56,20 @@ export const Footer: React.FC<FooterProps> = ({
               <span>Star on GitHub</span>
             </a>
             <a
-              href="https://twitter.com/typerca"
+              href="https://x.com/philemonku86576?t=bJNHraV_7kyKHqPHpWqqbQ&s=09"
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all"
-              aria-label="Follow Typerca on Twitter"
+              aria-label="Follow Philemon on Twitter / X"
             >
               <Twitter className="w-3.5 h-3.5" />
             </a>
             <a
-              href="https://www.linkedin.com/in/philemon-kusi"
+              href="https://www.linkedin.com/in/philemon-osei-kusi-5970a6343"
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all"
-              aria-label="Connect with the developer on LinkedIn"
+              aria-label="Connect with Philemon on LinkedIn"
             >
               <Linkedin className="w-3.5 h-3.5" />
             </a>

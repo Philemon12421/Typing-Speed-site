@@ -709,7 +709,7 @@ export const AnimatedGuideView: React.FC<AnimatedGuideViewProps> = ({
                     <span>GitHub Repository</span>
                   </a>
                   <a
-                    href="https://twitter.com/typerca"
+                    href="https://x.com/philemonku86576?t=bJNHraV_7kyKHqPHpWqqbQ&s=09"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-2 border border-white/20 transition-all"
@@ -718,7 +718,7 @@ export const AnimatedGuideView: React.FC<AnimatedGuideViewProps> = ({
                     <span>Twitter / X</span>
                   </a>
                   <a
-                    href="https://www.linkedin.com/in/philemon-kusi"
+                    href="https://www.linkedin.com/in/philemon-osei-kusi-5970a6343"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-2 border border-white/20 transition-all"
