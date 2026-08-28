@@ -32,6 +32,12 @@ import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { TYPING_CHALLENGES } from './data/challenges';
 import { Eye, EyeOff, Sparkles, Award, User, Loader2 } from 'lucide-react';
 import { GuideSubTab } from './components/AnimatedGuideView';
+import {
+  TypingAreaSkeleton,
+  ProAnalyticsSkeleton,
+  ChallengesSkeleton,
+  AnimatedGuideSkeleton,
+} from './components/SkeletonLoader';
 
 // Lazy-loaded secondary views and modals to optimize initial bundle size & load speed
 const ProAnalytics = lazy(() =>
@@ -54,15 +60,6 @@ const UserRegistrationModal = lazy(() =>
 );
 const ContactModal = lazy(() =>
   import('./components/ContactModal').then((m) => ({ default: m.ContactModal }))
-);
-
-const ViewSkeletonLoader = () => (
-  <div className="w-full flex flex-col items-center justify-center py-20 min-h-[400px]">
-    <div className="p-4 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 text-slate-700 font-semibold text-sm animate-pulse">
-      <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
-      <span>Loading module...</span>
-    </div>
-  </div>
 );
 
 export default function App() {
@@ -400,6 +397,8 @@ export default function App() {
                 onViewAnalytics={() => setActiveTab('analytics')}
                 onViewCertificate={() => setIsCertificateOpen(true)}
               />
+            ) : !targetText ? (
+              <TypingAreaSkeleton />
             ) : (
               <>
                 <TypingArea
@@ -428,7 +427,7 @@ export default function App() {
 
         {/* VIEW 2: CHALLENGES */}
         {activeTab === 'challenges' && (
-          <Suspense fallback={<ViewSkeletonLoader />}>
+          <Suspense fallback={<ChallengesSkeleton />}>
             <ChallengesView
               completedIds={completedChallengeIds}
               testResults={results}
@@ -439,7 +438,7 @@ export default function App() {
 
         {/* VIEW 3: PRO ANALYTICS */}
         {activeTab === 'analytics' && (
-          <Suspense fallback={<ViewSkeletonLoader />}>
+          <Suspense fallback={<ProAnalyticsSkeleton />}>
             <ProAnalytics
               results={results}
               onRefreshResults={() => setResults(getTestResults())}
@@ -451,7 +450,7 @@ export default function App() {
 
         {/* VIEW 4: ANIMATED GUIDE & KNOWLEDGE BASE */}
         {activeTab === 'guide' && (
-          <Suspense fallback={<ViewSkeletonLoader />}>
+          <Suspense fallback={<AnimatedGuideSkeleton />}>
             <AnimatedGuideView
               initialSubTab={guideSubTab}
               onSubTabChange={(sub) => setGuideSubTab(sub)}

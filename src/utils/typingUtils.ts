@@ -9,23 +9,29 @@ export function calculateStats(
   timeElapsedSeconds: number,
   wpmHistory: WpmPoint[]
 ) {
-  if (timeElapsedSeconds <= 0) {
+  if (timeElapsedSeconds <= 0 || typedLength === 0) {
     return { wpm: 0, rawWpm: 0, accuracy: 100, cpm: 0, consistency: 100 };
   }
 
   const minutes = timeElapsedSeconds / 60;
   
-  // Standard calculation: 1 word = 5 characters
-  const rawWpm = Math.round((typedLength / 5) / minutes);
-  const wpm = Math.max(0, Math.round((correctCount / 5) / minutes));
-  const cpm = Math.round(correctCount / minutes);
+  // Standard calculation: 1 standardized word = 5 characters (including spaces & punctuation)
+  // Gross WPM (Raw WPM): (Total typed characters / 5) / time in minutes
+  const rawWpm = Math.max(0, Math.round((typedLength / 5) / minutes));
   
+  // Net WPM (Official WPM): (Correctly typed characters / 5) / time in minutes
+  const wpm = Math.max(0, Math.round((correctCount / 5) / minutes));
+  
+  // CPM: Characters per minute
+  const cpm = Math.max(0, Math.round(correctCount / minutes));
+  
+  // Accuracy: (Correct / (Correct + Incorrect + Extra)) * 100
   const totalAttempts = correctCount + incorrectCount + extraCount;
   const accuracy = totalAttempts > 0 
-    ? Math.round((correctCount / totalAttempts) * 100) 
+    ? Math.max(0, Math.min(100, Math.round((correctCount / totalAttempts) * 100))) 
     : 100;
 
-  // Calculate consistency based on WPM variance in history
+  // Calculate consistency based on WPM variance across recorded points
   let consistency = 100;
   if (wpmHistory.length > 2) {
     const wpms = wpmHistory.map(p => p.wpm);

@@ -54,6 +54,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const textContainerRef = useRef<HTMLDivElement>(null);
   const activeCharRef = useRef<HTMLSpanElement>(null);
+  const startTimeRef = useRef<number | null>(null);
 
   // Focus input automatically
   useEffect(() => {
@@ -70,6 +71,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     setKeyErrors({});
     setFingerStats({});
     setWpmHistory([]);
+    startTimeRef.current = null;
   }, [targetText]);
 
   // Handle Start Test with Countdown
@@ -93,6 +95,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       const timer = setTimeout(() => {
         setCountdown(null);
         setIsStarted(true);
+        startTimeRef.current = performance.now();
         setTimeout(() => inputRef.current?.focus(), 50);
       }, 400);
       return () => clearTimeout(timer);
@@ -132,12 +135,17 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
   }, [typedChars, targetText, isFinished]);
 
-  // Main Timer Interval
+  // Main Timer Interval with exact millisecond synchronization
   useEffect(() => {
     if (!isStarted || isFinished) return;
 
     const interval = setInterval(() => {
-      setTimeElapsed((prev) => prev + 1);
+      if (startTimeRef.current) {
+        const elapsed = Math.floor((performance.now() - startTimeRef.current) / 1000);
+        setTimeElapsed(elapsed);
+      } else {
+        setTimeElapsed((prev) => prev + 1);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
@@ -154,12 +162,16 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       else incorrect++;
     }
 
+    const exactElapsed = startTimeRef.current 
+      ? Math.max(0.5, (performance.now() - startTimeRef.current) / 1000) 
+      : timeElapsed;
+
     const stats = calculateStats(
       typedChars.length,
       correct,
       incorrect,
       0,
-      timeElapsed,
+      exactElapsed,
       wpmHistory
     );
 
@@ -176,11 +188,11 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
     if (timeLimit && timeElapsed >= timeLimit) {
       setIsFinished(true);
-      finishTest(timeElapsed, typedChars);
+      finishTest(exactElapsed, typedChars);
     }
   }, [timeElapsed]);
 
-  // Finish Test Logic
+  // Finish Test Logic with mathematically exact elapsed time
   const finishTest = (finalTimeSeconds: number, currentTyped: string) => {
     let correctChars = 0;
     let incorrectChars = 0;
@@ -194,14 +206,20 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
 
     const missedChars = Math.max(0, targetText.length - currentTyped.length);
-    const finalTime = Math.max(1, finalTimeSeconds);
+    
+    // Exact elapsed time in seconds with millisecond resolution
+    const exactElapsed = startTimeRef.current
+      ? Math.max(0.5, (performance.now() - startTimeRef.current) / 1000)
+      : Math.max(0.5, finalTimeSeconds);
+
+    const roundedSeconds = Math.max(1, Math.round(exactElapsed));
 
     const stats = calculateStats(
       currentTyped.length,
       correctChars,
       incorrectChars,
       0,
-      finalTime,
+      exactElapsed,
       wpmHistory
     );
 
@@ -210,7 +228,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       rawWpm: stats.rawWpm,
       accuracy: stats.accuracy,
       cpm: stats.cpm,
-      timeSeconds: finalTime,
+      timeSeconds: roundedSeconds,
       totalChars: currentTyped.length,
       correctChars,
       incorrectChars,
@@ -229,9 +247,10 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
     const newTyped = e.target.value;
 
-    // First keypress triggers timer start
+    // First keypress triggers timer start with precise timestamp
     if (!isStarted && newTyped.length > 0) {
       setIsStarted(true);
+      startTimeRef.current = performance.now();
     }
 
     const lastInputIndex = newTyped.length - 1;
@@ -286,11 +305,14 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     // Check completion condition for text/word/quote modes
     if (newTyped.length >= targetText.length) {
       setIsFinished(true);
-      finishTest(timeElapsed || 1, newTyped);
+      const elapsed = startTimeRef.current
+        ? (performance.now() - startTimeRef.current) / 1000
+        : (timeElapsed || 1);
+      finishTest(elapsed, newTyped);
     }
   };
 
-  // Calculate live stats for HUD
+  // Calculate live stats for HUD with precise elapsed time
   let currentCorrect = 0;
   let currentIncorrect = 0;
   for (let i = 0; i < typedChars.length; i++) {
@@ -298,12 +320,16 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     else currentIncorrect++;
   }
 
+  const liveElapsed = isStarted && startTimeRef.current
+    ? Math.max(0.3, (performance.now() - startTimeRef.current) / 1000)
+    : (timeElapsed || 0);
+
   const liveStats = calculateStats(
     typedChars.length,
     currentCorrect,
     currentIncorrect,
     0,
-    timeElapsed || 1,
+    liveElapsed,
     wpmHistory
   );
 
