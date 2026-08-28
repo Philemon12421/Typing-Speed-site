@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { TestResult } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
-import { X, Download, Printer, Keyboard } from 'lucide-react';
+import { X, Download, Printer } from 'lucide-react';
 
 interface CertificateModalProps {
   result: TestResult;
@@ -88,24 +88,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.lineWidth = 1.5;
     ctx.strokeRect(48, 48, W - 96, H - 96);
 
-    // Logo mark (top-left)
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.roundRect(90, 88, 44, 44, 12);
-    ctx.fill();
-    ctx.fillStyle = '#a78bfa';
-    ctx.font = '700 20px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('T', 112, 112);
-
+    // Clean brand typography header (top-left)
     ctx.textAlign = 'left';
     ctx.fillStyle = '#0f172a';
-    ctx.font = '800 22px sans-serif';
-    ctx.fillText('Typerca', 148, 103);
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '600 12px sans-serif';
-    ctx.fillText('TOUCH TYPING ASSESSMENT', 148, 123);
+    ctx.font = '800 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('Typerca', 90, 102);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('TOUCH TYPING ASSESSMENT', 90, 122);
 
     // Certificate ID (top-right)
     ctx.textAlign = 'right';
@@ -426,16 +416,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             TYPERCA
           </span>
 
-          {/* Header: logo + certificate ID */}
+          {/* Header: clean brand text + certificate ID */}
           <div className="relative z-10 flex items-start justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-violet-600 flex items-center justify-center text-white shadow-sm shadow-violet-200">
-                <Keyboard className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="font-extrabold text-slate-900 text-lg leading-none">Typerca</div>
-                <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1">Touch Typing Assessment</div>
-              </div>
+            <div>
+              <div className="text-2xl font-black text-slate-900 tracking-tight leading-none font-sans">Typerca</div>
+              <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1.5 font-sans">Touch Typing Assessment</div>
             </div>
             <div className="text-right">
               <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Certificate ID</div>
