@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TabType, SoundProfile, DailyGoalType } from '../types';
-import { Keyboard, BarChart2, Flame, Trophy, Target, Volume2, VolumeX, Sliders, Award, BookOpen, User, AtSign, Sun, Moon, Monitor } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Keyboard, BarChart2, Flame, Trophy, Target, Volume2, VolumeX, Sliders, Award, BookOpen, User, AtSign, Sun, Moon, Monitor, ChevronDown, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   activeTab: TabType;
@@ -40,6 +40,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenGoalSoundModal,
   onOpenRegisterModal,
 }) => {
+  const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState<boolean>(false);
+  const themeDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (themeDropdownRef.current && !themeDropdownRef.current.contains(event.target as Node)) {
+        setIsThemeDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsThemeDropdownOpen(false);
+      }
+    };
+
+    if (isThemeDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isThemeDropdownOpen]);
+
   const navItems: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'test', label: 'Practice', icon: <Keyboard className="w-4 h-4" /> },
     { id: 'challenges', label: 'Challenges', icon: <Award className="w-4 h-4 text-amber-500" /> },
@@ -52,11 +78,31 @@ export const Navbar: React.FC<NavbarProps> = ({
     Math.round((completedChallengesCount / Math.max(1, totalChallengesCount)) * 100)
   );
 
-  const cycleTheme = () => {
-    if (!onToggleTheme) return;
-    if (theme === 'system') onToggleTheme('dark');
-    else if (theme === 'dark') onToggleTheme('light');
-    else onToggleTheme('system');
+  const themeOptions: { id: 'dark' | 'light' | 'system'; label: string; desc: string; icon: React.ReactNode }[] = [
+    {
+      id: 'dark',
+      label: 'Dark Screen',
+      desc: 'Clean Black / Pitch Dark Mode',
+      icon: <Moon className="w-4 h-4 text-indigo-400 shrink-0" />,
+    },
+    {
+      id: 'light',
+      label: 'Light Screen',
+      desc: 'Crisp High-Contrast Daylight',
+      icon: <Sun className="w-4 h-4 text-amber-500 shrink-0" />,
+    },
+    {
+      id: 'system',
+      label: 'System Default',
+      desc: 'Auto-detect OS preference',
+      icon: <Monitor className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0" />,
+    },
+  ];
+
+  const getCurrentThemeLabel = () => {
+    if (theme === 'dark') return 'Dark';
+    if (theme === 'light') return 'Light';
+    return 'System';
   };
 
   const getThemeIcon = () => {
@@ -65,10 +111,11 @@ export const Navbar: React.FC<NavbarProps> = ({
     return <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 dark:text-indigo-400" />;
   };
 
-  const getThemeTitle = () => {
-    if (theme === 'dark') return 'Theme: Clean Black (Dark Mode) • Click to switch';
-    if (theme === 'light') return 'Theme: Light Mode • Click to switch';
-    return 'Theme: System Default (Auto Clean Black) • Click to switch';
+  const handleSelectTheme = (newTheme: 'system' | 'light' | 'dark') => {
+    if (onToggleTheme) {
+      onToggleTheme(newTheme);
+    }
+    setIsThemeDropdownOpen(false);
   };
 
   return (
@@ -175,15 +222,87 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Quick Controls: Theme Toggle, Sound, Streak & Settings */}
             <div className="flex items-center gap-1 sm:gap-1.5">
-              {/* Theme Quick Switcher (System / Dark / Light) */}
-              <button
-                onClick={cycleTheme}
-                title={getThemeTitle()}
-                className="p-1.5 sm:p-2 rounded-xl bg-white/80 dark:bg-zinc-900/90 border border-slate-200/70 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800 transition-all shadow-2xs cursor-pointer"
-                aria-label="Toggle visual theme"
-              >
-                {getThemeIcon()}
-              </button>
+              {/* Theme Dropdown Selector */}
+              <div className="relative" ref={themeDropdownRef}>
+                <button
+                  type="button"
+                  id="theme-dropdown-trigger"
+                  onClick={() => setIsThemeDropdownOpen((prev) => !prev)}
+                  title="Toggle Dark / Light Screen Theme (Dropdown)"
+                  aria-haspopup="true"
+                  aria-expanded={isThemeDropdownOpen}
+                  className={`flex items-center gap-1 sm:gap-1.5 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
+                    isThemeDropdownOpen
+                      ? 'bg-indigo-50 dark:bg-zinc-800 border-indigo-400 dark:border-indigo-500 text-indigo-600 dark:text-indigo-300'
+                      : 'bg-white/80 dark:bg-zinc-900/90 border-slate-200/80 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-850 hover:border-slate-300 dark:hover:border-zinc-700'
+                  }`}
+                >
+                  {getThemeIcon()}
+                  <span className="hidden xs:inline sm:inline text-[11px] font-extrabold tracking-tight">
+                    {getCurrentThemeLabel()}
+                  </span>
+                  <ChevronDown
+                    className={`w-3 h-3 text-slate-400 dark:text-zinc-500 transition-transform duration-200 ${
+                      isThemeDropdownOpen ? 'rotate-180 text-indigo-600 dark:text-indigo-400' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Dropdown Menu Popup */}
+                <AnimatePresence>
+                  {isThemeDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                      transition={{ duration: 0.15, ease: 'easeOut' }}
+                      className="absolute right-0 mt-1.5 w-56 sm:w-60 p-1.5 rounded-2xl bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 shadow-xl shadow-slate-900/10 dark:shadow-black/60 z-50 backdrop-blur-xl"
+                    >
+                      <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-zinc-800/80 mb-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+                          Screen Theme
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        {themeOptions.map((opt) => {
+                          const isSelected = (theme || 'system') === opt.id;
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => handleSelectTheme(opt.id)}
+                              className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200 dark:border-indigo-800/80 text-indigo-950 dark:text-indigo-200'
+                                  : 'hover:bg-slate-100 dark:hover:bg-zinc-900 text-slate-700 dark:text-zinc-300 border border-transparent'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="p-1 rounded-lg bg-white dark:bg-zinc-900 shadow-2xs border border-slate-200/60 dark:border-zinc-800 shrink-0">
+                                  {opt.icon}
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                  <span className="text-xs font-bold leading-tight truncate">
+                                    {opt.label}
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 dark:text-zinc-500 leading-tight truncate">
+                                    {opt.desc}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {isSelected && (
+                                <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 ml-2" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* Sound Toggle */}
               <button

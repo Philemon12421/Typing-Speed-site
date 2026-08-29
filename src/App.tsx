@@ -342,6 +342,8 @@ export default function App() {
           streakDays={overallAnalytics.currentStreakDays}
           userName={settings.userName}
           soundProfile={settings.soundProfile}
+          theme={settings.theme || 'system'}
+          onToggleTheme={(newTheme) => handleUpdateSettings({ ...settings, theme: newTheme })}
           todayProgress={todayProgress}
           completedChallengesCount={completedChallengeIds.length}
           totalChallengesCount={TYPING_CHALLENGES.length}
