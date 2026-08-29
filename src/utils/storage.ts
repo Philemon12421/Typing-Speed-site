@@ -86,6 +86,7 @@ export function invalidateStorageCache(): void {
 
 export const DEFAULT_SETTINGS: UserSettings = {
   userName: 'Pro Typist',
+  theme: 'system',
   fontSize: 'lg',
   caretStyle: 'line',
   soundEnabled: true,

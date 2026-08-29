@@ -223,27 +223,27 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm animate-in fade-in zoom-in-95 duration-300">
+    <div className="w-full max-w-4xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm animate-in fade-in zoom-in-95 duration-300 transition-colors">
       
       {/* Header Badge */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/40 pb-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/60 dark:border-zinc-800/80 pb-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-200 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-600 dark:bg-indigo-500 shadow-lg shadow-indigo-600/30 flex items-center justify-center">
             <Trophy className="w-7 h-7 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-2xl font-black text-slate-900">Test Complete!</h2>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 border border-indigo-200 text-indigo-700">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-zinc-100">Test Complete!</h2>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300">
                 {grade.badge}
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Verified</span>
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium">
-              Mode: <span className="font-semibold text-slate-700 capitalize">{result.mode}</span> ({result.modeDetail})
+            <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium">
+              Mode: <span className="font-semibold text-slate-700 dark:text-zinc-300 capitalize">{result.mode}</span> ({result.modeDetail})
             </p>
           </div>
         </div>
@@ -252,23 +252,23 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <button
             onClick={onRestart}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-200 transition-all hover:scale-[1.02]"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Next Test (Tab)</span>
           </button>
           <button
             onClick={() => setIsShareModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold text-sm shadow-sm transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 dark:bg-zinc-900 hover:bg-indigo-100 dark:hover:bg-zinc-800 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-zinc-700 font-bold text-sm shadow-sm transition-all cursor-pointer"
           >
-            <Share2 className="w-4 h-4 text-indigo-600" />
+            <Share2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>Share Results</span>
           </button>
           <button
             onClick={onViewCertificate}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-sm shadow-sm transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-zinc-900 hover:bg-amber-100 dark:hover:bg-zinc-800 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-zinc-700 font-bold text-sm shadow-sm transition-all cursor-pointer"
           >
-            <Award className="w-4 h-4 text-amber-600" />
+            <Award className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             <span>Certificate</span>
           </button>
         </div>
@@ -277,14 +277,14 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
       {/* Personal Best (PB) Performance Benchmark Banner */}
       <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm transition-all ${
         isNewPB
-          ? 'bg-gradient-to-r from-amber-500/10 via-amber-400/20 to-yellow-500/10 border-amber-300 text-amber-950'
+          ? 'bg-gradient-to-r from-amber-500/10 via-amber-400/20 to-yellow-500/10 dark:from-amber-950/40 dark:via-amber-900/30 dark:to-yellow-950/40 border-amber-300 dark:border-amber-700/60 text-amber-950 dark:text-amber-200'
           : isTiedPB
-          ? 'bg-indigo-50 border-indigo-200 text-indigo-900'
-          : 'bg-slate-50 border-slate-200 text-slate-800'
+          ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200'
+          : 'bg-slate-50 dark:bg-zinc-900/70 border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200'
       }`}>
         <div className="flex items-center gap-3">
           <div className={`p-2.5 rounded-xl flex items-center justify-center shrink-0 ${
-            isNewPB ? 'bg-amber-500 text-white shadow-md shadow-amber-300' : 'bg-slate-200 text-slate-700'
+            isNewPB ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300'
           }`}>
             <Trophy className="w-5 h-5" />
           </div>
@@ -300,18 +300,18 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
               {percentImprovement !== 0 && (
                 <span className={`px-2 py-0.5 rounded-full text-xs font-black ${
                   percentImprovement > 0
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-slate-200 text-slate-700'
+                    ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                    : 'bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300'
                 }`}>
                   {percentImprovement > 0 ? `+${percentImprovement}% Improvement` : `${percentImprovement}% vs PB`}
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-600 font-medium mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium mt-0.5">
               {isNewPB ? (
-                <>You outperformed your previous personal record of <strong className="font-bold text-slate-900">{personalBestWpm} WPM</strong> by <strong className="font-bold text-emerald-700">+{pbDiff} WPM</strong>!</>
+                <>You outperformed your previous personal record of <strong className="font-bold text-slate-900 dark:text-zinc-100">{personalBestWpm} WPM</strong> by <strong className="font-bold text-emerald-700 dark:text-emerald-400">+{pbDiff} WPM</strong>!</>
               ) : personalBestWpm > 0 ? (
-                <>Your top personal best is <strong className="font-bold text-slate-900">{personalBestWpm} WPM</strong> ({Math.abs(pbDiff)} WPM difference in this run).</>
+                <>Your top personal best is <strong className="font-bold text-slate-900 dark:text-zinc-100">{personalBestWpm} WPM</strong> ({Math.abs(pbDiff)} WPM difference in this run).</>
               ) : (
                 <>First baseline score logged as your starting Personal Best!</>
               )}
@@ -322,8 +322,8 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
         {personalBestWpm > 0 && (
           <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Personal Best</div>
-              <div className="text-base font-black text-slate-900">{personalBestWpm} WPM</div>
+              <div className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Personal Best</div>
+              <div className="text-base font-black text-slate-900 dark:text-zinc-100">{personalBestWpm} WPM</div>
             </div>
           </div>
         )}
@@ -332,76 +332,77 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
       {/* Headline Metric Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* WPM Card */}
-        <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 shadow-sm flex flex-col gap-1">
-          <div className="flex items-center justify-between text-indigo-700 text-xs font-semibold">
+        <div className="p-4 rounded-2xl bg-indigo-50/80 dark:bg-zinc-900/80 border border-indigo-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-1">
+          <div className="flex items-center justify-between text-indigo-700 dark:text-indigo-400 text-xs font-semibold">
             <span>Net Speed</span>
-            <Zap className="w-4 h-4 text-indigo-600 fill-indigo-600" />
+            <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400 fill-indigo-600 dark:fill-indigo-400" />
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-black text-indigo-900">{result.wpm}</span>
-            <span className="text-xs font-bold text-indigo-600">WPM</span>
+            <span className="text-4xl font-black text-indigo-900 dark:text-indigo-200">{result.wpm}</span>
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">WPM</span>
           </div>
-          <span className="text-[10px] text-indigo-600/80 font-medium">Raw: {result.rawWpm} WPM</span>
+          <span className="text-[10px] text-indigo-600/80 dark:text-indigo-400/80 font-medium">Raw: {result.rawWpm} WPM</span>
         </div>
 
         {/* Accuracy Card */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/80 to-teal-50/50 border border-emerald-200/80 shadow-sm flex flex-col gap-1">
-          <div className="flex items-center justify-between text-emerald-700 text-xs font-semibold">
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/80 to-teal-50/50 dark:from-zinc-900/80 dark:to-zinc-900/60 border border-emerald-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-1">
+          <div className="flex items-center justify-between text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
             <span>Accuracy</span>
-            <Target className="w-4 h-4 text-emerald-600" />
+            <Target className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-black text-emerald-900">{result.accuracy}%</span>
+            <span className="text-4xl font-black text-emerald-900 dark:text-emerald-300">{result.accuracy}%</span>
           </div>
-          <span className="text-[10px] text-emerald-600/80 font-medium">
+          <span className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80 font-medium">
             {result.correctChars} correct / {result.incorrectChars} errors
           </span>
         </div>
 
         {/* CPM & Time */}
-        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm flex flex-col gap-1">
-          <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-900/80 border border-slate-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-1">
+          <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400 text-xs font-semibold">
             <span>CPM & Time</span>
-            <Clock className="w-4 h-4 text-slate-500" />
+            <Clock className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-slate-800">{result.cpm}</span>
-            <span className="text-xs font-bold text-slate-500">CPM</span>
+            <span className="text-3xl font-black text-slate-800 dark:text-zinc-100">{result.cpm}</span>
+            <span className="text-xs font-bold text-slate-500 dark:text-zinc-400">CPM</span>
           </div>
-          <span className="text-[10px] text-slate-500 font-medium">Duration: {result.timeSeconds}s</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-medium">Duration: {result.timeSeconds}s</span>
         </div>
 
         {/* Consistency */}
-        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm flex flex-col gap-1">
-          <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-900/80 border border-slate-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-1">
+          <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400 text-xs font-semibold">
             <span>Consistency</span>
-            <Activity className="w-4 h-4 text-slate-500" />
+            <Activity className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-slate-800">{result.consistency}%</span>
+            <span className="text-3xl font-black text-slate-800 dark:text-zinc-100">{result.consistency}%</span>
           </div>
-          <span className="text-[10px] text-slate-500 font-medium">Rhythm stability</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-medium">Rhythm stability</span>
         </div>
       </div>
 
       {/* Recharts Performance Line Graph */}
       {result.wpmHistory && result.wpmHistory.length > 1 && (
-        <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col gap-3">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+        <div className="p-5 rounded-2xl bg-slate-50/80 dark:bg-zinc-900/70 border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-3">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-zinc-300">
             <span>WPM & Accuracy Progression Over Time</span>
-            <span className="text-[11px] text-slate-500 font-normal">Recorded every second</span>
+            <span className="text-[11px] text-slate-500 dark:text-zinc-500 font-normal">Recorded every second</span>
           </div>
           <div className="w-full h-48">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={result.wpmHistory}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="second" unit="s" stroke="#64748b" fontSize={11} />
-                <YAxis stroke="#64748b" fontSize={11} domain={[0, 'auto']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+                <XAxis dataKey="second" unit="s" stroke="#71717a" fontSize={11} />
+                <YAxis stroke="#71717a" fontSize={11} domain={[0, 'auto']} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    backgroundColor: '#18181b',
                     borderRadius: '12px',
-                    borderColor: '#cbd5e1',
+                    borderColor: '#27272a',
+                    color: '#f4f4f5',
                     fontSize: '12px',
                   }}
                 />
@@ -409,7 +410,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
                   type="monotone"
                   dataKey="wpm"
                   name="WPM"
-                  stroke="#2563eb"
+                  stroke="#6366f1"
                   strokeWidth={3}
                   dot={false}
                 />
@@ -417,7 +418,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
                   type="monotone"
                   dataKey="rawWpm"
                   name="Raw WPM"
-                  stroke="#94a3b8"
+                  stroke="#71717a"
                   strokeWidth={1.5}
                   strokeDasharray="4 4"
                   dot={false}
@@ -430,9 +431,9 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
 
       {/* Error-Prone Keys Section */}
       {result.keyErrors && Object.keys(result.keyErrors).length > 0 && (
-        <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-200/80 flex flex-col gap-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800">
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
+        <div className="p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/50 flex flex-col gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800 dark:text-rose-300">
+            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>Mistakes Breakdown (Top Weak Keys)</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
@@ -441,12 +442,12 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
               .map(([key, count]) => (
                 <div
                   key={key}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-rose-200 text-xs font-bold text-rose-900 shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white dark:bg-zinc-900 border border-rose-200 dark:border-rose-900/60 text-xs font-bold text-rose-900 dark:text-rose-300 shadow-sm"
                 >
-                  <span className="uppercase font-mono font-extrabold text-rose-600">
+                  <span className="uppercase font-mono font-extrabold text-rose-600 dark:text-rose-400">
                     '{key === ' ' ? 'Space' : key}'
                   </span>
-                  <span className="text-[10px] text-rose-500 font-semibold">{count} error(s)</span>
+                  <span className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold">{count} error(s)</span>
                 </div>
               ))}
           </div>
@@ -454,10 +455,10 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
       )}
 
       {/* Footer Navigation */}
-      <div className="flex items-center justify-between border-t border-slate-200/80 pt-4 text-xs font-semibold text-slate-600">
+      <div className="flex items-center justify-between border-t border-slate-200/80 dark:border-zinc-800 pt-4 text-xs font-semibold text-slate-600 dark:text-zinc-400">
         <button
           onClick={onViewAnalytics}
-          className="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 font-bold transition-colors"
+          className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold transition-colors cursor-pointer"
         >
           <BarChart2 className="w-4 h-4" />
           <span>View All Pro Analytics & History →</span>
@@ -465,7 +466,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
 
         <button
           onClick={onRestart}
-          className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold transition-all"
+          className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-800 font-bold transition-all cursor-pointer"
         >
           Close & Practice Again
         </button>

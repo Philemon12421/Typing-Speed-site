@@ -85,25 +85,25 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
       onClick={(e) => {
         if (e.target === e.currentTarget) handleResetAndClose();
       }}
-      className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
     >
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-200 font-sans animate-in zoom-in-95 duration-200 text-slate-800">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-zinc-950 rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-200 dark:border-zinc-800 font-sans animate-in zoom-in-95 duration-200 text-slate-800 dark:text-zinc-100 transition-colors">
         
         {/* Header with Close */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 border border-indigo-200 flex items-center justify-center text-indigo-600 shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
               <Mail className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900">Contact Typerca Team</h2>
-              <p className="text-xs text-slate-500 font-medium">Direct communication channel with engineering & support</p>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-zinc-100">Contact Typerca Team</h2>
+              <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium">Direct communication channel with engineering & support</p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleResetAndClose}
-            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+            className="w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center text-slate-500 dark:text-zinc-400 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -150,46 +150,46 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {/* Contact Information Column */}
-            <div className="md:col-span-2 space-y-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
-              <h4 className="font-extrabold text-slate-900 text-sm">Official Entity Details</h4>
+            <div className="md:col-span-2 space-y-4 p-4 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs">
+              <h4 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm">Official Entity Details</h4>
               
-              <div className="space-y-3 text-slate-600">
+              <div className="space-y-3 text-slate-600 dark:text-zinc-400">
                 <div className="flex items-start gap-2.5">
-                  <Building className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                  <Building className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-slate-800">Drenchack Tech Company</strong>
+                    <strong className="block text-slate-800 dark:text-zinc-200">Drenchack Tech Company</strong>
                     <span>Software & Web Benchmarks</span>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <User className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                  <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-slate-800">Founder & Engineer</strong>
+                    <strong className="block text-slate-800 dark:text-zinc-200">Founder & Engineer</strong>
                     <span>Philemon Osei Kusi</span>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Mail className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                  <Mail className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-slate-800">Direct Email</strong>
-                    <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 hover:underline font-mono text-[11px]">
+                    <strong className="block text-slate-800 dark:text-zinc-200">Direct Email</strong>
+                    <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:underline font-mono text-[11px]">
                       philemonkusi292@gmail.com
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Clock className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                  <Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-slate-800">Response Window</strong>
-                    <span className="font-semibold text-emerald-700">Less than 24 hours guaranteed</span>
+                    <strong className="block text-slate-800 dark:text-zinc-200">Response Window</strong>
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">Less than 24 hours guaranteed</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900 font-medium leading-relaxed">
+              <div className="p-3 rounded-xl bg-indigo-50 dark:bg-zinc-850 border border-indigo-200 dark:border-zinc-700 text-[11px] text-indigo-900 dark:text-indigo-200 font-medium leading-relaxed">
                 💬 Open to feedback, typing speed feature suggestions, bug reports, and educational licensing inquiries.
               </div>
             </div>
@@ -197,42 +197,42 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             {/* Contact Form Column */}
             <form onSubmit={handleSubmit} className="md:col-span-3 space-y-3.5">
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+                <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Your Full Name *</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">Your Full Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Alex Johnson"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-zinc-900 text-slate-900 dark:text-zinc-100 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Your Email Address *</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">Your Email Address *</label>
                 <input
                   type="email"
                   required
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-zinc-900 text-slate-900 dark:text-zinc-100 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Topic / Subject</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">Topic / Subject</label>
                 <select
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-zinc-900 text-slate-900 dark:text-zinc-100 transition-all"
                 >
                   <option value="General Feedback">General Feedback</option>
                   <option value="Feature Suggestion">Feature Suggestion</option>
@@ -243,14 +243,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Message *</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">Message *</label>
                 <textarea
                   required
                   rows={4}
                   placeholder="How can we help you improve your touch typing experience?"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all resize-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-zinc-900 text-slate-900 dark:text-zinc-100 transition-all resize-none"
                 />
               </div>
 
@@ -258,14 +258,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 <button
                   type="button"
                   onClick={handleResetAndClose}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 font-bold text-xs transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md shadow-indigo-200 flex items-center gap-1.5 transition-all disabled:opacity-50 active:scale-95 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md shadow-indigo-500/20 flex items-center gap-1.5 transition-all disabled:opacity-50 active:scale-95 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>

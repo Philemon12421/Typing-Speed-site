@@ -674,10 +674,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center justify-center gap-3 py-6 print:hidden bg-slate-50 border-t border-slate-100">
+        <div className="flex flex-wrap items-center justify-center gap-3 py-6 print:hidden bg-slate-50 dark:bg-zinc-900 border-t border-slate-100 dark:border-zinc-800">
           <button
             onClick={handleDownloadPNG}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-md shadow-blue-200 transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all active:scale-95 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             <span>Download Certificate PNG</span>
@@ -685,7 +685,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Print or Save PDF</span>
@@ -693,7 +693,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer"
           >
             Close
           </button>

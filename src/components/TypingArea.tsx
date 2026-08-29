@@ -343,10 +343,10 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
   // Caret style classes
   const caretClasses: Record<string, string> = {
-    line: 'w-0.5 bg-indigo-600 animate-pulse',
-    block: 'w-3.5 bg-indigo-500/40 border-b-2 border-indigo-600 animate-pulse',
-    underline: 'w-3.5 border-b-2 border-indigo-600 animate-pulse',
-    smooth: 'w-0.5 bg-gradient-to-b from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/50 animate-pulse',
+    line: 'w-0.5 bg-indigo-600 dark:bg-indigo-400 animate-pulse',
+    block: 'w-3.5 bg-indigo-500/40 dark:bg-indigo-400/40 border-b-2 border-indigo-600 dark:border-indigo-400 animate-pulse',
+    underline: 'w-3.5 border-b-2 border-indigo-600 dark:border-indigo-400 animate-pulse',
+    smooth: 'w-0.5 bg-gradient-to-b from-indigo-500 to-purple-500 dark:from-indigo-400 dark:to-purple-400 shadow-lg shadow-indigo-500/50 animate-pulse',
   };
 
   const progressPercent = timeLimit
@@ -384,38 +384,38 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       />
 
       {/* Progress & Live HUD Bar */}
-      <div className="w-full max-w-4xl flex flex-col gap-2 p-3 sm:p-4 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm">
-        <div className="flex items-center justify-between text-xs font-bold text-slate-600 flex-wrap gap-2">
+      <div className="w-full max-w-4xl flex flex-col gap-2 p-3 sm:p-4 rounded-3xl bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm transition-colors">
+        <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-zinc-400 flex-wrap gap-2">
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             {/* Live WPM */}
             {settings.showLiveWpm && !settings.blindMode && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 text-indigo-800">
-                <Zap className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/50 text-indigo-800 dark:text-indigo-300">
+                <Zap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 fill-indigo-600 dark:fill-indigo-400" />
                 <span className="text-xs sm:text-sm font-black">{liveStats.wpm}</span>
-                <span className="text-[10px] text-indigo-600 font-semibold uppercase">WPM</span>
+                <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold uppercase">WPM</span>
               </div>
             )}
 
             {/* Live Accuracy */}
             {!settings.blindMode && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-emerald-800">
-                <Target className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/50 text-emerald-800 dark:text-emerald-300">
+                <Target className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span className="text-xs sm:text-sm font-black">{liveStats.accuracy}%</span>
-                <span className="text-[10px] text-emerald-600 font-semibold uppercase">ACC</span>
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">ACC</span>
               </div>
             )}
 
             {/* Error Counter */}
             {currentIncorrect > 0 && (
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 font-bold text-xs">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+              <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/50 text-rose-700 dark:text-rose-300 font-bold text-xs">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                 <span>{currentIncorrect} errors</span>
               </div>
             )}
           </div>
 
           {/* Time or Character Counter */}
-          <div className="flex items-center gap-2 font-black text-slate-800 text-xs sm:text-sm">
+          <div className="flex items-center gap-2 font-black text-slate-800 dark:text-zinc-200 text-xs sm:text-sm">
             {timeLimit ? (
               <span>{timeLimit - timeElapsed}s</span>
             ) : (
@@ -427,9 +427,9 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
         </div>
 
         {/* Live Top Gradient Progress Bar */}
-        <div className="w-full h-2 rounded-full bg-slate-100/80 overflow-hidden border border-white/40">
+        <div className="w-full h-2 rounded-full bg-slate-100/80 dark:bg-zinc-800/80 overflow-hidden border border-slate-200/40 dark:border-zinc-800">
           <div
-            className="h-full bg-indigo-600 transition-all duration-300 rounded-full"
+            className="h-full bg-indigo-600 dark:bg-indigo-500 transition-all duration-300 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -437,8 +437,8 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
       {/* Active Word Focus Bar - Ideal for Mobile Clarity */}
       {!isFinished && activeWordHUD.wordChars.length > 0 && (
-        <div className="w-full max-w-4xl px-4 py-2 rounded-2xl bg-slate-900/90 text-white shadow-lg flex items-center justify-between gap-3 text-xs font-semibold backdrop-blur-md border border-slate-800">
-          <div className="flex items-center gap-2 shrink-0 text-slate-400">
+        <div className="w-full max-w-4xl px-4 py-2 rounded-2xl bg-slate-900/90 dark:bg-black/95 text-white shadow-lg flex items-center justify-between gap-3 text-xs font-semibold backdrop-blur-md border border-slate-800 dark:border-zinc-800">
+          <div className="flex items-center gap-2 shrink-0 text-slate-400 dark:text-zinc-400">
             <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400">Current Word:</span>
           </div>
           <div className="flex items-center gap-1 font-mono text-base sm:text-xl font-bold tracking-wider overflow-x-auto">
@@ -449,10 +449,10 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
               const typedVal = typedChars[charGlobalIdx];
               const isCorrect = isTyped && typedVal === char;
 
-              let style = 'text-slate-400';
+              let style = 'text-slate-400 dark:text-zinc-500';
               if (isCorrect) style = 'text-emerald-400 font-extrabold';
               else if (isTyped) style = 'text-rose-400 underline font-extrabold bg-rose-950/60 rounded px-0.5';
-              else if (isCurrent) style = 'text-indigo-300 underline font-extrabold animate-pulse bg-indigo-900/50 rounded px-0.5';
+              else if (isCurrent) style = 'text-indigo-300 dark:text-indigo-400 underline font-extrabold animate-pulse bg-indigo-900/50 dark:bg-indigo-950/70 rounded px-0.5';
 
               return (
                 <span key={idx} className={style}>
@@ -461,21 +461,21 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
               );
             })}
           </div>
-          <span className="text-[10px] text-slate-400 hidden sm:inline">Keep typing...</span>
+          <span className="text-[10px] text-slate-400 dark:text-zinc-500 hidden sm:inline">Keep typing...</span>
         </div>
       )}
 
       {/* Main Glassy Typing Canvas Box */}
       <div
         ref={textContainerRef}
-        className="w-full max-w-4xl h-[200px] sm:h-[240px] p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/60 shadow-sm relative overflow-y-auto flex flex-wrap items-start content-start gap-y-2 font-mono tracking-wide text-slate-400 scroll-smooth"
+        className="w-full max-w-4xl h-[200px] sm:h-[240px] p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[32px] bg-white/40 dark:bg-zinc-950/90 backdrop-blur-2xl border border-slate-200/60 dark:border-zinc-800/90 shadow-sm relative overflow-y-auto flex flex-wrap items-start content-start gap-y-2 font-mono tracking-wide text-slate-400 dark:text-zinc-500 scroll-smooth transition-colors"
       >
         {/* Unfocused overlay prompt if input loses focus */}
         {!isFinished && !countdown && (
-          <div className="absolute inset-0 z-10 bg-white/40 backdrop-blur-[2px] opacity-0 hover:opacity-100 focus-within:opacity-0 transition-opacity flex flex-col items-center justify-center pointer-events-none p-4 text-center">
+          <div className="absolute inset-0 z-10 bg-white/40 dark:bg-black/40 backdrop-blur-[2px] opacity-0 hover:opacity-100 focus-within:opacity-0 transition-opacity flex flex-col items-center justify-center pointer-events-none p-4 text-center">
             <button
               onClick={() => inputRef.current?.focus()}
-              className="px-5 py-2.5 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-xl flex items-center gap-2 pointer-events-auto active:scale-95 transition-all"
+              className="px-5 py-2.5 rounded-2xl bg-slate-900 dark:bg-zinc-800 text-white text-xs font-bold shadow-xl flex items-center gap-2 pointer-events-auto active:scale-95 transition-all"
             >
               <span>📱 Tap to focus & bring up keyboard</span>
             </button>
@@ -484,15 +484,15 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
         {/* Start Test Button Banner (Before starting) */}
         {!isStarted && countdown === null && (
-          <div className="absolute inset-0 z-20 bg-slate-900/10 backdrop-blur-[3px] flex flex-col items-center justify-center p-4 text-center gap-3 animate-in fade-in duration-200">
+          <div className="absolute inset-0 z-20 bg-slate-900/10 dark:bg-black/60 backdrop-blur-[3px] flex flex-col items-center justify-center p-4 text-center gap-3 animate-in fade-in duration-200">
             <button
               onClick={handleStartWithCountdown}
-              className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-extrabold shadow-xl shadow-indigo-300 flex items-center gap-2.5 active:scale-95 transition-all cursor-pointer"
+              className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-extrabold shadow-xl shadow-indigo-600/30 flex items-center gap-2.5 active:scale-95 transition-all cursor-pointer"
             >
               <Play className="w-5 h-5 fill-white" />
               <span>Click to Start Test</span>
             </button>
-            <span className="text-xs font-bold text-slate-700 bg-white/80 px-3 py-1 rounded-full shadow-sm border border-slate-200">
+            <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 bg-white/80 dark:bg-zinc-900/90 px-3 py-1 rounded-full shadow-sm border border-slate-200/80 dark:border-zinc-800">
               Or start typing directly to begin
             </span>
           </div>
@@ -500,7 +500,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
         {/* Clean Countdown Popup Modal (3... 2... 1... GO!) */}
         {countdown !== null && (
-          <div className="absolute inset-0 z-30 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white text-center animate-in zoom-in-95 duration-200">
+          <div className="absolute inset-0 z-30 bg-slate-950/85 dark:bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 text-white text-center animate-in zoom-in-95 duration-200">
             <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">Get Ready</span>
             <div className="text-7xl sm:text-8xl font-black text-amber-400 my-2 animate-bounce">
               {countdown === 0 ? 'GO!' : countdown}
@@ -517,11 +517,11 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
           const isCorrect = isTyped && typedChar === char;
           const isIncorrect = isTyped && typedChar !== char;
 
-          let colorClass = 'text-slate-400 font-light';
-          if (isCorrect) colorClass = 'text-slate-800 font-semibold';
+          let colorClass = 'text-slate-400 dark:text-zinc-600 font-light';
+          if (isCorrect) colorClass = 'text-slate-800 dark:text-zinc-100 font-semibold';
           if (isIncorrect)
             colorClass =
-              'text-rose-600 bg-rose-100/80 rounded px-0.5 underline decoration-rose-500 font-bold';
+              'text-rose-600 dark:text-rose-400 bg-rose-100/80 dark:bg-rose-950/80 rounded px-0.5 underline decoration-rose-500 font-bold';
 
           return (
             <span
@@ -545,15 +545,15 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
       </div>
 
       {/* Footer Hotkey Restart Tip */}
-      <div className="flex items-center justify-center gap-4 text-xs font-medium text-slate-500 pt-2">
+      <div className="flex items-center justify-center gap-4 text-xs font-medium text-slate-500 dark:text-zinc-400 pt-2">
         <button
           onClick={onRestart}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 shadow-sm transition-all"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200/80 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 shadow-sm transition-all cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Restart Test</span>
         </button>
-        <span className="hidden sm:inline text-slate-400">Tip: Press <kbd className="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-mono text-[11px]">Tab</kbd> then <kbd className="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-mono text-[11px]">Enter</kbd> to quick restart</span>
+        <span className="hidden sm:inline text-slate-400 dark:text-zinc-500">Tip: Press <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono text-[11px]">Tab</kbd> then <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono text-[11px]">Enter</kbd> to quick restart</span>
       </div>
     </div>
   );

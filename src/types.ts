@@ -23,6 +23,7 @@ export type FingerName =
 
 export interface UserSettings {
   userName: string;
+  theme?: 'system' | 'light' | 'dark';
   fontSize: FontSize;
   caretStyle: CaretStyle;
   soundEnabled: boolean;

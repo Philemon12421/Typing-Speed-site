@@ -33,11 +33,11 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="w-full bg-white/60 backdrop-blur-xl text-slate-600 border-t border-white/60 mt-auto text-xs transition-all shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
+    <footer className="w-full bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl text-slate-600 dark:text-zinc-400 border-t border-slate-200/60 dark:border-zinc-800/80 mt-auto text-xs transition-colors shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
         
         {/* GitHub Open Source Strip & Socials */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-2 px-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-white shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-2 px-4 rounded-xl bg-slate-900/90 dark:bg-black/90 backdrop-blur-md border border-white/10 dark:border-zinc-800 text-white shadow-sm">
           <div className="flex items-center gap-2 min-w-0">
             <Github className="w-4 h-4 text-indigo-400 shrink-0" />
             <span className="font-semibold text-xs text-slate-200 tracking-tight">Typerca Platform</span>
@@ -81,33 +81,33 @@ export const Footer: React.FC<FooterProps> = ({
           
           {/* Column 1: Core Tools */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
-              <Keyboard className="w-4 h-4 text-indigo-600 shrink-0" />
+            <h4 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5 dark:border-zinc-800">
+              <Keyboard className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
               <span>Practice & Tools</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-semibold">
+            <ul className="space-y-2 text-slate-600 dark:text-zinc-400 font-semibold">
               <li>
-                <button onClick={() => { setActiveTab('test'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => { setActiveTab('test'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Touch Typing Speed Test
                 </button>
               </li>
               <li>
-                <button onClick={() => { setActiveTab('challenges'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => { setActiveTab('challenges'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Typing Challenges & Quests
                 </button>
               </li>
               <li>
-                <button onClick={() => { setActiveTab('analytics'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => { setActiveTab('analytics'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Pro Analytics & Error Heatmap
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('manual')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('manual')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Interactive Feature Manual
                 </button>
               </li>
               <li>
-                <button onClick={onOpenRegisterModal} className="hover:text-indigo-600 transition-colors truncate block max-w-full text-left">
+                <button onClick={onOpenRegisterModal} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate block max-w-full text-left cursor-pointer">
                   {userName ? `Profile: @${userName}` : 'Claim Username'}
                 </button>
               </li>
@@ -116,33 +116,33 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 2: Guides & Articles */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
-              <BookOpen className="w-4 h-4 text-emerald-600 shrink-0" />
+            <h4 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5 dark:border-zinc-800">
+              <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>Guides & Science</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-semibold">
+            <ul className="space-y-2 text-slate-600 dark:text-zinc-400 font-semibold">
               <li>
-                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Break 100 WPM Plateau
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Neuroscience of Muscle Memory
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Ergonomics & RSI Prevention
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Mechanical Switches Guide
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('blog')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Global WPM Benchmarks
                 </button>
               </li>
@@ -151,39 +151,39 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 3: Legal & Trust (AdSense Essentials) */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
-              <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
+            <h4 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5 dark:border-zinc-800">
+              <Shield className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>Legal & Compliance</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-semibold">
+            <ul className="space-y-2 text-slate-600 dark:text-zinc-400 font-semibold">
               <li>
-                <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 transition-colors flex items-center gap-1">
+                <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1 cursor-pointer">
                   <span>Privacy Policy (GDPR & CCPA)</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Terms of Service
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Cookie & Storage Policy
                 </button>
               </li>
               <li>
-                <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 transition-colors flex items-center gap-1 text-slate-700">
-                  <Sliders className="w-3 h-3 text-indigo-500" />
+                <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1 text-slate-700 dark:text-zinc-300 cursor-pointer">
+                  <Sliders className="w-3 h-3 text-indigo-500 dark:text-indigo-400" />
                   <span>Cookie Preferences</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('disclaimer')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('disclaimer')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Website Disclaimer
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   Frequently Asked Questions
                 </button>
               </li>
@@ -192,29 +192,29 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 4: Company & Support */}
           <div className="space-y-3 min-w-0">
-            <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5">
-              <Mail className="w-4 h-4 text-sky-600 shrink-0" />
+            <h4 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm flex items-center gap-1.5 pb-1.5 border-b border-slate-900/5 dark:border-zinc-800">
+              <Mail className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
               <span>Company & Support</span>
             </h4>
-            <ul className="space-y-2 text-slate-600 font-semibold">
+            <ul className="space-y-2 text-slate-600 dark:text-zinc-400 font-semibold">
               <li>
-                <button onClick={() => navigateToGuideSubTab('about')} className="hover:text-indigo-600 transition-colors">
+                <button onClick={() => navigateToGuideSubTab('about')} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
                   About Us & Mission
                 </button>
               </li>
               <li>
-                <span className="text-slate-800 font-bold block">Drenchack Tech Company</span>
+                <span className="text-slate-800 dark:text-zinc-200 font-bold block">Drenchack Tech Company</span>
               </li>
               <li>
-                <span className="text-slate-500 block text-[11px] font-medium">Founder: Philemon Osei Kusi</span>
+                <span className="text-slate-500 dark:text-zinc-400 block text-[11px] font-medium">Founder: Philemon Osei Kusi</span>
               </li>
               <li>
-                <button onClick={onOpenContactModal} className="hover:text-indigo-700 font-bold transition-colors flex items-center gap-1 text-indigo-600">
+                <button onClick={onOpenContactModal} className="hover:text-indigo-700 dark:hover:text-indigo-300 font-bold transition-colors flex items-center gap-1 text-indigo-600 dark:text-indigo-400 cursor-pointer">
                   <span>Contact Support / Feedback</span>
                 </button>
               </li>
               <li>
-                <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 hover:text-indigo-800 font-mono text-[11px] font-semibold underline break-all">
+                <a href="mailto:philemonkusi292@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-mono text-[11px] font-semibold underline break-all">
                   philemonkusi292@gmail.com
                 </a>
               </li>
@@ -224,22 +224,22 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Bar with Copyright & Entity Notice */}
-        <div className="border-t border-white/60 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+        <div className="border-t border-slate-200/60 dark:border-zinc-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 dark:text-zinc-400 text-[11px]">
           <div className="text-center sm:text-left font-medium">
-            &copy; {new Date().getFullYear()} <strong className="text-slate-800">Typerca</strong>. Built & Operated by <strong className="text-slate-800">Drenchack Tech Company</strong>. All rights reserved.
+            &copy; {new Date().getFullYear()} <strong className="text-slate-800 dark:text-zinc-200">Typerca</strong>. Built & Operated by <strong className="text-slate-800 dark:text-zinc-200">Drenchack Tech Company</strong>. All rights reserved.
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-bold text-slate-600">
-            <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600">Privacy</button>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-bold text-slate-600 dark:text-zinc-400">
+            <button onClick={() => navigateToGuideSubTab('privacy')} className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Privacy</button>
             <span>•</span>
-            <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600">Terms</button>
+            <button onClick={() => navigateToGuideSubTab('terms')} className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Terms</button>
             <span>•</span>
-            <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600">Cookies</button>
+            <button onClick={() => navigateToGuideSubTab('cookies')} className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Cookies</button>
             <span>•</span>
-            <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 text-indigo-600">Cookie Settings</button>
+            <button onClick={handleOpenCookiePreferences} className="hover:text-indigo-600 dark:hover:text-indigo-400 text-indigo-600 dark:text-indigo-400 cursor-pointer">Cookie Settings</button>
             <span>•</span>
-            <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600">FAQ</button>
+            <button onClick={() => navigateToGuideSubTab('faq')} className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">FAQ</button>
             <span>•</span>
-            <button onClick={onOpenContactModal} className="hover:text-indigo-600">Contact</button>
+            <button onClick={onOpenContactModal} className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Contact</button>
           </div>
         </div>
 

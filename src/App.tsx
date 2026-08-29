@@ -20,6 +20,7 @@ import {
   getCompletedChallengeIds,
   saveCompletedChallengeId,
 } from './utils/storage';
+import { initTheme, applyThemeToDOM } from './utils/theme';
 import { generateWordsText, getRandomQuote } from './utils/typingUtils';
 import { Navbar } from './components/Navbar';
 import { TestControls } from './components/TestControls';
@@ -84,6 +85,12 @@ export default function App() {
     setActiveTab('guide');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Initialize & synchronize System / Light / Clean Black Dark theme
+  useEffect(() => {
+    const cleanup = initTheme(settings.theme || 'system');
+    return cleanup;
+  }, [settings.theme]);
 
   // URL Hash Listener for direct deep-linking & SEO updates
   useEffect(() => {
@@ -309,11 +316,11 @@ export default function App() {
   const isZenModeActive = settings.zenMode && activeTab === 'test' && !latestResult;
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans antialiased relative overflow-x-hidden selection:bg-indigo-600 selection:text-white w-full">
+    <div className="min-h-screen bg-white dark:bg-black text-slate-800 dark:text-zinc-100 flex flex-col font-sans antialiased relative overflow-x-hidden selection:bg-indigo-600 selection:text-white w-full transition-colors">
       {/* Frosted Glass Ambient Soft Blurred Light Orbs */}
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none" />
-      <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none" />
-      <div className="absolute -bottom-24 left-1/3 w-72 h-72 bg-emerald-50 rounded-full mix-blend-multiply filter blur-3xl opacity-60 pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 dark:bg-indigo-950/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 pointer-events-none" />
+      <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-100 dark:bg-purple-950/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 pointer-events-none" />
+      <div className="absolute -bottom-24 left-1/3 w-72 h-72 bg-emerald-50 dark:bg-emerald-950/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-60 pointer-events-none" />
 
       {/* Zen Mode Floating Exit Overlay Button */}
       {isZenModeActive ? (

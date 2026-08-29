@@ -103,26 +103,26 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
   const nextNeedsShift = requiresShift(nextChar || '');
 
   return (
-    <div className="w-full flex flex-col items-center gap-3 p-4 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm my-4 transition-all">
+    <div className="w-full flex flex-col items-center gap-3 p-4 rounded-3xl bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm my-4 transition-colors">
       
       {/* Top Controls Bar: Finger Guidance & Heatmap Toggle */}
-      <div className="w-full flex flex-wrap items-center justify-between gap-2 px-2 sm:px-4 py-2 rounded-2xl bg-white/50 border border-white/40 text-xs font-semibold text-slate-700">
+      <div className="w-full flex flex-wrap items-center justify-between gap-2 px-2 sm:px-4 py-2 rounded-2xl bg-white/50 dark:bg-zinc-900/70 border border-slate-200/40 dark:border-zinc-800/60 text-xs font-semibold text-slate-700 dark:text-zinc-300">
         {/* Finger Guidance Banner */}
         {showFingerGuide && targetFingerInfo ? (
           <div className="flex items-center gap-2">
-            <Hand className="w-4 h-4 text-indigo-600 animate-bounce shrink-0" />
+            <Hand className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-bounce shrink-0" />
             <span className="hidden sm:inline">Target:</span>
-            <span className="font-extrabold text-xs sm:text-sm px-2 py-0.5 rounded-lg bg-indigo-600 text-white shadow-sm uppercase">
+            <span className="font-extrabold text-xs sm:text-sm px-2 py-0.5 rounded-lg bg-indigo-600 dark:bg-indigo-500 text-white shadow-sm uppercase">
               {activeChar === ' ' ? 'SPACEBAR' : activeChar}
             </span>
-            <span className="text-slate-400 font-normal">|</span>
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/80 border border-white/60 font-bold text-[11px]">
+            <span className="text-slate-400 dark:text-zinc-600 font-normal">|</span>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/80 dark:bg-zinc-800/80 border border-slate-200/60 dark:border-zinc-700/60 font-bold text-[11px]">
               <span className={`w-2 h-2 rounded-full ${targetFingerInfo.color}`} />
-              <span className="text-slate-800">{targetFingerInfo.label}</span>
+              <span className="text-slate-800 dark:text-zinc-200">{targetFingerInfo.label}</span>
             </div>
           </div>
         ) : (
-          <div className="text-slate-500 font-medium">Virtual Keyboard</div>
+          <div className="text-slate-500 dark:text-zinc-400 font-medium">Virtual Keyboard</div>
         )}
 
         {/* Heatmap Mode Toggle Button */}
@@ -130,16 +130,16 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
           {totalErrors > 0 && (
             <button
               onClick={() => setShowHeatmap(!showHeatmap)}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl font-bold text-xs transition-all border ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl font-bold text-xs transition-all border cursor-pointer ${
                 showHeatmap
-                  ? 'bg-rose-500 text-white border-rose-600 shadow-md shadow-rose-200'
-                  : 'bg-white/80 hover:bg-white text-slate-700 border-slate-200'
+                  ? 'bg-rose-500 text-white border-rose-600 shadow-md shadow-rose-500/30'
+                  : 'bg-white/80 dark:bg-zinc-800/80 hover:bg-white dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-zinc-700'
               }`}
             >
               <Flame className={`w-3.5 h-3.5 ${showHeatmap ? 'text-white' : 'text-rose-500'}`} />
               <span>{showHeatmap ? 'Heatmap Mode ON' : 'Show Error Heatmap'}</span>
               {totalErrors > 0 && (
-                <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-rose-100 text-rose-800 text-[10px]">
+                <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 text-[10px]">
                   {totalErrors} errs
                 </span>
               )}
@@ -183,12 +183,12 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
                   key={`${rowIndex}-${keyIndex}`}
                   className={`relative flex items-center justify-center rounded-xl transition-all duration-150 border ${widthClass} ${
                     isTarget
-                      ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-300 scale-110 z-10 font-black'
+                      ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500 shadow-lg shadow-indigo-500/40 scale-110 z-10 font-black'
                       : isNext
-                      ? 'bg-indigo-100/80 text-indigo-900 border-indigo-200 font-bold scale-[1.03]'
+                      ? 'bg-indigo-100/80 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-200 border-indigo-200 dark:border-indigo-800 font-bold scale-[1.03]'
                       : heatmapStyle
                       ? heatmapStyle.bg
-                      : 'bg-white/80 text-slate-700 border-white/60 hover:bg-white shadow-sm'
+                      : 'bg-white/80 dark:bg-zinc-900/90 text-slate-700 dark:text-zinc-300 border-slate-200/60 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-800 shadow-sm'
                   }`}
                 >
                   <span className="capitalize text-[11px] sm:text-xs">
@@ -197,7 +197,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 
                   {/* Heatmap Error Count Badge */}
                   {showHeatmap && heatmapStyle && (
-                    <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-slate-900 text-white text-[9px] font-extrabold shadow">
+                    <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-slate-900 dark:bg-black text-white text-[9px] font-extrabold shadow">
                       {heatmapStyle.badge}
                     </span>
                   )}
@@ -217,8 +217,8 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
 
       {/* Legend */}
       {showHeatmap ? (
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-[11px] text-slate-600 font-medium">
-          <span className="flex items-center gap-1 font-bold text-slate-700">
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-[11px] text-slate-600 dark:text-zinc-400 font-medium">
+          <span className="flex items-center gap-1 font-bold text-slate-700 dark:text-zinc-300">
             <Flame className="w-3.5 h-3.5 text-rose-500" /> Error Heatmap Density:
           </span>
           <span className="flex items-center gap-1">
@@ -232,7 +232,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
           </span>
         </div>
       ) : (
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[11px] text-slate-500 font-medium">
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-rose-500" /> Pinky
           </span>
