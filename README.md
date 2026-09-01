@@ -208,6 +208,4 @@ This project is licensed under the **MIT License**. Feel free to use, customize,
 
 **⭐ If VelocisType helped you type faster, consider starring the repo — it genuinely helps.**
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,100:1d4ed8&height=120&section=footer" width="100%"/>
-
 </div>
