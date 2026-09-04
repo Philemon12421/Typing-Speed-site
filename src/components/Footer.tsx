@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="w-full bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl text-slate-600 dark:text-zinc-400 border-t border-slate-200/60 dark:border-zinc-800/80 mt-auto text-xs transition-colors shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
+    <footer className="w-full bg-white/60 dark:bg-black text-slate-600 dark:text-zinc-400 border-t border-slate-200/60 dark:border-zinc-800 mt-auto text-xs transition-colors shadow-[0_-8px_32px_rgba(15,23,42,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col gap-6">
         
         {/* GitHub Open Source Strip & Socials */}

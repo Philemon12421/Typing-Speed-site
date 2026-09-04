@@ -223,7 +223,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 dark:bg-zinc-950/80 backdrop-blur-xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm animate-in fade-in zoom-in-95 duration-300 transition-colors">
+    <div className="w-full max-w-4xl mx-auto my-6 flex flex-col gap-6 p-6 sm:p-8 rounded-3xl bg-white/60 dark:bg-black border border-slate-200/60 dark:border-zinc-800 shadow-sm animate-in fade-in zoom-in-95 duration-300 transition-colors">
       
       {/* Header Badge */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200/60 dark:border-zinc-800/80 pb-6">

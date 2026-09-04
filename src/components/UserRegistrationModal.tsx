@@ -63,7 +63,7 @@ export const UserRegistrationModal: React.FC<UserRegistrationModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white dark:bg-zinc-950 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-5 text-slate-800 dark:text-zinc-100 transition-colors">
+      <div className="relative w-full max-w-md bg-white dark:bg-black rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-5 text-slate-800 dark:text-zinc-100 transition-colors">
         
         {/* Close Button */}
         <button

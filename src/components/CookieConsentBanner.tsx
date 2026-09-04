@@ -159,21 +159,21 @@ export const CookieConsentBanner: React.FC<{
           aria-modal="true"
           className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
         >
-          <div className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 font-sans animate-in zoom-in-95 duration-200 text-slate-800">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4">
+          <div className="relative w-full max-w-lg bg-white dark:bg-black rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-zinc-800 font-sans animate-in zoom-in-95 duration-200 text-slate-800 dark:text-zinc-100">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-4 mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-200/50 dark:border-indigo-800/50">
                   <Shield className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">Cookie & Privacy Settings</h3>
-                  <p className="text-xs text-slate-500">Manage consent for cookies and local storage items</p>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-zinc-100">Cookie & Privacy Settings</h3>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400">Manage consent for cookies and local storage items</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowPreferencesModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center text-slate-500 dark:text-zinc-400 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -181,23 +181,23 @@ export const CookieConsentBanner: React.FC<{
 
             <div className="space-y-4 text-xs">
               {/* Essential */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-3">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 flex items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-slate-900 text-sm">Essential Storage & Functions</span>
-                    <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-mono font-bold uppercase">Always Active</span>
+                    <span className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm">Essential Storage & Functions</span>
+                    <span className="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 text-[10px] font-mono font-bold uppercase">Always Active</span>
                   </div>
-                  <p className="text-slate-600">
+                  <p className="text-slate-600 dark:text-zinc-400">
                     Required for basic site operation, local WPM test history storage, user sound preferences, and session state. These cannot be disabled.
                   </p>
                 </div>
               </div>
 
               {/* Analytics */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-3">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 flex items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <span className="font-extrabold text-slate-900 text-sm">Performance & Analytics</span>
-                  <p className="text-slate-600">
+                  <span className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm">Performance & Analytics</span>
+                  <p className="text-slate-600 dark:text-zinc-400">
                     Allows us to count visits and traffic sources to measure and improve our typing benchmark speed and platform performance.
                   </p>
                 </div>
@@ -210,10 +210,10 @@ export const CookieConsentBanner: React.FC<{
               </div>
 
               {/* Advertising */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-3">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 flex items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <span className="font-extrabold text-slate-900 text-sm">Advertising & Google AdSense</span>
-                  <p className="text-slate-600">
+                  <span className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm">Advertising & Google AdSense</span>
+                  <p className="text-slate-600 dark:text-zinc-400">
                     Used by Google and certified advertising partners to deliver relevant, non-intrusive ads that keep Typerca 100% free for all typists worldwide.
                   </p>
                 </div>
@@ -226,11 +226,11 @@ export const CookieConsentBanner: React.FC<{
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={onOpenPrivacyPolicy}
-                className="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
               >
                 Privacy Notice
                 <ExternalLink className="w-3 h-3" />
@@ -240,14 +240,14 @@ export const CookieConsentBanner: React.FC<{
                 <button
                   type="button"
                   onClick={handleRejectNonEssential}
-                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all"
+                  className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs transition-all cursor-pointer"
                 >
                   Reject All Optional
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveCustomPreferences}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-600/30 transition-all cursor-pointer"
                 >
                   Save Preferences
                 </button>

@@ -332,13 +332,13 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
       </div>
 
       {/* Analytics Sub-Tab Navigation Bar */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 border border-slate-200/80 shadow-xs overflow-x-auto">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs overflow-x-auto">
         <button
           onClick={() => setActiveSubTab('overview')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
             activeSubTab === 'overview'
-              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200/60 dark:border-zinc-700'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100'
           }`}
         >
           <TrendingUp className="w-4 h-4" />
@@ -347,10 +347,10 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
         <button
           onClick={() => setActiveSubTab('badges')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
             activeSubTab === 'badges'
-              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200/60 dark:border-zinc-700'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100'
           }`}
         >
           <Award className="w-4 h-4 text-amber-500" />
@@ -359,10 +359,10 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
         <button
           onClick={() => setActiveSubTab('leaderboard')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
             activeSubTab === 'leaderboard'
-              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200/60 dark:border-zinc-700'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100'
           }`}
         >
           <Crown className="w-4 h-4 text-amber-500" />
@@ -371,10 +371,10 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
         <button
           onClick={() => setActiveSubTab('history')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
             activeSubTab === 'history'
-              ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200/60 dark:border-zinc-700'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100'
           }`}
         >
           <BarChart2 className="w-4 h-4" />
@@ -387,65 +387,65 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
         <div className="flex flex-col gap-6">
           {/* Aggregate Stats Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-indigo-700 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-900/60 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
                 <span>Best Speed</span>
                 <Trophy className="w-4 h-4 text-amber-500" />
               </div>
-              <span className="text-3xl font-black text-indigo-900">{analytics.bestWpm}</span>
-              <span className="text-[10px] text-indigo-600 font-semibold uppercase">WPM</span>
+              <span className="text-3xl font-black text-indigo-900 dark:text-indigo-100">{analytics.bestWpm}</span>
+              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold uppercase">WPM</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-black border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400 text-xs font-semibold">
                 <span>Avg Speed</span>
-                <Zap className="w-4 h-4 text-indigo-600" />
+                <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <span className="text-3xl font-black text-slate-800">{analytics.avgWpm}</span>
-              <span className="text-[10px] text-slate-500 font-semibold uppercase">WPM</span>
+              <span className="text-3xl font-black text-slate-800 dark:text-zinc-100">{analytics.avgWpm}</span>
+              <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold uppercase">WPM</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-emerald-700 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/60 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
                 <span>Avg Accuracy</span>
-                <Target className="w-4 h-4 text-emerald-600" />
+                <Target className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <span className="text-3xl font-black text-emerald-900">{analytics.avgAccuracy}%</span>
-              <span className="text-[10px] text-emerald-600 font-semibold uppercase">Overall</span>
+              <span className="text-3xl font-black text-emerald-900 dark:text-emerald-100">{analytics.avgAccuracy}%</span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Overall</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-orange-50/80 border border-orange-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-orange-700 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-orange-50/80 dark:bg-orange-950/30 border border-orange-200/80 dark:border-orange-900/60 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-orange-700 dark:text-orange-300 text-xs font-semibold">
                 <span>Streak</span>
                 <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
               </div>
-              <span className="text-3xl font-black text-orange-900">{analytics.currentStreakDays}</span>
-              <span className="text-[10px] text-orange-600 font-semibold uppercase">Days</span>
+              <span className="text-3xl font-black text-orange-900 dark:text-orange-100">{analytics.currentStreakDays}</span>
+              <span className="text-[10px] text-orange-600 dark:text-orange-400 font-semibold uppercase">Days</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-black border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400 text-xs font-semibold">
                 <span>Total Tests</span>
-                <BarChart2 className="w-4 h-4 text-slate-500" />
+                <BarChart2 className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
               </div>
-              <span className="text-3xl font-black text-slate-800">{analytics.totalTests}</span>
-              <span className="text-[10px] text-slate-500 font-semibold uppercase">Completed</span>
+              <span className="text-3xl font-black text-slate-800 dark:text-zinc-100">{analytics.totalTests}</span>
+              <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold uppercase">Completed</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 flex flex-col gap-1">
-              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold">
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-black border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-1">
+              <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400 text-xs font-semibold">
                 <span>Practice Time</span>
-                <Clock className="w-4 h-4 text-slate-500" />
+                <Clock className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
               </div>
-              <span className="text-2xl font-black text-slate-800">{Math.round(analytics.totalTimeSeconds / 60)}m</span>
-              <span className="text-[10px] text-slate-500 font-semibold uppercase">Total</span>
+              <span className="text-2xl font-black text-slate-800 dark:text-zinc-100">{Math.round(analytics.totalTimeSeconds / 60)}m</span>
+              <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold uppercase">Total</span>
             </div>
           </div>
 
           {/* Chronological WPM Progression Chart */}
-          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-4">
-            <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-indigo-600" />
+          <div className="p-6 rounded-3xl bg-white/80 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs flex flex-col gap-4">
+            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>WPM Velocity Progression</span>
             </h3>
 
@@ -453,26 +453,26 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
               <div className="w-full h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:stroke-zinc-800" />
                     <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} />
                     <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0f172a',
-                        border: 'none',
+                        backgroundColor: '#000000',
+                        border: '1px solid #27272a',
                         borderRadius: '16px',
-                        color: '#fff',
+                        color: '#f4f4f5',
                         fontSize: '12px',
                         fontWeight: 'bold',
                       }}
                     />
-                    <Line type="monotone" dataKey="wpm" name="Net WPM" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4, fill: '#4f46e5' }} />
-                    <Line type="monotone" dataKey="rawWpm" name="Raw WPM" stroke="#94a3b8" strokeWidth={2} strokeDasharray="4 4" dot={false} />
+                    <Line type="monotone" dataKey="wpm" name="Net WPM" stroke="#6366f1" strokeWidth={3} dot={{ r: 4, fill: '#6366f1' }} />
+                    <Line type="monotone" dataKey="rawWpm" name="Raw WPM" stroke="#71717a" strokeWidth={2} strokeDasharray="4 4" dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="p-8 text-center text-xs font-semibold text-slate-500">No test data recorded yet. Complete a test to view progression trends!</div>
+              <div className="p-8 text-center text-xs font-semibold text-slate-500 dark:text-zinc-400">No test data recorded yet. Complete a test to view progression trends!</div>
             )}
           </div>
         </div>
@@ -481,19 +481,19 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
       {/* SUB-VIEW 2: MILESTONE BADGES */}
       {activeSubTab === 'badges' && (
         <div className="flex flex-col gap-6">
-          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-2">
+          <div className="p-6 rounded-3xl bg-white/80 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <h2 className="text-lg font-extrabold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
                   <Award className="w-5 h-5 text-amber-500" />
                   <span>Milestone Badges & Speed Achievements</span>
                 </h2>
-                <p className="text-xs text-slate-500 font-medium">
+                <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium">
                   Unlock permanent badges as you increase your WPM velocity, test counts, and accuracy streak.
                 </p>
               </div>
 
-              <div className="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-extrabold text-xs">
+              <div className="px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 font-extrabold text-xs">
                 {unlockedCount} / {MILESTONE_BADGES_DEF.length} Unlocked
               </div>
             </div>
@@ -505,20 +505,20 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                   key={badge.id}
                   className={`p-5 rounded-3xl border transition-all relative overflow-hidden flex flex-col justify-between gap-4 ${
                     badge.isUnlocked
-                      ? 'bg-gradient-to-br from-white via-indigo-50/30 to-amber-50/20 border-indigo-200 shadow-md'
-                      : 'bg-slate-50/80 border-slate-200/80 opacity-70'
+                      ? 'bg-gradient-to-br from-white via-indigo-50/30 to-amber-50/20 dark:from-black dark:via-indigo-950/25 dark:to-zinc-950 border-indigo-200 dark:border-indigo-900/60 shadow-md dark:shadow-none'
+                      : 'bg-slate-50/80 dark:bg-zinc-950/80 border-slate-200/80 dark:border-zinc-800/80 opacity-70'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm ${
-                        badge.isUnlocked ? 'bg-indigo-600/10 border border-indigo-200' : 'bg-slate-200/80 text-slate-400'
+                        badge.isUnlocked ? 'bg-indigo-600/10 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800/60' : 'bg-slate-200/80 dark:bg-zinc-800 text-slate-400 dark:text-zinc-500'
                       }`}>
                         {badge.iconSymbol}
                       </div>
                       <div>
-                        <h3 className="text-sm font-extrabold text-slate-900">{badge.title}</h3>
-                        <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200/60 inline-block mt-0.5">
+                        <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">{badge.title}</h3>
+                        <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md border border-indigo-200/60 dark:border-indigo-800/60 inline-block mt-0.5">
                           {badge.badgeLabel}
                         </span>
                       </div>
@@ -540,21 +540,21 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                         </span>
                       </div>
                     ) : (
-                      <span className="p-1.5 rounded-full bg-slate-200 text-slate-500 text-[10px]">
+                      <span className="p-1.5 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 text-[10px]">
                         <Lock className="w-3.5 h-3.5" />
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs font-medium text-slate-600 leading-snug">{badge.description}</p>
+                  <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 leading-snug">{badge.description}</p>
 
                   {/* Progress Bar */}
                   <div className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-zinc-400">
                       <span>Progress</span>
                       <span>{badge.currentValue} / {badge.reqValue}</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-zinc-800 overflow-hidden">
                       <div
                         className={`h-full rounded-full bg-gradient-to-r ${badge.color}`}
                         style={{ width: `${badge.progressPercent}%` }}
@@ -571,16 +571,16 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
       {/* SUB-VIEW 3: WEEKLY LEADERBOARD */}
       {activeSubTab === 'leaderboard' && (
         <div className="flex flex-col gap-6">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200/80 shadow-xs flex flex-col gap-6">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white/90 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs flex flex-col gap-6">
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-zinc-800 pb-5">
               <div>
-                <div className="flex items-center gap-2 text-xs font-extrabold text-amber-600 uppercase tracking-wider">
+                <div className="flex items-center gap-2 text-xs font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
                   <Crown className="w-4 h-4 text-amber-500" />
                   <span>Typerca Weekly Speed Sprint</span>
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 mt-1">Global Weekly Typists Leaderboard</h2>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-zinc-100 mt-1">Global Weekly Typists Leaderboard</h2>
+                <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium mt-0.5">
                   Top performing typists this week. Register your handle to automatically claim your ranking.
                 </p>
               </div>
@@ -588,7 +588,7 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
               {!isUserRegistered && (
                 <button
                   onClick={onOpenRegisterModal}
-                  className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2 shrink-0"
+                  className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 dark:shadow-none transition-all active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
                 >
                   <User className="w-4 h-4" />
                   <span>Register Username to Join</span>
@@ -598,19 +598,19 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
             {/* Leaderboard Table / Empty State */}
             {fullLeaderboardList.length === 0 ? (
-              <div className="p-10 text-center flex flex-col items-center justify-center gap-3 bg-slate-50/80 rounded-2xl border border-dashed border-slate-300/80 my-2">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-200 flex items-center justify-center text-amber-500 shadow-xs">
+              <div className="p-10 text-center flex flex-col items-center justify-center gap-3 bg-slate-50/80 dark:bg-zinc-950 rounded-2xl border border-dashed border-slate-300/80 dark:border-zinc-800 my-2">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-200 dark:border-amber-800/60 flex items-center justify-center text-amber-500 shadow-xs">
                   <Crown className="w-7 h-7" />
                 </div>
                 <div className="max-w-md">
-                  <h3 className="text-base font-extrabold text-slate-900">No Registered Typists On Leaderboard Yet</h3>
-                  <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-zinc-100">No Registered Typists On Leaderboard Yet</h3>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium mt-1 leading-relaxed">
                     This weekly board displays scores exclusively from real registered typists. Claim your username and complete a test to take Rank #1!
                   </p>
                 </div>
                 <button
                   onClick={onOpenRegisterModal}
-                  className="mt-2 px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2"
+                  className="mt-2 px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 dark:shadow-none transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
                 >
                   <UserCheck className="w-4 h-4" />
                   <span>Register Username to Claim Rank #1</span>
@@ -620,41 +620,41 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
               <div className="flex flex-col gap-4">
                 {/* Gold Medal Champion Spotlight Card */}
                 {fullLeaderboardList.length > 0 && (
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-300/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 dark:from-amber-950/30 dark:via-yellow-950/20 dark:to-amber-950/30 border border-amber-300/80 dark:border-amber-700/50 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-3.5">
                       <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-400 to-yellow-500 text-amber-950 flex items-center justify-center font-black text-2xl shadow-md ring-4 ring-amber-300/40">
                         👑
                       </div>
                       <div>
-                        <div className="flex items-center gap-2 text-[11px] font-black text-amber-800 uppercase tracking-wider">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                        <div className="flex items-center gap-2 text-[11px] font-black text-amber-800 dark:text-amber-400 uppercase tracking-wider">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                           <span>Weekly Gold Medal Champion</span>
                         </div>
-                        <div className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2 mt-0.5">
+                        <div className="text-base sm:text-lg font-black text-slate-900 dark:text-zinc-100 flex items-center gap-2 mt-0.5">
                           <span>{fullLeaderboardList[0].username}</span>
-                          <span className="text-xs text-amber-800 font-mono font-bold">{fullLeaderboardList[0].uniqueHandle}</span>
+                          <span className="text-xs text-amber-800 dark:text-amber-400 font-mono font-bold">{fullLeaderboardList[0].uniqueHandle}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/90 backdrop-blur-xs px-4 py-2 rounded-xl border border-amber-200/80 shadow-2xs">
+                    <div className="flex items-center gap-4 bg-white/90 dark:bg-zinc-950 backdrop-blur-xs px-4 py-2 rounded-xl border border-amber-200/80 dark:border-amber-700/50 shadow-2xs">
                       <div className="text-center">
-                        <div className="text-[10px] font-bold text-slate-500 uppercase">Top Speed</div>
-                        <div className="text-base font-black text-indigo-950">{fullLeaderboardList[0].wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span></div>
+                        <div className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase">Top Speed</div>
+                        <div className="text-base font-black text-indigo-950 dark:text-indigo-300">{fullLeaderboardList[0].wpm} <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">WPM</span></div>
                       </div>
-                      <div className="h-6 w-px bg-amber-200" />
+                      <div className="h-6 w-px bg-amber-200 dark:bg-amber-800/60" />
                       <div className="text-center">
-                        <div className="text-[10px] font-bold text-slate-500 uppercase">Accuracy</div>
-                        <div className="text-base font-black text-emerald-700">{fullLeaderboardList[0].accuracy}%</div>
+                        <div className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase">Accuracy</div>
+                        <div className="text-base font-black text-emerald-700 dark:text-emerald-400">{fullLeaderboardList[0].accuracy}%</div>
                       </div>
                     </div>
                   </div>
                 )}
 
-                <div className="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-2xs">
+                <div className="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-zinc-800 shadow-2xs">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200/80 text-[11px] font-black uppercase text-slate-500 tracking-wider">
+                      <tr className="bg-slate-50 dark:bg-zinc-950 border-b border-slate-200/80 dark:border-zinc-800 text-[11px] font-black uppercase text-slate-500 dark:text-zinc-400 tracking-wider">
                         <th className="p-3.5 pl-5">Rank</th>
                         <th className="p-3.5">Typist</th>
                         <th className="p-3.5 text-center">Net WPM</th>
@@ -663,7 +663,7 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                         <th className="p-3.5 text-right pr-5">Member Joined</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200/60 text-xs font-semibold text-slate-700">
+                    <tbody className="divide-y divide-slate-200/60 dark:divide-zinc-800 text-xs font-semibold text-slate-700 dark:text-zinc-300">
                       {fullLeaderboardList.map((entry) => {
                         const isTop1 = entry.rank === 1;
                         const isTop2 = entry.rank === 2;
@@ -674,8 +674,8 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                             key={entry.id}
                             className={`transition-colors ${
                               entry.isCurrentUser
-                                ? 'bg-indigo-50/90 font-bold border-l-4 border-l-indigo-600'
-                                : 'hover:bg-slate-50/80'
+                                ? 'bg-indigo-50/90 dark:bg-indigo-950/40 font-bold border-l-4 border-l-indigo-600 dark:border-l-indigo-500'
+                                : 'hover:bg-slate-50/80 dark:hover:bg-zinc-900/60'
                             }`}
                           >
                             {/* Rank */}
@@ -698,53 +698,53 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                                   <span>🥉 #3 Bronze</span>
                                 </div>
                               )}
-                              {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 pl-2">#{entry.rank}</span>}
+                              {!isTop1 && !isTop2 && !isTop3 && <span className="text-slate-500 dark:text-zinc-400 pl-2">#{entry.rank}</span>}
                             </td>
 
                             {/* Typist Name & Badges cleanly aligned */}
                             <td className="p-3.5">
                               <div className="flex items-center gap-3">
                                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs uppercase text-white shrink-0 shadow-xs ${
-                                  entry.isCurrentUser ? 'bg-indigo-600 ring-2 ring-indigo-300' : 'bg-slate-800'
+                                  entry.isCurrentUser ? 'bg-indigo-600 ring-2 ring-indigo-300 dark:ring-indigo-700' : 'bg-slate-800 dark:bg-zinc-800'
                                 }`}>
                                   {entry.username.charAt(0)}
                                 </div>
                                 <div className="flex flex-col">
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="font-extrabold text-slate-900 text-sm">
+                                    <span className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm">
                                       {entry.username}
                                     </span>
                                     {entry.isCurrentUser && (
-                                      <span className="px-1.5 py-0.5 rounded bg-indigo-100 border border-indigo-200 text-indigo-900 text-[9px] font-black uppercase tracking-wider">
+                                      <span className="px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-300 text-[9px] font-black uppercase tracking-wider">
                                         YOU
                                       </span>
                                     )}
-                                    <span className="px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200/80 font-extrabold text-amber-900 text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                                    <span className="px-2 py-0.5 rounded-lg bg-amber-50 dark:bg-amber-950/50 border border-amber-200/80 dark:border-amber-800/60 font-extrabold text-amber-900 dark:text-amber-300 text-[11px] inline-flex items-center gap-1 shadow-2xs">
                                       {entry.badge}
                                     </span>
                                   </div>
-                                  <span className="text-[10px] text-slate-400 font-mono mt-0.5">{entry.uniqueHandle}</span>
+                                  <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono mt-0.5">{entry.uniqueHandle}</span>
                                 </div>
                               </div>
                             </td>
 
                             {/* WPM */}
-                            <td className="p-3.5 text-center font-black text-indigo-950 text-base">
-                              {entry.wpm} <span className="text-[10px] font-bold text-indigo-600">WPM</span>
+                            <td className="p-3.5 text-center font-black text-indigo-950 dark:text-indigo-300 text-base">
+                              {entry.wpm} <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">WPM</span>
                             </td>
 
                             {/* Accuracy */}
-                            <td className="p-3.5 text-center font-extrabold text-emerald-700">
+                            <td className="p-3.5 text-center font-extrabold text-emerald-700 dark:text-emerald-400">
                               {entry.accuracy}%
                             </td>
 
                             {/* Tests */}
-                            <td className="p-3.5 text-center font-bold text-slate-600">
+                            <td className="p-3.5 text-center font-bold text-slate-600 dark:text-zinc-400">
                               {entry.testsCount}
                             </td>
 
                             {/* Date */}
-                            <td className="p-3.5 text-right pr-5 font-mono text-[11px] text-slate-500">
+                            <td className="p-3.5 text-right pr-5 font-mono text-[11px] text-slate-500 dark:text-zinc-500">
                               {entry.registeredDate}
                             </td>
                           </tr>
@@ -762,24 +762,24 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
       {/* SUB-VIEW 4: FULL TEST HISTORY LOGS */}
       {activeSubTab === 'history' && (
         <div className="flex flex-col gap-6">
-          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col gap-4">
+          <div className="p-6 rounded-3xl bg-white/80 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-extrabold text-slate-900">Historical Test Log</h3>
-                <p className="text-xs text-slate-500 font-medium">Export, search, or inspect all completed tests.</p>
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-zinc-100">Historical Test Log</h3>
+                <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium">Export, search, or inspect all completed tests.</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 text-xs font-bold cursor-pointer"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>CSV</span>
                 </button>
                 <button
                   onClick={handleExportJSON}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-800 text-xs font-bold cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>JSON</span>
@@ -789,20 +789,20 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
 
             {/* Filter Search */}
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 dark:text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search history by mode, WPM, or text..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold outline-none focus:bg-white focus:border-indigo-500"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-zinc-800 text-xs font-bold outline-none focus:bg-white focus:border-indigo-500 focus:dark:bg-black focus:dark:border-indigo-500 text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500"
               />
             </div>
 
             {/* History Table */}
-            <div className="overflow-x-auto rounded-2xl border border-slate-200/80">
-              <table className="w-full text-left text-xs font-semibold text-slate-700">
-                <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 border-b">
+            <div className="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-zinc-800">
+              <table className="w-full text-left text-xs font-semibold text-slate-700 dark:text-zinc-300">
+                <thead className="bg-slate-50 dark:bg-zinc-950 text-[10px] font-black uppercase text-slate-400 dark:text-zinc-400 border-b border-slate-200/80 dark:border-zinc-800">
                   <tr>
                     <th className="p-3">Date</th>
                     <th className="p-3">WPM</th>
@@ -811,17 +811,17 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                     <th className="p-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
                   {filteredResults.map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50">
-                      <td className="p-3 text-slate-500">{new Date(r.timestamp).toLocaleDateString()}</td>
-                      <td className="p-3 font-black text-indigo-950">{r.wpm} WPM</td>
-                      <td className="p-3 font-bold text-emerald-700">{r.accuracy}%</td>
+                    <tr key={r.id} className="hover:bg-slate-50 dark:hover:bg-zinc-900/60 transition-colors">
+                      <td className="p-3 text-slate-500 dark:text-zinc-400">{new Date(r.timestamp).toLocaleDateString()}</td>
+                      <td className="p-3 font-black text-indigo-950 dark:text-indigo-300">{r.wpm} WPM</td>
+                      <td className="p-3 font-bold text-emerald-700 dark:text-emerald-400">{r.accuracy}%</td>
                       <td className="p-3 capitalize">{r.mode} ({r.modeDetail})</td>
                       <td className="p-3 text-right">
                         <button
                           onClick={() => handleDelete(r.id)}
-                          className="p-1 rounded-lg text-rose-500 hover:bg-rose-50"
+                          className="p-1 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>

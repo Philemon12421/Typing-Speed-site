@@ -91,13 +91,13 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
   const getDifficultyBadge = (diff: string) => {
     switch (diff) {
       case 'easy':
-        return <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">Easy</span>;
+        return <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 dark:border dark:border-emerald-800/60 text-[10px] font-bold uppercase">Easy</span>;
       case 'medium':
-        return <span className="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold uppercase">Medium</span>;
+        return <span className="px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 dark:border dark:border-sky-800/60 text-[10px] font-bold uppercase">Medium</span>;
       case 'hard':
-        return <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold uppercase">Hard</span>;
+        return <span className="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 dark:border dark:border-rose-800/60 text-[10px] font-bold uppercase">Hard</span>;
       case 'legendary':
-        return <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-extrabold uppercase animate-pulse">Legendary</span>;
+        return <span className="px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/80 text-[10px] font-extrabold uppercase animate-pulse">Legendary</span>;
       default:
         return null;
     }
@@ -107,7 +107,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-6 p-4 sm:p-8 animate-in fade-in duration-300">
       
       {/* Header Banner & Level XP Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-800 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-800 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 dark:border dark:border-zinc-800">
         
         {/* Background Decorative Glow */}
         <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -159,18 +159,18 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
         
         {/* Search Bar */}
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-slate-400 dark:text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search 1,000+ challenges (e.g. Level 50, Code, 100 WPM)..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs transition-all"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/80 dark:bg-black border border-slate-200 dark:border-zinc-800 text-xs font-medium text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-extrabold text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-extrabold text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300"
             >
               ✕
             </button>
@@ -178,15 +178,15 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
         </div>
 
         {/* Tier Filters */}
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/70 border border-slate-200/80 backdrop-blur-md shadow-xs overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/70 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs overflow-x-auto scrollbar-none">
           {(['all', 'easy', 'medium', 'hard', 'legendary', 'passed'] as const).map((filter) => (
             <button
               key={filter}
               onClick={() => handleFilterChange(filter)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize whitespace-nowrap transition-all ${
                 selectedFilter === filter
-                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200 dark:shadow-none'
+                  : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 hover:bg-white/60 dark:hover:bg-zinc-900'
               }`}
             >
               {filter === 'passed' ? `Passed (${completedIds.length})` : filter}
@@ -196,25 +196,25 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
       </div>
 
       {/* Counter & Page Info Header */}
-      <div className="flex items-center justify-between text-xs font-semibold text-slate-500 px-1">
+      <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-zinc-400 px-1">
         <div className="flex items-center gap-2">
-          <Layers className="w-4 h-4 text-indigo-600" />
-          <span>Showing <strong className="text-slate-900">{filteredChallenges.length}</strong> matching challenges</span>
+          <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <span>Showing <strong className="text-slate-900 dark:text-zinc-100">{filteredChallenges.length}</strong> matching challenges</span>
         </div>
         <span>Page {pageIndex} of {totalPages}</span>
       </div>
 
       {/* Challenges Grid */}
       {paginatedChallenges.length === 0 ? (
-        <div className="p-12 text-center rounded-3xl bg-white/60 border border-slate-200 flex flex-col items-center justify-center gap-3">
-          <Search className="w-8 h-8 text-slate-300" />
-          <h3 className="text-lg font-bold text-slate-700">No challenges found</h3>
-          <p className="text-xs text-slate-500 max-w-sm">
+        <div className="p-12 text-center rounded-3xl bg-white/60 dark:bg-black border border-slate-200 dark:border-zinc-800 flex flex-col items-center justify-center gap-3">
+          <Search className="w-8 h-8 text-slate-300 dark:text-zinc-700" />
+          <h3 className="text-lg font-bold text-slate-700 dark:text-zinc-200">No challenges found</h3>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 max-w-sm">
             Try adjusting your search query or selecting a different difficulty filter above.
           </p>
           <button
             onClick={() => { setSelectedFilter('all'); setSearchQuery(''); }}
-            className="mt-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-200"
+            className="mt-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-200 dark:shadow-none transition-all cursor-pointer"
           >
             Reset Filters
           </button>
@@ -229,8 +229,8 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
                 key={challenge.id}
                 className={`p-5 rounded-3xl border transition-all relative flex flex-col justify-between gap-4 ${
                   isCompleted
-                    ? 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 border-emerald-300 shadow-xs'
-                    : 'bg-white/80 backdrop-blur-xl border-slate-200/80 hover:border-indigo-300 shadow-xs hover:shadow-md'
+                    ? 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 dark:from-emerald-950/25 dark:via-black dark:to-black border-emerald-300 dark:border-emerald-800/60 shadow-xs'
+                    : 'bg-white/80 dark:bg-black border-slate-200/80 dark:border-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-500/70 shadow-xs hover:shadow-md'
                 }`}
               >
                 <div>
@@ -238,57 +238,57 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
                   <div className="flex items-center justify-between gap-2 mb-2.5">
                     <div className="flex items-center gap-2.5">
                       <div className={`p-2.5 rounded-2xl flex items-center justify-center ${
-                        isCompleted ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200' : 'bg-slate-100 text-slate-700'
+                        isCompleted ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200 dark:shadow-none' : 'bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300'
                       }`}>
                         {getIconComponent(challenge.icon)}
                       </div>
                       <div>
-                        <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">{challenge.title}</h3>
+                        <h3 className="font-extrabold text-slate-900 dark:text-zinc-100 text-sm sm:text-base leading-tight">{challenge.title}</h3>
                         <div className="flex items-center gap-2 mt-1">
                           {getDifficultyBadge(challenge.difficulty)}
-                          <span className="text-[11px] font-bold text-indigo-600">+{challenge.xpReward} XP</span>
+                          <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400">+{challenge.xpReward} XP</span>
                         </div>
                       </div>
                     </div>
 
                     {isCompleted && (
-                      <div className="flex items-center gap-1 text-emerald-700 bg-emerald-100/90 px-2.5 py-1 rounded-xl font-bold text-[11px] shrink-0">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <div className="flex items-center gap-1 text-emerald-700 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-950/80 border dark:border-emerald-800/60 px-2.5 py-1 rounded-xl font-bold text-[11px] shrink-0">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span>Passed</span>
                       </div>
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium leading-relaxed">
                     {challenge.description}
                   </p>
 
                   {/* Target Criteria Pill */}
-                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-                    <span className="flex items-center gap-1 font-bold text-slate-900">
-                      <Zap className="w-3.5 h-3.5 text-indigo-600" /> Target: {challenge.targetWpm} WPM
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 dark:text-zinc-300 bg-slate-50 dark:bg-zinc-950 p-2.5 rounded-2xl border border-slate-200/80 dark:border-zinc-800">
+                    <span className="flex items-center gap-1 font-bold text-slate-900 dark:text-zinc-100">
+                      <Zap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" /> Target: {challenge.targetWpm} WPM
                     </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1 font-bold text-slate-900">
-                      <Target className="w-3.5 h-3.5 text-emerald-600" /> {challenge.targetAccuracy}% Accuracy
+                    <span className="flex items-center gap-1 font-bold text-slate-900 dark:text-zinc-100">
+                      <Target className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> {challenge.targetAccuracy}% Accuracy
                     </span>
                     <span>•</span>
-                    <span className="text-slate-500">{challenge.modeDetail}</span>
+                    <span className="text-slate-500 dark:text-zinc-400">{challenge.modeDetail}</span>
                   </div>
                 </div>
 
                 {/* Action Button */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="text-[11px] font-medium text-slate-400">
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-900 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-medium text-slate-400 dark:text-zinc-500">
                     {isCompleted ? 'Replay anytime' : 'Ready to start?'}
                   </span>
 
                   <button
                     onClick={() => onStartChallenge(challenge)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs transition-all active:scale-95 ${
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs transition-all active:scale-95 cursor-pointer ${
                       isCompleted
-                        ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200'
+                        ? 'bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 border border-transparent dark:border-zinc-800'
+                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 dark:shadow-none'
                     }`}
                   >
                     <Play className="w-3.5 h-3.5 fill-current" />
@@ -303,42 +303,42 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({
 
       {/* Pagination Bar */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between gap-2 pt-4 border-t border-slate-200/80 flex-wrap">
-          <div className="text-xs font-semibold text-slate-500">
-            Page <strong className="text-slate-800">{pageIndex}</strong> of <strong className="text-slate-800">{totalPages}</strong>
+        <div className="flex items-center justify-between gap-2 pt-4 border-t border-slate-200/80 dark:border-zinc-800 flex-wrap">
+          <div className="text-xs font-semibold text-slate-500 dark:text-zinc-400">
+            Page <strong className="text-slate-800 dark:text-zinc-200">{pageIndex}</strong> of <strong className="text-slate-800 dark:text-zinc-200">{totalPages}</strong>
           </div>
 
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setCurrentPage(1)}
               disabled={pageIndex === 1}
-              className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black text-xs font-bold text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               First
             </button>
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={pageIndex === 1}
-              className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-900 font-extrabold text-xs font-mono">
+            <span className="px-3 py-1 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-300 font-extrabold text-xs font-mono">
               {pageIndex} / {totalPages}
             </span>
 
             <button
               onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
               disabled={pageIndex === totalPages}
-              className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
               disabled={pageIndex === totalPages}
-              className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black text-xs font-bold text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               Last
             </button>

@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       {/* Top Header Navbar */}
-      <header className="sticky top-0 z-30 w-full backdrop-blur-md bg-white/80 dark:bg-black/85 border-b border-slate-200/80 dark:border-zinc-800/90 shadow-2xs transition-colors">
+      <header className="sticky top-0 z-30 w-full backdrop-blur-md bg-white/80 dark:bg-black border-b border-slate-200/80 dark:border-zinc-800 shadow-2xs transition-colors">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 max-w-full">
           
           {/* Brand Logo */}
@@ -140,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden sm:flex items-center gap-1 p-1 rounded-2xl bg-white/80 dark:bg-zinc-950/80 border border-slate-200/60 dark:border-zinc-800 backdrop-blur-md shadow-xs">
+          <nav className="hidden sm:flex items-center gap-1 p-1 rounded-2xl bg-white/80 dark:bg-black border border-slate-200/60 dark:border-zinc-800 shadow-xs">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
@@ -148,7 +148,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
-                    isActive ? 'text-white' : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-zinc-900/60'
+                    isActive ? 'text-white' : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-zinc-900'
                   }`}
                 >
                   {isActive && (
@@ -174,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div 
               onClick={onOpenGoalSoundModal}
               title={`Daily Goal: ${todayProgress.completed}/${todayProgress.target} ${todayProgress.unit} (${todayProgress.percent}% completed)`}
-              className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800 shadow-2xs cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-600 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white/90 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-2xs cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-600 transition-all"
             >
               <Target className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
               <div className="flex flex-col sm:gap-1">
@@ -184,7 +184,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
                 
                 {/* Framer Motion Progress Bar (Desktop & Tablet) */}
-                <div className="hidden sm:block w-16 sm:w-20 h-1.5 rounded-full bg-slate-100 dark:bg-zinc-800 overflow-hidden mt-0.5">
+                <div className="hidden sm:block w-16 sm:w-20 h-1.5 rounded-full bg-slate-100 dark:bg-zinc-900 overflow-hidden mt-0.5">
                   <motion.div
                     className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600"
                     initial={{ width: 0 }}
@@ -199,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div 
               onClick={() => setActiveTab('challenges')}
               title={`Challenge Progress: ${completedChallengesCount}/${totalChallengesCount} unlocked (${challengePercent}%)`}
-              className="hidden md:flex flex-col gap-1 px-3 py-1.5 rounded-2xl bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800 shadow-xs cursor-pointer hover:border-amber-300 dark:hover:border-amber-600 transition-all"
+              className="hidden md:flex flex-col gap-1 px-3 py-1.5 rounded-2xl bg-white/90 dark:bg-black border border-slate-200/80 dark:border-zinc-800 shadow-xs cursor-pointer hover:border-amber-300 dark:hover:border-amber-600 transition-all"
             >
               <div className="flex items-center justify-between gap-3 text-[11px] font-extrabold text-slate-800 dark:text-zinc-200">
                 <span className="flex items-center gap-1">
@@ -210,7 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               {/* Framer Motion Smooth Progress Bar */}
-              <div className="w-16 sm:w-20 h-1.5 rounded-full bg-slate-100 dark:bg-zinc-800 overflow-hidden">
+              <div className="w-16 sm:w-20 h-1.5 rounded-full bg-slate-100 dark:bg-zinc-900 overflow-hidden">
                 <motion.div
                   className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-500"
                   initial={{ width: 0 }}
@@ -233,8 +233,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   aria-expanded={isThemeDropdownOpen}
                   className={`flex items-center gap-1 sm:gap-1.5 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
                     isThemeDropdownOpen
-                      ? 'bg-indigo-50 dark:bg-zinc-800 border-indigo-400 dark:border-indigo-500 text-indigo-600 dark:text-indigo-300'
-                      : 'bg-white/80 dark:bg-zinc-900/90 border-slate-200/80 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-850 hover:border-slate-300 dark:hover:border-zinc-700'
+                      ? 'bg-indigo-50 dark:bg-zinc-900 border-indigo-400 dark:border-indigo-500 text-indigo-600 dark:text-indigo-300'
+                      : 'bg-white/80 dark:bg-black border-slate-200/80 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-950 hover:border-slate-300 dark:hover:border-zinc-700'
                   }`}
                 >
                   {getThemeIcon()}
@@ -256,7 +256,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15, ease: 'easeOut' }}
-                      className="absolute right-0 mt-1.5 w-56 sm:w-60 p-1.5 rounded-2xl bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 shadow-xl shadow-slate-900/10 dark:shadow-black/60 z-50 backdrop-blur-xl"
+                      className="absolute right-0 mt-1.5 w-56 sm:w-60 p-1.5 rounded-2xl bg-white dark:bg-black border border-slate-200/90 dark:border-zinc-800 shadow-xl shadow-slate-900/10 dark:shadow-black/80 z-50"
                     >
                       <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-zinc-800/80 mb-1">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
@@ -279,7 +279,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               }`}
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
-                                <div className="p-1 rounded-lg bg-white dark:bg-zinc-900 shadow-2xs border border-slate-200/60 dark:border-zinc-800 shrink-0">
+                                <div className="p-1 rounded-lg bg-white dark:bg-zinc-950 shadow-2xs border border-slate-200/60 dark:border-zinc-800 shrink-0">
                                   {opt.icon}
                                 </div>
                                 <div className="flex flex-col min-w-0">
@@ -308,7 +308,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onOpenGoalSoundModal}
                 title={`Sound Profile: ${soundProfile}`}
-                className="p-1.5 sm:p-2 rounded-xl bg-white/80 dark:bg-zinc-900/90 border border-slate-200/70 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800 transition-all shadow-2xs"
+                className="p-1.5 sm:p-2 rounded-xl bg-white/80 dark:bg-black border border-slate-200/70 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 transition-all shadow-2xs"
               >
                 {soundProfile === 'silent' ? (
                   <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 dark:text-zinc-600" />
@@ -331,7 +331,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onOpenGoalSoundModal}
                 title="Settings & Daily Goals"
-                className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-300/80 dark:border-zinc-700 shadow-2xs flex items-center justify-center text-slate-700 dark:text-zinc-300 transition-all"
+                className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-zinc-900 border border-slate-300/80 dark:border-zinc-800 shadow-2xs flex items-center justify-center text-slate-700 dark:text-zinc-300 transition-all"
               >
                 <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>

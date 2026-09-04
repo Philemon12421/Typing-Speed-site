@@ -74,7 +74,7 @@ export const GoalSoundModal: React.FC<GoalSoundModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl border border-slate-200/80 dark:border-zinc-800 rounded-3xl shadow-2xl p-6 flex flex-col gap-6 max-h-[90vh] overflow-y-auto text-slate-800 dark:text-zinc-100">
+      <div className="w-full max-w-lg bg-white dark:bg-black border border-slate-200/80 dark:border-zinc-800 rounded-3xl shadow-2xl p-6 flex flex-col gap-6 max-h-[90vh] overflow-y-auto text-slate-800 dark:text-zinc-100">
         
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800/80 pb-4">
