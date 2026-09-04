@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { UserSettings, WpmPoint } from '../types';
 import { calculateStats, getKeyFingerInfo } from '../utils/typingUtils';
 import { soundSynth } from '../utils/soundEffects';
@@ -367,6 +367,35 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
 
   const activeWordHUD = getCurrentWordHUD();
 
+  // Group characters into whole words with their trailing whitespace so words are never cut across lines
+  const wordTokens = useMemo(() => {
+    const tokens: { id: number; chars: { char: string; index: number }[] }[] = [];
+    let currentChars: { char: string; index: number }[] = [];
+
+    for (let i = 0; i < targetText.length; i++) {
+      const char = targetText[i];
+      currentChars.push({ char, index: i });
+
+      // Space or newline boundary groups the word and its trailing space together
+      if (char === ' ' || char === '\n') {
+        tokens.push({
+          id: tokens.length,
+          chars: currentChars,
+        });
+        currentChars = [];
+      }
+    }
+
+    if (currentChars.length > 0) {
+      tokens.push({
+        id: tokens.length,
+        chars: currentChars,
+      });
+    }
+
+    return tokens;
+  }, [targetText]);
+
   return (
     <div
       onClick={() => inputRef.current?.focus()}
@@ -509,39 +538,46 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
           </div>
         )}
 
-        {/* Character by character rendering */}
-        {targetText.split('').map((char, index) => {
-          const typedChar = typedChars[index];
-          const isTyped = index < typedChars.length;
-          const isCurrent = index === typedChars.length;
-          const isCorrect = isTyped && typedChar === char;
-          const isIncorrect = isTyped && typedChar !== char;
+        {/* Whole-word rendering: words are kept complete on the same line and never cut */}
+        {wordTokens.map((word) => (
+          <span
+            key={word.id}
+            className="inline-flex flex-shrink-0 whitespace-nowrap"
+          >
+            {word.chars.map(({ char, index }) => {
+              const typedChar = typedChars[index];
+              const isTyped = index < typedChars.length;
+              const isCurrent = index === typedChars.length;
+              const isCorrect = isTyped && typedChar === char;
+              const isIncorrect = isTyped && typedChar !== char;
 
-          let colorClass = 'text-slate-400 dark:text-zinc-600 font-light';
-          if (isCorrect) colorClass = 'text-slate-800 dark:text-zinc-100 font-semibold';
-          if (isIncorrect)
-            colorClass =
-              'text-rose-600 dark:text-rose-400 bg-rose-100/80 dark:bg-rose-950/80 rounded px-0.5 underline decoration-rose-500 font-bold';
+              let colorClass = 'text-slate-400 dark:text-zinc-600 font-light';
+              if (isCorrect) colorClass = 'text-slate-800 dark:text-zinc-100 font-semibold';
+              if (isIncorrect)
+                colorClass =
+                  'text-rose-600 dark:text-rose-400 bg-rose-100/80 dark:bg-rose-950/80 rounded px-0.5 underline decoration-rose-500 font-bold';
 
-          return (
-            <span
-              key={index}
-              ref={isCurrent ? activeCharRef : null}
-              className={`relative inline-block ${fontClasses[settings.fontSize]} ${colorClass}`}
-            >
-              {/* Active Caret */}
-              {isCurrent && (
+              return (
                 <span
-                  className={`absolute left-0 top-1 bottom-1 ${
-                    caretClasses[settings.caretStyle]
-                  }`}
-                />
-              )}
-              {/* Spacebar visualization */}
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          );
-        })}
+                  key={index}
+                  ref={isCurrent ? activeCharRef : null}
+                  className={`relative inline-block ${fontClasses[settings.fontSize]} ${colorClass}`}
+                >
+                  {/* Active Caret */}
+                  {isCurrent && (
+                    <span
+                      className={`absolute left-0 top-1 bottom-1 ${
+                        caretClasses[settings.caretStyle]
+                      }`}
+                    />
+                  )}
+                  {/* Spacebar visualization */}
+                  {char === ' ' ? '\u00A0' : char === '\n' ? '\u21B5' : char}
+                </span>
+              );
+            })}
+          </span>
+        ))}
       </div>
 
       {/* Footer Hotkey Restart Tip */}
