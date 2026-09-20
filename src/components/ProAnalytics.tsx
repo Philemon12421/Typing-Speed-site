@@ -46,54 +46,58 @@ interface ProAnalyticsProps {
 }
 
 const MILESTONE_BADGES_DEF: MilestoneBadge[] = [
-  // WPM SPEED MILESTONES (Challenging Speed Tiers)
-  { id: 'wpm_50', title: 'Speedster Pace', description: 'Reach 50+ WPM typing speed', category: 'wpm', reqValue: 50, iconSymbol: '🏃', badgeLabel: '50 WPM', color: 'from-blue-500 to-indigo-500' },
-  { id: 'wpm_65', title: 'Keyboard Runner', description: 'Reach 65+ WPM typing speed', category: 'wpm', reqValue: 65, iconSymbol: '🚀', badgeLabel: '65 WPM', color: 'from-indigo-500 to-violet-600' },
-  { id: 'wpm_80', title: 'Pro Typist Benchmark', description: 'Reach 80+ WPM typing speed', category: 'wpm', reqValue: 80, iconSymbol: '🔥', badgeLabel: '80 WPM', color: 'from-purple-500 to-fuchsia-600' },
-  { id: 'wpm_95', title: 'Ninja Fingers', description: 'Reach 95+ WPM typing speed', category: 'wpm', reqValue: 95, iconSymbol: '🥷', badgeLabel: '95 WPM', color: 'from-fuchsia-500 to-pink-600' },
-  { id: 'wpm_110', title: 'Century Grandmaster', description: 'Cross 110+ WPM peak speed threshold', category: 'wpm', reqValue: 110, iconSymbol: '🏆', badgeLabel: '110 WPM', color: 'from-amber-500 to-yellow-600' },
-  { id: 'wpm_125', title: 'Lightning Speedster', description: 'Reach 125+ WPM typing speed', category: 'wpm', reqValue: 125, iconSymbol: '⚡', badgeLabel: '125 WPM', color: 'from-yellow-400 to-amber-600' },
-  { id: 'wpm_140', title: 'God Speed Legend', description: 'Reach 140+ WPM typing speed', category: 'wpm', reqValue: 140, iconSymbol: '🌠', badgeLabel: '140 WPM', color: 'from-sky-400 to-blue-600' },
-  { id: 'wpm_160', title: 'Apex Velocity', description: 'Reach 160+ WPM typing speed', category: 'wpm', reqValue: 160, iconSymbol: '✨', badgeLabel: '160 WPM', color: 'from-indigo-600 to-purple-800' },
-  { id: 'wpm_180', title: 'Hyper Drive Warp', description: 'Reach 180+ WPM typing speed', category: 'wpm', reqValue: 180, iconSymbol: '💫', badgeLabel: '180 WPM', color: 'from-fuchsia-600 to-pink-800' },
-  { id: 'wpm_200', title: 'Typing Deity 200', description: 'Achieve legendary 200+ WPM peak speed', category: 'wpm', reqValue: 200, iconSymbol: '🔱', badgeLabel: '200 WPM', color: 'from-amber-300 via-yellow-400 to-amber-600' },
+  // WPM SPEED MILESTONES (Demanding High Speed + Min 95% Accuracy)
+  { id: 'wpm_75', title: 'Speedster Touch', description: 'Cross 75+ WPM typing speed with minimum 95% accuracy', category: 'wpm', reqValue: 75, iconSymbol: '⚡', badgeLabel: '75 WPM', color: 'from-blue-500 to-indigo-500' },
+  { id: 'wpm_90', title: 'Velocity Elite', description: 'Reach 90+ WPM typing speed with minimum 95% accuracy', category: 'wpm', reqValue: 90, iconSymbol: '🚀', badgeLabel: '90 WPM', color: 'from-indigo-500 to-violet-600' },
+  { id: 'wpm_105', title: 'Century Master', description: 'Break the 105+ WPM speed barrier with minimum 95% accuracy', category: 'wpm', reqValue: 105, iconSymbol: '🔥', badgeLabel: '105 WPM', color: 'from-purple-500 to-fuchsia-600' },
+  { id: 'wpm_120', title: 'Grandmaster Typist', description: 'Reach 120+ WPM grandmaster velocity with minimum 95% accuracy', category: 'wpm', reqValue: 120, iconSymbol: '🏆', badgeLabel: '120 WPM', color: 'from-amber-500 to-yellow-600' },
+  { id: 'wpm_135', title: 'Supersonic Prodigy', description: 'Achieve 135+ WPM blisteringly fast velocity with minimum 95% accuracy', category: 'wpm', reqValue: 135, iconSymbol: '🥷', badgeLabel: '135 WPM', color: 'from-rose-500 to-red-600' },
+  { id: 'wpm_150', title: 'Apex Velocity Titan', description: 'Cross elite 150+ WPM threshold with minimum 95% accuracy', category: 'wpm', reqValue: 150, iconSymbol: '🌠', badgeLabel: '150 WPM', color: 'from-sky-400 to-blue-600' },
+  { id: 'wpm_165', title: 'God Speed Dimension', description: 'Surpass 165+ WPM velocity with minimum 95% accuracy', category: 'wpm', reqValue: 165, iconSymbol: '✨', badgeLabel: '165 WPM', color: 'from-indigo-600 to-purple-800' },
+  { id: 'wpm_180', title: 'Hyper Warp Prodigy', description: 'Achieve near-impossible 180+ WPM with minimum 95% accuracy', category: 'wpm', reqValue: 180, iconSymbol: '💫', badgeLabel: '180 WPM', color: 'from-fuchsia-600 to-pink-800' },
+  { id: 'wpm_200', title: 'Mythical 200 Barrier', description: 'Conquer the legendary 200+ WPM milestone with minimum 95% accuracy', category: 'wpm', reqValue: 200, iconSymbol: '👑', badgeLabel: '200 WPM', color: 'from-amber-400 via-yellow-400 to-amber-600' },
+  { id: 'wpm_220', title: 'Typing Deity Immortal', description: 'Transcend human limits with 220+ WPM velocity at 95%+ accuracy', category: 'wpm', reqValue: 220, iconSymbol: '🔱', badgeLabel: '220 WPM', color: 'from-yellow-300 via-amber-500 to-red-600' },
 
-  // ACCURACY MILESTONES (Demanding High Precision)
-  { id: 'acc_95', title: 'Precision Touch', description: 'Achieve 95%+ accuracy in a completed test', category: 'accuracy', reqValue: 95, iconSymbol: '🎯', badgeLabel: '95% Acc', color: 'from-emerald-400 to-teal-500' },
-  { id: 'acc_97', title: 'Laser Sharpshooter', description: 'Achieve 97%+ accuracy in a completed test', category: 'accuracy', reqValue: 97, iconSymbol: '🏹', badgeLabel: '97% Acc', color: 'from-teal-500 to-cyan-600' },
-  { id: 'acc_98', title: 'Laser Precision', description: 'Achieve 98%+ accuracy in a completed test', category: 'accuracy', reqValue: 98, iconSymbol: '💎', badgeLabel: '98% Acc', color: 'from-indigo-500 to-violet-600' },
-  { id: 'acc_99', title: 'Surgical Accuracy', description: 'Achieve 99%+ accuracy in a completed test', category: 'accuracy', reqValue: 99, iconSymbol: '⚔️', badgeLabel: '99% Acc', color: 'from-violet-500 to-purple-600' },
-  { id: 'acc_100', title: 'Flawless Perfection', description: 'Score 100% 0-error flawless accuracy in a completed test', category: 'accuracy', reqValue: 100, iconSymbol: '🌟', badgeLabel: '100% Perfect', color: 'from-amber-400 to-yellow-500' },
+  // ACCURACY MILESTONES (Demanding High Precision at Competitive Speed >= 65 WPM)
+  { id: 'acc_97', title: 'Precision Sharpshooter', description: 'Achieve 97%+ accuracy in a completed test at 65+ WPM', category: 'accuracy', reqValue: 97, iconSymbol: '🎯', badgeLabel: '97% Acc', color: 'from-emerald-400 to-teal-500' },
+  { id: 'acc_98', title: 'Laser Precision Touch', description: 'Achieve 98%+ accuracy in a completed test at 70+ WPM', category: 'accuracy', reqValue: 98, iconSymbol: '🏹', badgeLabel: '98% Acc', color: 'from-teal-500 to-cyan-600' },
+  { id: 'acc_99', title: 'Surgical Calibration', description: 'Achieve 99%+ surgical accuracy in a completed test at 75+ WPM', category: 'accuracy', reqValue: 99, iconSymbol: '💎', badgeLabel: '99% Acc', color: 'from-indigo-500 to-violet-600' },
+  { id: 'acc_99_5', title: 'Diamond Precision', description: 'Achieve 99.5%+ near-zero-error precision in a completed test at 80+ WPM', category: 'accuracy', reqValue: 99.5, iconSymbol: '⚔️', badgeLabel: '99.5% Acc', color: 'from-violet-500 to-purple-600' },
+  { id: 'acc_100', title: 'Flawless Zero-Error Run', description: 'Score 100% 0-error flawless accuracy in a completed test at 70+ WPM', category: 'accuracy', reqValue: 100, iconSymbol: '🌟', badgeLabel: '100% Flawless', color: 'from-amber-400 to-yellow-500' },
 
-  // TESTS COMPLETED MILESTONES (Practice Endurance)
-  { id: 'tests_10', title: 'Dedicated Practice', description: 'Complete 10 practice tests', category: 'tests', reqValue: 10, iconSymbol: '📚', badgeLabel: '10 Tests', color: 'from-cyan-500 to-blue-600' },
-  { id: 'tests_25', title: 'Test Centurion', description: 'Complete 25 practice tests', category: 'tests', reqValue: 25, iconSymbol: '🛡️', badgeLabel: '25 Tests', color: 'from-blue-500 to-indigo-600' },
-  { id: 'tests_50', title: 'Typing Veteran', description: 'Complete 50 practice tests', category: 'tests', reqValue: 50, iconSymbol: '🏅', badgeLabel: '50 Tests', color: 'from-indigo-500 to-purple-600' },
-  { id: 'tests_100', title: 'Centennial Typist', description: 'Complete 100 practice tests', category: 'tests', reqValue: 100, iconSymbol: '💯', badgeLabel: '100 Tests', color: 'from-purple-600 to-pink-600' },
-  { id: 'tests_200', title: 'Endurance Legend', description: 'Complete 200 practice tests', category: 'tests', reqValue: 200, iconSymbol: '🏛️', badgeLabel: '200 Tests', color: 'from-rose-600 to-red-700' },
-  { id: 'tests_500', title: 'Half Millennium', description: 'Complete 500 practice tests', category: 'tests', reqValue: 500, iconSymbol: '🌟', badgeLabel: '500 Tests', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+  // TESTS COMPLETED MILESTONES (True Grinder Endurance)
+  { id: 'tests_50', title: 'Initiated Typist', description: 'Complete 50 full practice tests', category: 'tests', reqValue: 50, iconSymbol: '📚', badgeLabel: '50 Tests', color: 'from-cyan-500 to-blue-600' },
+  { id: 'tests_150', title: 'Centurion Challenger', description: 'Complete 150 full practice tests', category: 'tests', reqValue: 150, iconSymbol: '🛡️', badgeLabel: '150 Tests', color: 'from-blue-500 to-indigo-600' },
+  { id: 'tests_300', title: 'Typing Spartan', description: 'Complete 300 full practice tests', category: 'tests', reqValue: 300, iconSymbol: '🏅', badgeLabel: '300 Tests', color: 'from-indigo-500 to-purple-600' },
+  { id: 'tests_600', title: 'Half-Thousand Grinder', description: 'Complete 600 full practice tests', category: 'tests', reqValue: 600, iconSymbol: '💯', badgeLabel: '600 Tests', color: 'from-purple-600 to-pink-600' },
+  { id: 'tests_1200', title: 'Millennium Titan', description: 'Complete 1,200 full practice tests', category: 'tests', reqValue: 1200, iconSymbol: '🏛️', badgeLabel: '1,200 Tests', color: 'from-rose-600 to-red-700' },
+  { id: 'tests_2500', title: 'Olympian Ascendant', description: 'Complete an astounding 2,500 full practice tests', category: 'tests', reqValue: 2500, iconSymbol: '🌟', badgeLabel: '2,500 Tests', color: 'from-amber-400 via-yellow-500 to-amber-700' },
 
-  // STREAK MILESTONES (Rigorous Consistency)
-  { id: 'streak_3', title: 'Habit Formed', description: 'Maintain a 3-day practice streak', category: 'streak', reqValue: 3, iconSymbol: '🔥', badgeLabel: '3d Streak', color: 'from-orange-500 to-rose-500' },
-  { id: 'streak_7', title: 'Full Week Habit', description: 'Maintain a 7-day practice streak', category: 'streak', reqValue: 7, iconSymbol: '📅', badgeLabel: '7d Streak', color: 'from-purple-500 to-indigo-600' },
-  { id: 'streak_14', title: 'Fortnight Focus', description: 'Maintain a 14-day practice streak', category: 'streak', reqValue: 14, iconSymbol: '🏹', badgeLabel: '14d Streak', color: 'from-blue-600 to-teal-600' },
-  { id: 'streak_30', title: 'Monthly Legend', description: 'Maintain a 30-day practice streak', category: 'streak', reqValue: 30, iconSymbol: '👑', badgeLabel: '30d Streak', color: 'from-amber-500 to-yellow-600' },
-  { id: 'streak_60', title: 'Two Months Unstoppable', description: 'Maintain a 60-day practice streak', category: 'streak', reqValue: 60, iconSymbol: '🌋', badgeLabel: '60d Streak', color: 'from-rose-600 to-pink-700' },
-  { id: 'streak_100', title: '100-Day Streak Titan', description: 'Maintain an incredible 100-day practice streak', category: 'streak', reqValue: 100, iconSymbol: '☀️', badgeLabel: '100d Streak', color: 'from-amber-300 via-yellow-400 to-amber-600' },
+  // STREAK MILESTONES (Unforgiving Daily Consistency)
+  { id: 'streak_7', title: 'Iron Week Habit', description: 'Maintain an unbroken 7-day practice streak', category: 'streak', reqValue: 7, iconSymbol: '🔥', badgeLabel: '7d Streak', color: 'from-orange-500 to-rose-500' },
+  { id: 'streak_14', title: 'Fortnight Discipline', description: 'Maintain an unbroken 14-day practice streak', category: 'streak', reqValue: 14, iconSymbol: '📅', badgeLabel: '14d Streak', color: 'from-purple-500 to-indigo-600' },
+  { id: 'streak_30', title: 'Monthly Stalwart', description: 'Maintain an unbroken 30-day practice streak', category: 'streak', reqValue: 30, iconSymbol: '🏹', badgeLabel: '30d Streak', color: 'from-blue-600 to-teal-600' },
+  { id: 'streak_60', title: 'Two-Month Iron Will', description: 'Maintain an unbroken 60-day practice streak', category: 'streak', reqValue: 60, iconSymbol: '👑', badgeLabel: '60d Streak', color: 'from-amber-500 to-yellow-600' },
+  { id: 'streak_100', title: 'Century of Steel', description: 'Maintain an unbroken 100-day practice streak', category: 'streak', reqValue: 100, iconSymbol: '🌋', badgeLabel: '100d Streak', color: 'from-rose-600 to-pink-700' },
+  { id: 'streak_180', title: 'Half-Year Champion', description: 'Maintain an unbroken 180-day practice streak', category: 'streak', reqValue: 180, iconSymbol: '☀️', badgeLabel: '180d Streak', color: 'from-amber-400 via-orange-500 to-amber-600' },
+  { id: 'streak_365', title: 'Year of Immortality', description: 'Complete an unprecedented 365-day unbroken daily practice streak', category: 'streak', reqValue: 365, iconSymbol: '🔱', badgeLabel: '365d Streak', color: 'from-amber-300 via-yellow-400 to-amber-600' },
 
-  // TOTAL WORDS TYPED MILESTONES (Substantial Output)
-  { id: 'words_1000', title: 'Article Writer', description: 'Type 1,000 total correct words', category: 'words', reqValue: 1000, iconSymbol: '📰', badgeLabel: '1,000 Words', color: 'from-cyan-600 to-blue-600' },
-  { id: 'words_5000', title: 'Novelist in Training', description: 'Type 5,000 total correct words', category: 'words', reqValue: 5000, iconSymbol: '📕', badgeLabel: '5,000 Words', color: 'from-indigo-600 to-purple-600' },
-  { id: 'words_15000', title: 'Wordsmith Master', description: 'Type 15,000 total correct words', category: 'words', reqValue: 15000, iconSymbol: '🖋️', badgeLabel: '15,000 Words', color: 'from-purple-600 to-fuchsia-600' },
-  { id: 'words_50000', title: '50,000 Words Author', description: 'Type a full novel volume of 50,000 words!', category: 'words', reqValue: 50000, iconSymbol: '📜', badgeLabel: '50,000 Words', color: 'from-fuchsia-600 to-rose-600' },
-  { id: 'words_100000', title: 'Literary Titan', description: 'Type 100,000 total correct words', category: 'words', reqValue: 100000, iconSymbol: '📚', badgeLabel: '100k Words', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+  // TOTAL WORDS TYPED MILESTONES (Substantial Keystroke Volume)
+  { id: 'words_5000', title: 'Apprentice Scribe', description: 'Type 5,000 verified correct words', category: 'words', reqValue: 5000, iconSymbol: '📰', badgeLabel: '5,000 Words', color: 'from-cyan-600 to-blue-600' },
+  { id: 'words_15000', title: 'Wordsmith Journeyman', description: 'Type 15,000 verified correct words', category: 'words', reqValue: 15000, iconSymbol: '📕', badgeLabel: '15,000 Words', color: 'from-indigo-600 to-purple-600' },
+  { id: 'words_40000', title: 'Novelist in Training', description: 'Type 40,000 verified correct words', category: 'words', reqValue: 40000, iconSymbol: '🖋️', badgeLabel: '40,000 Words', color: 'from-purple-600 to-fuchsia-600' },
+  { id: 'words_100000', title: 'Century Wordsmith', description: 'Type 100,000 verified correct words', category: 'words', reqValue: 100000, iconSymbol: '📜', badgeLabel: '100,000 Words', color: 'from-fuchsia-600 to-rose-600' },
+  { id: 'words_250000', title: 'Quarter-Million Volume', description: 'Type 250,000 verified correct words', category: 'words', reqValue: 250000, iconSymbol: '📚', badgeLabel: '250k Words', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+  { id: 'words_500000', title: 'Half-Million Words Epic', description: 'Type 500,000 verified correct words across practice runs', category: 'words', reqValue: 500000, iconSymbol: '🏛️', badgeLabel: '500k Words', color: 'from-rose-500 to-pink-700' },
+  { id: 'words_1000000', title: 'Millionaire of Words', description: 'Type 1,000,000 verified correct words — ultimate literary titan!', category: 'words', reqValue: 1000000, iconSymbol: '👑', badgeLabel: '1M Words', color: 'from-amber-300 via-yellow-400 to-amber-600' },
 
-  // PRACTICE TIME MILESTONES (Serious Time Commitment)
-  { id: 'time_15', title: '15-Minute Focus', description: 'Accumulate 15 total minutes of typing practice', category: 'time', reqValue: 15, iconSymbol: '⏲️', badgeLabel: '15 Mins', color: 'from-teal-500 to-cyan-600' },
-  { id: 'time_60', title: '1 Hour Practiced', description: 'Accumulate 60 total minutes (1 Hour) of practice', category: 'time', reqValue: 60, iconSymbol: '⌛', badgeLabel: '1 Hour', color: 'from-blue-600 to-indigo-600' },
-  { id: 'time_300', title: '5 Hours Dedicated', description: 'Accumulate 5 hours of focused typing', category: 'time', reqValue: 300, iconSymbol: '🎓', badgeLabel: '5 Hours', color: 'from-purple-600 to-pink-600' },
-  { id: 'time_1200', title: '20 Hours Veteran', description: 'Accumulate 20 full hours of touch typing', category: 'time', reqValue: 1200, iconSymbol: '🔮', badgeLabel: '20 Hours', color: 'from-pink-600 to-rose-600' },
-  { id: 'time_3000', title: '50 Hours Immortal', description: 'Accumulate 50 hours of active keystroke practice!', category: 'time', reqValue: 3000, iconSymbol: '👑', badgeLabel: '50 Hours', color: 'from-amber-400 via-yellow-500 to-amber-700' },
+  // PRACTICE TIME MILESTONES (Serious Time Devotion)
+  { id: 'time_60', title: '1 Hour Dedicated', description: 'Accumulate 60 minutes (1 hour) of active typing practice', category: 'time', reqValue: 60, iconSymbol: '⌛', badgeLabel: '1 Hour', color: 'from-blue-600 to-indigo-600' },
+  { id: 'time_300', title: '5 Hours Practiced', description: 'Accumulate 300 minutes (5 hours) of focused typing practice', category: 'time', reqValue: 300, iconSymbol: '🎓', badgeLabel: '5 Hours', color: 'from-purple-600 to-pink-600' },
+  { id: 'time_900', title: '15 Hours Grind', description: 'Accumulate 900 minutes (15 full hours) of touch typing', category: 'time', reqValue: 900, iconSymbol: '🔮', badgeLabel: '15 Hours', color: 'from-pink-600 to-rose-600' },
+  { id: 'time_2400', title: '40 Hours Workweek', description: 'Accumulate 2,400 minutes (40 full hours) of active keystroke practice', category: 'time', reqValue: 2400, iconSymbol: '💼', badgeLabel: '40 Hours', color: 'from-indigo-700 to-purple-800' },
+  { id: 'time_6000', title: '100 Hours Master', description: 'Accumulate 6,000 minutes (100 hours) of focused keyboard mastery', category: 'time', reqValue: 6000, iconSymbol: '🌟', badgeLabel: '100 Hours', color: 'from-amber-500 to-orange-600' },
+  { id: 'time_15000', title: '250 Hours Immortal', description: 'Accumulate 15,000 minutes (250 hours) of dedicated typing practice!', category: 'time', reqValue: 15000, iconSymbol: '👑', badgeLabel: '250 Hours', color: 'from-amber-400 via-yellow-500 to-amber-700' },
 ];
 
 export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
@@ -109,14 +113,25 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
   const [badgeFilter, setBadgeFilter] = useState<'all' | 'unlocked' | 'locked' | 'wpm' | 'accuracy' | 'tests' | 'streak' | 'words' | 'time'>('all');
 
   const analytics = getOverallAnalytics();
-  const maxAccuracy = results.length > 0 ? Math.max(...results.map((r) => r.accuracy)) : 0;
 
-  // Compute Unlocked Badges across all 60+ milestone definitions
+  // Rigorous verification criteria:
+  // 1. WPM speed milestones require minimum 95% accuracy to prevent inaccurate key-mashing
+  const verifiedWpmRuns = results.filter((r) => r.accuracy >= 95);
+  const verifiedBestWpm = verifiedWpmRuns.length > 0 ? Math.max(...verifiedWpmRuns.map((r) => r.wpm)) : 0;
+
+  // 2. Accuracy milestones require typing at competitive speed (≥65 WPM, or ≥70 WPM for 100% flawless)
+  const computeQualifiedAccuracy = (reqAccuracy: number) => {
+    const minWpm = reqAccuracy === 100 ? 70 : 65;
+    const qualifiedRuns = results.filter((r) => r.wpm >= minWpm);
+    return qualifiedRuns.length > 0 ? Math.max(...qualifiedRuns.map((r) => r.accuracy)) : 0;
+  };
+
+  // Compute Unlocked Badges across all elite milestone definitions
   const badgesWithStatus = MILESTONE_BADGES_DEF.map((badge) => {
     let currentValue = 0;
-    if (badge.category === 'wpm') currentValue = analytics.bestWpm;
+    if (badge.category === 'wpm') currentValue = verifiedBestWpm;
     if (badge.category === 'tests') currentValue = analytics.totalTests;
-    if (badge.category === 'accuracy') currentValue = maxAccuracy;
+    if (badge.category === 'accuracy') currentValue = computeQualifiedAccuracy(badge.reqValue);
     if (badge.category === 'streak') currentValue = analytics.currentStreakDays;
     if (badge.category === 'words') currentValue = analytics.totalWords || 0;
     if (badge.category === 'time') currentValue = Math.round((analytics.totalTimeSeconds || 0) / 60);
@@ -628,10 +643,15 @@ export const ProAnalytics: React.FC<ProAnalyticsProps> = ({
                         Locked Milestone
                       </span>
                       <div className="mt-1.5 px-3 py-1 rounded-full bg-white/95 dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 text-[11px] font-extrabold text-slate-700 dark:text-zinc-200 shadow-xs">
-                        Progress: <span className="text-indigo-600 dark:text-indigo-400 font-black">{badge.currentValue}</span> / {badge.reqValue} ({badge.progressPercent}%)
+                        Progress: <span className="text-indigo-600 dark:text-indigo-400 font-black">{badge.currentValue.toLocaleString()}</span> / {badge.reqValue.toLocaleString()} ({badge.progressPercent}%)
                       </div>
                       <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold mt-1">
-                        Requires {badge.reqValue} {badge.category === 'time' ? 'mins' : badge.category}
+                        {badge.category === 'wpm' && `Target: ${badge.reqValue} WPM (at ≥95% accuracy)`}
+                        {badge.category === 'accuracy' && `Target: ${badge.reqValue}% (at ≥${badge.reqValue === 100 ? 70 : 65} WPM)`}
+                        {badge.category === 'tests' && `Target: ${badge.reqValue.toLocaleString()} tests`}
+                        {badge.category === 'streak' && `Target: ${badge.reqValue}-day streak`}
+                        {badge.category === 'words' && `Target: ${badge.reqValue.toLocaleString()} words`}
+                        {badge.category === 'time' && `Target: ${Math.round(badge.reqValue / 60)} hrs practice`}
                       </span>
                     </div>
                   )}
