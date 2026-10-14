@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { TestResult } from '../types';
 import { getWpmGrade } from '../utils/typingUtils';
-import { X, Download, Printer } from 'lucide-react';
+import { X, Download, Printer, Keyboard } from 'lucide-react';
 
 interface CertificateModalProps {
   result: TestResult;
@@ -10,7 +10,6 @@ interface CertificateModalProps {
 }
 
 // Draws text along a circular arc on a canvas context — used for the seal ring copy.
-// Helper to draw circular arc text with clean letter spacing
 function drawArcText(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -36,27 +35,6 @@ function drawArcText(
     ctx.restore();
   }
   ctx.restore();
-}
-
-// Helper to draw a precision scalloped / star rosette
-function drawRosette(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  points: number,
-  outerR: number,
-  innerR: number
-) {
-  ctx.beginPath();
-  for (let i = 0; i < points * 2; i++) {
-    const r = i % 2 === 0 ? outerR : innerR;
-    const angle = (i * Math.PI) / points;
-    const x = cx + Math.cos(angle) * r;
-    const y = cy + Math.sin(angle) * r;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  }
-  ctx.closePath();
 }
 
 export const CertificateModal: React.FC<CertificateModalProps> = ({
@@ -110,14 +88,30 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.lineWidth = 1.5;
     ctx.strokeRect(48, 48, W - 96, H - 96);
 
-    // Clean brand typography header (top-left)
+    // Logo mark (top-left)
+    ctx.fillStyle = '#7c3aed';
+    ctx.beginPath();
+    ctx.roundRect(90, 88, 44, 44, 12);
+    ctx.fill();
+
+    // Keyboard glyph (white outline, key dots, spacebar)
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(100, 102, 24, 16, 3);
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    [105, 110, 115, 120].forEach((x) => ctx.fillRect(x - 1, 106, 2.2, 2.2));
+    [107.5, 112.5, 117.5].forEach((x) => ctx.fillRect(x - 1, 110, 2.2, 2.2));
+    ctx.fillRect(107, 113.5, 10, 2);
+
     ctx.textAlign = 'left';
     ctx.fillStyle = '#0f172a';
-    ctx.font = '800 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-    ctx.fillText('Typerca', 90, 102);
-    ctx.fillStyle = '#64748b';
-    ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-    ctx.fillText('TOUCH TYPING ASSESSMENT', 90, 122);
+    ctx.font = '800 22px sans-serif';
+    ctx.fillText('Typerca', 148, 103);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('TOUCH TYPING ASSESSMENT', 148, 123);
 
     // Certificate ID (top-right)
     ctx.textAlign = 'right';
@@ -245,147 +239,58 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.font = '600 12px sans-serif';
     ctx.fillText('CERTIFICATION AUTHORITY', W - 90, 850);
 
-    // --- HIGH-END AUTHENTIC VERIFICATION SEAL (Center Bottom) ---
+    // Seal / stamp (center bottom)
     const sealX = W / 2;
     const sealY = 800;
-    const sealR = 64;
+    const sealR = 62;
 
-    // 1. Hanging Ribbon Tails with Gold Stitching & Swallowtail Notches
-    ctx.save();
-    // Left Ribbon Tail
-    const ribbonGradLeft = ctx.createLinearGradient(sealX - 45, sealY + 20, sealX - 10, sealY + 115);
-    ribbonGradLeft.addColorStop(0, '#78350f');
-    ribbonGradLeft.addColorStop(0.4, '#b45309');
-    ribbonGradLeft.addColorStop(1, '#92400e');
-    ctx.fillStyle = ribbonGradLeft;
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(sealX - 16, sealY + 40);
-    ctx.lineTo(sealX - 42, sealY + 114);
-    ctx.lineTo(sealX - 24, sealY + 95);
-    ctx.lineTo(sealX - 6, sealY + 114);
-    ctx.lineTo(sealX - 6, sealY + 40);
-    ctx.closePath();
-    ctx.fill();
-
-    // Left Ribbon Gold Border & Stitching
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 1.5;
+    ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
     ctx.stroke();
-
-    // Right Ribbon Tail
-    const ribbonGradRight = ctx.createLinearGradient(sealX + 10, sealY + 20, sealX + 45, sealY + 115);
-    ribbonGradRight.addColorStop(0, '#78350f');
-    ribbonGradRight.addColorStop(0.4, '#b45309');
-    ribbonGradRight.addColorStop(1, '#92400e');
-    ctx.fillStyle = ribbonGradRight;
-    ctx.beginPath();
-    ctx.moveTo(sealX + 6, sealY + 40);
-    ctx.lineTo(sealX + 6, sealY + 114);
-    ctx.lineTo(sealX + 24, sealY + 95);
-    ctx.lineTo(sealX + 42, sealY + 114);
-    ctx.lineTo(sealX + 16, sealY + 40);
-    ctx.closePath();
-    ctx.fill();
-
-    // Right Ribbon Gold Border
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
-
-    // 2. Precision 32-Point Star Rosette (Metallic Golden Edge)
-    ctx.save();
-    const goldGrad = ctx.createRadialGradient(sealX, sealY, 20, sealX, sealY, sealR + 8);
-    goldGrad.addColorStop(0, '#fbbf24');
-    goldGrad.addColorStop(0.5, '#d97706');
-    goldGrad.addColorStop(0.85, '#b45309');
-    goldGrad.addColorStop(1, '#78350f');
-    ctx.fillStyle = goldGrad;
-    drawRosette(ctx, sealX, sealY, 32, sealR + 6, sealR - 2);
-    ctx.fill();
-    ctx.strokeStyle = '#78350f';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
-
-    // 3. Concentric Security Rings & Beaded Border
-    ctx.strokeStyle = '#fef3c7';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR - 4, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Medallion Base
-    ctx.fillStyle = '#fffdfa';
-    ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR - 6, 0, Math.PI * 2);
-    ctx.fill();
     ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // Security Micro-Beads (36 beads along outer ring)
-    ctx.fillStyle = '#b45309';
-    const beadCount = 36;
-    const beadRadius = sealR - 10;
-    for (let b = 0; b < beadCount; b++) {
-      const bAngle = (b * Math.PI * 2) / beadCount;
-      const bx = sealX + Math.cos(bAngle) * beadRadius;
-      const by = sealY + Math.sin(bAngle) * beadRadius;
-      ctx.beginPath();
-      ctx.arc(bx, by, 1.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Inner Rule Circle
-    ctx.strokeStyle = '#e2e8f0';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(sealX, sealY, sealR - 16, 0, Math.PI * 2);
+    ctx.arc(sealX, sealY, sealR - 7, 0, Math.PI * 2);
     ctx.stroke();
 
-    // 4. Circular Arc Lettering
-    drawArcText(
-      ctx,
-      '★ TYPERCA VERIFIED ASSESSMENT ★',
-      sealX,
-      sealY,
-      sealR - 20,
-      -94,
-      5.8,
-      '800 8.5px sans-serif',
-      '#78350f'
-    );
-
-    // 5. Center Security Shield / Verification Medallion
-    const innerCenterR = 24;
-    const shieldGrad = ctx.createLinearGradient(sealX - innerCenterR, sealY - innerCenterR, sealX + innerCenterR, sealY + innerCenterR);
-    shieldGrad.addColorStop(0, '#1e293b');
-    shieldGrad.addColorStop(1, '#0f172a');
-    ctx.fillStyle = shieldGrad;
+    ctx.fillStyle = '#fffbeb';
     ctx.beginPath();
-    ctx.arc(sealX, sealY + 2, innerCenterR, 0, Math.PI * 2);
+    ctx.arc(sealX, sealY, sealR - 8, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
     ctx.stroke();
 
-    // 6. Crisp White Verified Checkmark
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3.8;
+    // Checkmark
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 4.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
-    ctx.moveTo(sealX - 11, sealY + 1);
-    ctx.lineTo(sealX - 3, sealY + 9);
-    ctx.lineTo(sealX + 12, sealY - 7);
+    ctx.moveTo(sealX - 16, sealY + 2);
+    ctx.lineTo(sealX - 4, sealY + 14);
+    ctx.lineTo(sealX + 18, sealY - 14);
     ctx.stroke();
 
-    // Tiny 3-star authenticity markers below checkmark
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = '700 7px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('★  ★  ★', sealX, sealY + 18);
+    drawArcText(ctx, '★ VERIFIED  •  OFFICIAL  •', sealX, sealY, sealR - 20, -90, 13.2, '700 10px sans-serif', '#92400e');
+
+    // Ribbon tails
+    ctx.fillStyle = '#b45309';
+    ctx.beginPath();
+    ctx.moveTo(sealX - 22, sealY + sealR - 4);
+    ctx.lineTo(sealX - 32, sealY + sealR + 38);
+    ctx.lineTo(sealX - 10, sealY + sealR + 22);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(sealX + 22, sealY + sealR - 4);
+    ctx.lineTo(sealX + 32, sealY + sealR + 38);
+    ctx.lineTo(sealX + 10, sealY + sealR + 22);
+    ctx.closePath();
+    ctx.fill();
   }, [result, userName, formattedDate, certificateId, grade]);
 
   const handlePrint = () => {
@@ -517,21 +422,26 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Top accent bar */}
         <div className="h-2 w-full bg-blue-700" />
 
-        <div className="relative p-6 sm:p-10 border border-slate-100 overflow-hidden">
+        {/* Faded background watermark */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute inset-0 flex items-center justify-center text-[7rem] sm:text-[12rem] font-black font-serif text-violet-500/[0.03] -rotate-6 whitespace-nowrap"
+        >
+          Typerca
+        </div>
 
-          {/* Faded background watermark */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none select-none absolute inset-0 -z-0 flex items-center justify-center text-[9rem] sm:text-[13rem] font-black font-serif text-violet-500/[0.03] -rotate-6 whitespace-nowrap"
-          >
-            TYPERCA
-          </span>
+        <div className="relative p-6 sm:p-10 border border-slate-100">
 
-          {/* Header: clean brand text + certificate ID */}
-          <div className="relative z-10 flex items-start justify-between mb-8">
-            <div>
-              <div className="text-2xl font-black text-slate-900 tracking-tight leading-none font-sans">Typerca</div>
-              <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1.5 font-sans">Touch Typing Assessment</div>
+          {/* Header: logo + certificate ID */}
+          <div className="flex items-start justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-violet-600 flex items-center justify-center text-white shadow-sm shadow-violet-200">
+                <Keyboard className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="font-extrabold text-slate-900 text-lg leading-none">Typerca</div>
+                <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1">Touch Typing Assessment</div>
+              </div>
             </div>
             <div className="text-right">
               <div className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Certificate ID</div>
@@ -590,72 +500,20 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Date Issued</span>
             </div>
 
-            {/* Authentic High-End Verification Seal */}
-            <div className="flex justify-center -mb-2">
-              <svg viewBox="0 0 160 180" className="w-24 h-28 drop-shadow-md">
+            {/* Seal */}
+            <div className="flex justify-center">
+              <svg viewBox="0 0 140 160" className="w-20 h-24">
                 <defs>
-                  <radialGradient id="svgSealGold" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#fde68a" />
-                    <stop offset="45%" stopColor="#d97706" />
-                    <stop offset="85%" stopColor="#b45309" />
-                    <stop offset="100%" stopColor="#78350f" />
-                  </radialGradient>
-                  <linearGradient id="svgRibbonLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#78350f" />
-                    <stop offset="50%" stopColor="#b45309" />
-                    <stop offset="100%" stopColor="#92400e" />
-                  </linearGradient>
-                  <linearGradient id="svgRibbonRight" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#78350f" />
-                    <stop offset="50%" stopColor="#b45309" />
-                    <stop offset="100%" stopColor="#92400e" />
-                  </linearGradient>
-                  <linearGradient id="svgShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#1e293b" />
-                    <stop offset="100%" stopColor="#0f172a" />
-                  </linearGradient>
-                  <path id="sealArcTop" d="M 28,80 A 52,52 0 1 1 132,80" fill="none" />
-                  <path id="sealArcBottom" d="M 130,82 A 50,50 0 0 1 30,82" fill="none" />
+                  <path id="sealArc" d="M 20,70 A 50,50 0 1 1 120,70" fill="none" />
                 </defs>
-
-                {/* Left Ribbon Tail */}
-                <polygon points="62,110 32,168 52,150 72,168 72,110" fill="url(#svgRibbonLeft)" stroke="#f59e0b" strokeWidth="1.2" />
-                {/* Right Ribbon Tail */}
-                <polygon points="88,110 88,168 108,150 128,168 98,110" fill="url(#svgRibbonRight)" stroke="#f59e0b" strokeWidth="1.2" />
-
-                {/* 32-Point Scalloped Gold Rosette */}
-                <circle cx="80" cy="80" r="58" fill="url(#svgSealGold)" stroke="#78350f" strokeWidth="1.5" />
-                
-                {/* Outer Relief Ring */}
-                <circle cx="80" cy="80" r="52" fill="none" stroke="#fef3c7" strokeWidth="1.5" strokeDasharray="3,2" />
-                
-                {/* Medallion Base Body */}
-                <circle cx="80" cy="80" r="48" fill="#fffdfa" stroke="#d97706" strokeWidth="1.5" />
-                
-                {/* Inner Rule Ring */}
-                <circle cx="80" cy="80" r="38" fill="none" stroke="#e2e8f0" strokeWidth="1" />
-
-                {/* Circular Security Text */}
-                <text fontSize="7.5" fontWeight="800" fill="#78350f" letterSpacing="1.2">
-                  <textPath href="#sealArcTop" startOffset="50%" textAnchor="middle">
-                    ★ TYPERCA VERIFIED ★
+                <polygon points="55,118 45,155 70,140 95,155 85,118" fill="#b45309" />
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#b45309" strokeWidth="2.5" />
+                <circle cx="70" cy="70" r="44" fill="#fffbeb" stroke="#d97706" strokeWidth="1" />
+                <path d="M 52,72 L 63,84 L 90,54" fill="none" stroke="#b45309" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                <text fontSize="8.2" fontWeight="700" fill="#92400e" letterSpacing="1.5">
+                  <textPath href="#sealArc" startOffset="50%" textAnchor="middle">
+                    ★ VERIFIED • OFFICIAL ★
                   </textPath>
-                </text>
-                <text fontSize="6.5" fontWeight="700" fill="#92400e" letterSpacing="1">
-                  <textPath href="#sealArcBottom" startOffset="50%" textAnchor="middle">
-                    • OFFICIAL BENCHMARK •
-                  </textPath>
-                </text>
-
-                {/* Center Navy Medallion */}
-                <circle cx="80" cy="80" r="23" fill="url(#svgShieldGrad)" stroke="#d97706" strokeWidth="1.8" />
-
-                {/* Crisp White Verified Checkmark */}
-                <path d="M 69,79 L 77,87 L 92,72" fill="none" stroke="#ffffff" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" />
-
-                {/* Stars below Checkmark */}
-                <text x="80" y="96" fontSize="6.5" fontWeight="700" fill="#fbbf24" textAnchor="middle">
-                  ★★★
                 </text>
               </svg>
             </div>
@@ -674,10 +532,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center justify-center gap-3 py-6 print:hidden bg-slate-50 dark:bg-zinc-900 border-t border-slate-100 dark:border-zinc-800">
+        <div className="flex flex-wrap items-center justify-center gap-3 py-6 print:hidden bg-slate-50 border-t border-slate-100">
           <button
             onClick={handleDownloadPNG}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-md shadow-blue-200 transition-all active:scale-95 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             <span>Download Certificate PNG</span>
@@ -685,7 +543,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Print or Save PDF</span>
@@ -693,7 +551,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
           >
             Close
           </button>
